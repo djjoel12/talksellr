@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Accueil Marketplace</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+
+  <form method="GET" action="/" role="search" aria-label="Recherche produits" class="search-form">
+    <input
+      type="text"
+      name="q"
+      placeholder="Rechercher un produit..."
+      value="<%= typeof q !== 'undefined' ? q : '' %>"
+      aria-label="Champ de recherche des produits"
+      class="search-input"
+      autocomplete="off"
+    />
+    <button type="submit" aria-label="Lancer la recherche" class="search-btn">🔍</button>
+  </form>
+
+  <a href="/panier" class="panier-link">Voir mon panier</a>
+
+  <% if (user) { %>
+    <p style="text-align:center; margin-bottom:20px;">
+      Bienvenue <%= user.nom %> (<%= user.role %>) | <a href="/auth/logout" style="color: var(--jaune);">Déconnexion</a>
+    </p>
+  <% } else { %>
+    <p style="text-align:center; margin-bottom:20px;">
+      <a href="/auth/login" style="color: var(--jaune);">Se connecter</a> | <a href="/auth/register" style="color: var(--jaune);">S’inscrire</a>
+    </p>
+  <% } %>
+
+  <% if (isVendeur) { %>
+    <h2 style="text-align:center; user-select:none;">Tableau de bord vendeur</h2>
+    <ul style="max-width: 200px; margin: 0 auto 40px auto; list-style:none; padding:0;">
+      <li><a href="/boutique/mon" style="color: var(--jaune); text-decoration:none;">Gérer ma boutique</a></li>
+    </ul>
+  <% } %>
+
+  <h1 style="user-select:none;">Bienvenue sur la marketplace multi-vendeurs</h1>
+  <h1 style="text-align:center; user-select:none; margin-bottom:30px;">Tous les Produits</h1>
+
+  <% if (!produits || produits.length === 0) { %>
+    <p style="text-align:center;">Aucun produit trouvé.</p>
+  <% } else { %>
+    <div class="produits-grid" role="list">
+      <% produits.forEach(p => { %>
+        <div
+          class="produit-card"
+          tabindex="0"
+          role="listitem"
+          aria-label="Produit <%= p.nom %> à <%= p.prix.toFixed(2) %> <%= p.devise %>"
+        >
+          <% if (p.image) { %>
+            <img src="<%= p.image %>" alt="Image de <%= p.nom %>" class="produit-image" />
+          <% } else { %>
+            <img src="/images/no-image.png" alt="Pas d'image disponible" class="produit-image" />
+          <% } %>
+
+          <p style="margin: 5px 0;">Vendu par : <strong><%= p.vendeur ? p.vendeur.nom : 'Inconnu' %></strong></p>
+
+          <div class="produit-titre"><%= p.nom %></div>
+          <div class="produit-prix"><%= p.prix.toFixed(2) %> <%= p.devise %></div>
+
+          <a href="/boutique/produit/<%= p._id %>" class="produit-lien" aria-label="Voir les détails de <%= p.nom %>">Voir</a>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+
+</body>
+</html>
+

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>mes produits</title>
+   <link rel="stylesheet" href="/css/styles.css" />
+
+</head>
+<p><a href="/">Retour à l’accueil</a></p>
+<h1>Mes produits</h1>
+<a href="/produits/ajouter">Ajouter un nouveau produit</a>
+
+<ul>
+  <% produits.forEach(p => { %>
+    <li>
+        <h3><%= p.nom %> - <%= p.prix %> <%= p.devise %></h3>
+      <% if(p.image) { %>
+        <img src="<%= p.image %>" style="max-width: 100px" />
+      <% } %>
+      <p><%= p.description %></p>
+        
+        <a href="/produits/modifier/<%= p._id %>">✏️ Modifier</a> |
+        <form action="/produits/supprimer/<%= p._id %>" method="POST" style="display:inline;" onsubmit="return confirm('Supprimer ce produit ?');">
+          <button type="submit" style="background-color: red; color: white; border: none;">🗑️ Supprimer</button>
+        </form>
+        
+    </li>
+  <% }) %>
+</ul>
+
+

@@ -1,0 +1,67 @@
+                    <!DOCTYPE html>
+                    <html lang="fr">
+                    <head>
+                      <meta charset="UTF-8" />
+                      <title><%= boutique.nom %> - Boutique</title>
+                      <link rel="stylesheet" href="/css/styles.css" />
+                    </head>
+                    <body>
+                      <nav>
+                        <ul>
+                          <li><a href="/">Aller à l’accueil</a></li>
+                        </ul>
+                      </nav>
+
+                      <h1><%= boutique.nom %></h1>
+
+                      <% if (boutique.logo) { %>
+                        <img src="<%= boutique.logo %>" alt="Logo de <%= boutique.nom %>" style="max-width:200px; border-radius: 8px; margin-bottom: 20px;" />
+                      <% } %>
+
+                      <p><strong>Description :</strong> <%= boutique.description %></p>
+                      <p><strong>Téléphone :</strong> <%= boutique.telephone %></p>
+                      <p>
+                        <strong>Adresse :</strong>
+                        <%= boutique.adresse.rue %>, 
+                        <%= boutique.adresse.ville %>, 
+                        <%= boutique.adresse.codePostal %>, 
+                        <%= boutique.adresse.pays %>
+                      </p>
+
+                      <h2>Produits disponibles</h2>
+                      <ul style="padding-left: 0; list-style: none;">
+                        <% produits.forEach(p => { %>
+                          <li style="margin-bottom: 40px; border-bottom: 1px solid #ccc; padding-bottom: 20px;">
+                            <strong><%= p.nom %></strong> - <%= p.prix %> <%= p.devise %> - Vendu par <%= p.vendeur ? p.vendeur.nom : 'Inconnu' %>
+                            <br />
+                            <a href="/boutique/produit/<%= p._id %>">Voir détails</a>
+                            <br />
+                            <img src="<%= p.image %>" alt="<%= p.nom %>" style="max-width: 150px; margin-top: 10px; border-radius: 8px;" />
+
+                            <!-- Formulaire Ajouter au panier -->
+                            <form action="/panier/ajouter" method="POST" style="display:inline-block; margin-top: 10px;">
+                              <input type="hidden" name="produitId" value="<%= p._id %>">
+                              <button type="submit" class="produit-lien" style="margin-top: 10px;">🛒 Ajouter au panier</button>
+                            </form>
+
+                            <% 
+                              let messageWhatsApp = `Bonjour, je souhaite commander le produit ${p.nom} au prix de ${p.prix} ${p.devise}.`; 
+                            %>
+
+                            <% if (p.vendeur && p.vendeur.telephone) { %>
+                              <!-- Lien WhatsApp pour commander -->
+                              <a 
+                                href="https://wa.me/<%= p.vendeur.telephone.replace(/[^0-9]/g, '') %>?text=<%= encodeURIComponent(messageWhatsApp) %>" 
+                                target="_blank"
+                                class="produit-lien"
+                                style="background-color: #25D366; color: white; margin-top: 10px; display: inline-block; padding: 8px 16px; border-radius: 30px; text-decoration: none;">
+                                Commander via WhatsApp
+                              </a>
+                            <% } else { %>
+                              <p style="color: gray; font-style: italic; margin-top: 10px;">Numéro du vendeur non disponible</p>
+                            <% } %>
+                          </li>
+                        <% }) %>
+                      </ul>
+                    </body>
+                    </html>

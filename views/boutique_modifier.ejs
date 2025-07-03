@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Modifier ma boutique</title>
+  <style>
+    /*<style>/* Variables couleurs */
+  :root {
+    --bleu-fonce: #004080;
+    --bleu-clair: #66aaff;
+    --blanc: #ffffff;
+    --gris-clair: #f2f6fc;
+    --ombre: rgba(0, 0, 0, 0.15);
+    --transition: 0.3s ease;
+    --radius: 8px;
+    --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  /* Reset simple */
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: var(--gris-clair);
+    color: var(--bleu-fonce);
+    font-family: var(--font-main);
+    margin: 0;
+    padding: 30px 20px;
+    user-select: none;
+    animation: fadeInBody 0.8s ease forwards;
+    opacity: 0;
+  }
+
+  @keyframes fadeInBody {
+    to {
+      opacity: 1;
+    }
+  }
+
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: var(--blanc);
+    padding: 30px 40px;
+    border-radius: var(--radius);
+    box-shadow: 0 8px 20px var(--ombre);
+  }
+
+  /* Titres */
+  h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 700;
+    color: var(--bleu-fonce);
+    letter-spacing: 1.2px;
+    animation: slideDown 0.5s ease forwards;
+    opacity: 0;
+  }
+
+  @keyframes slideDown {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+  }
+
+  /* Formulaire */
+  form label {
+    display: line;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: var(--bleu-fonce);
+    animation: fadeInUp 0.6s ease forwards;
+    opacity: 0;
+  }
+
+  form input[type="text"],
+  form textarea,
+  form input[type="file"] {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border: 2px solid var(--bleu-clair);
+    border-radius: var(--radius);
+    font-size: 1rem;
+    color: var(--bleu-fonce);
+    font-weight: 500;
+    background: var(--gris-clair);
+    transition: border-color var(--transition);
+    outline: none;
+    animation: fadeInUp 0.6s ease forwards;
+    opacity: 0;
+  }
+
+  form input[type="text"]:focus,
+  form textarea:focus,
+  form input[type="file"]:focus {
+    border-color: var(--bleu-fonce);
+    box-shadow: 0 0 10px var(--bleu-clair);
+  }
+
+  /* Animation cascade delay pour inputs */
+  form label:nth-of-type(1),
+  form input:nth-of-type(1) {
+    animation-delay: 0.1s;
+  }
+  form label:nth-of-type(2),
+  form textarea:nth-of-type(1) {
+    animation-delay: 0.2s;
+  }
+  form label:nth-of-type(3),
+  form input:nth-of-type(2) {
+    animation-delay: 0.3s;
+  }
+  form label:nth-of-type(4),
+  form input:nth-of-type(3) {
+    animation-delay: 0.4s;
+  }
+  form label:nth-of-type(5),
+  form input:nth-of-type(4) {
+    animation-delay: 0.5s;
+  }
+  form label:nth-of-type(6),
+  form input:nth-of-type(5) {
+    animation-delay: 0.6s;
+  }
+  form label:nth-of-type(7),
+  form input:nth-of-type(6) {
+    animation-delay: 0.7s;
+  }
+  form label:nth-of-type(8),
+  form input:nth-of-type(7) {
+    animation-delay: 0.8s;
+  }
+
+  /* Bouton */
+  button[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 14px 0;
+    background-color: var(--bleu-fonce);
+    color: var(--blanc);
+    font-weight: 700;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background-color var(--transition), transform 0.2s ease;
+    user-select: none;
+    animation: fadeInUp 0.6s ease forwards;
+    opacity: 0;
+    animation-delay: 0.9s;
+  }
+
+  button[type="submit"]:hover,
+  button[type="submit"]:focus {
+    background-color: var(--bleu-clair);
+    transform: scale(1.05);
+    outline: none;
+  }
+
+  /* Image logo */
+  img {
+    display: block;
+    margin: 0 auto 20px auto;
+    border-radius: 50%;
+    max-width: 120px;
+    box-shadow: 0 4px 15px var(--ombre);
+    animation: fadeInUp 0.6s ease forwards;
+    opacity: 0;
+    animation-delay: 1s;
+  }
+
+  /* Lien retour */
+  p a {
+    display: block;
+    text-align: center;
+    margin-top: 25px;
+    color: var(--bleu-fonce);
+    font-weight: 600;
+    text-decoration: none;
+    transition: color var(--transition);
+  }
+
+  p a:hover,
+  p a:focus {
+    color: var(--bleu-clair);
+    text-decoration: underline;
+  }
+
+  /* Animations générales */
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+  }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Modifier ma boutique</h1>
+    <form action="/boutique/mon/modifier" method="POST" enctype="multipart/form-data">
+      <label for="nom">Nom de la boutique</label>
+      <input type="text" id="nom" name="nom" value="<%= boutique.nom %>" required />
+
+      <label for="description">Description</label>
+      <textarea id="description" name="description" rows="4"><%= boutique.description %></textarea>
+
+      <label for="rue">Rue</label>
+      <input type="text" id="rue" name="rue" value="<%= boutique.adresse.rue %>" />
+
+      <label for="ville">Ville</label>
+      <input type="text" id="ville" name="ville" value="<%= boutique.adresse.ville %>" />
+
+      <label for="codePostal">Code Postal</label>
+      <input type="text" id="codePostal" name="codePostal" value="<%= boutique.adresse.codePostal %>" />
+
+      <label for="pays">Pays</label>
+      <input type="text" id="pays" name="pays" value="<%= boutique.adresse.pays %>" />
+
+      <label for="telephone">Téléphone</label>
+      <input type="text" id="telephone" name="telephone" value="<%= boutique.telephone %>" />
+
+      <label for="logo">Logo (laisser vide pour ne pas changer)</label>
+      <% if (boutique.logo) { %>
+        <img src="<%= boutique.logo %>" alt="Logo actuel" />
+      <% } %>
+      <input type="file" id="logo" name="logo" accept="image/*" />
+
+      <button type="submit">Enregistrer les modifications</button>
+    </form>
+
+    <p><a href="/boutique/mon">Retour à mon espace boutique</a></p>
+  </div>
+</body>
+</html>

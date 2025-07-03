@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Produit Ajouter</title>
+  <style>
+    :root {
+      --bleu-clair: #3498db;
+      --bleu-foncé: #2c3e50;
+      --blanc: #ffffff;
+      --gris-clair: #f7f9fc;
+      --gris: #ecf0f1;
+      --gris-foncé: #95a5a6;
+      --rouge: #e74c3c;
+    }
+
+    body {
+      background-color: var(--gris-clair);
+      color: var(--bleu-foncé);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 30px;
+      user-select: none;
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--bleu-clair);
+      margin-bottom: 40px;
+      user-select: text;
+    }
+
+    form {
+      max-width: 480px;
+      margin: 0 auto;
+      background-color: var(--blanc);
+      padding: 20px 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      user-select: text;
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: var(--bleu-foncé);
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea,
+    input[type="file"] {
+      width: 100%;
+      padding: 8px 0;
+      margin-bottom: 25px;
+      border: none;
+      border-bottom: 2px solid var(--gris);
+      font-size: 1rem;
+      color: var(--bleu-foncé);
+      background: transparent;
+      transition: border-color 0.3s ease;
+      font-family: inherit;
+      outline-offset: 2px;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    select:focus,
+    textarea:focus,
+    input[type="file"]:focus {
+      border-bottom-color: var(--bleu-clair);
+      outline: none;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      background-color: var(--bleu-clair);
+      color: var(--blanc);
+      border: none;
+      padding: 12px 0;
+      border-radius: 25px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+
+    button[type="submit"]:hover,
+    button[type="submit"]:focus {
+      background-color: #5dade2;
+      outline: none;
+    }
+
+    #messages-erreur {
+      max-width: 480px;
+      margin: 0 auto 20px;
+      padding: 10px 15px;
+      background-color: #fbeaea;
+      border-left: 4px solid var(--rouge);
+      color: var(--rouge);
+      font-weight: 600;
+      user-select: text;
+    }
+
+    #prixTTC {
+      font-style: italic;
+      color: var(--bleu-foncé);
+      margin-top: -20px;
+      margin-bottom: 20px;
+      user-select: text;
+    }
+
+    #preview {
+      display: block;
+      max-width: 200px;
+      margin: 0 auto 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 6px rgba(52, 152, 219, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="messages-erreur"></div>
+
+  <h1>Ajouter un produit</h1>
+
+  <form action="/produits/ajouter" method="POST" enctype="multipart/form-data">
+    <label for="nom">Nom :</label>
+    <input id="nom" type="text" name="nom" required />
+
+    <label for="devise">Devise :</label>
+    <select id="devise" name="devise" required>
+      <option value="EUR">€ Euro</option>
+      <option value="USD">$ Dollar</option>
+      <option value="XOF">CFA Franc</option>
+      <option value="GBP">£ Livre Sterling</option>
+    </select>
+
+    <label for="description">Description :</label>
+    <textarea id="description" name="description"></textarea>
+
+    <label for="prix">Prix HT :</label>
+    <input id="prix" type="number" name="prix" step="0.01" required />
+    <p id="prixTTC"></p>
+
+    <label for="image">Image :</label>
+    <input id="image" type="file" name="image" accept="image/*" />
+    <img id="preview" src="#" alt="Aperçu image" style="display:none;" />
+
+    <button type="submit">Ajouter</button>
+  </form>
+
+  <script>
+    const inputImage = document.getElementById('image');
+    const previewImage = document.getElementById('preview');
+
+    inputImage.addEventListener('change', function() {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          previewImage.src = e.target.result;
+          previewImage.style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+      } else {
+        previewImage.src = '#';
+        previewImage.style.display = 'none';
+      }
+    });
+  </script>
+
+  <script>
+    const form = document.querySelector('form');
+    const nomInput = document.getElementById('nom');
+    const prixInput = document.getElementById('prix');
+    const deviseSelect = document.getElementById('devise');
+    const messagesErreur = document.getElementById('messages-erreur');
+    const prixTTCElement = document.getElementById('prixTTC');
+
+    function calculerPrixTTC() {
+      const prix = parseFloat(prixInput.value);
+      const devise = deviseSelect.value;
+
+      if (isNaN(prix) || prix <= 0) {
+        prixTTCElement.textContent = '';
+        return;
+      }
+
+      let tauxTVA = 0;
+      switch (devise) {
+        case 'EUR': tauxTVA = 0.20; break;
+        case 'USD': tauxTVA = 0.07; break;
+        case 'XOF': tauxTVA = 0.18; break;
+        case 'GBP': tauxTVA = 0.20; break;
+        default: tauxTVA = 0;
+      }
+
+      const prixTTC = prix * (1 + tauxTVA);
+      prixTTCElement.textContent = `Prix TTC estimé : ${prixTTC.toFixed(2)} ${devise}`;
+    }
+
+    prixInput.addEventListener('input', calculerPrixTTC);
+    deviseSelect.addEventListener('change', calculerPrixTTC);
+
+    form.addEventListener('submit', function(event) {
+      let erreurs = [];
+
+      if (nomInput.value.trim() === '') {
+        erreurs.push("Le nom du produit est obligatoire.");
+      }
+
+      const prix = parseFloat(prixInput.value);
+      if (isNaN(prix) || prix <= 0) {
+        erreurs.push("Le prix doit être un nombre positif.");
+      }
+
+      if (!deviseSelect.value) {
+        erreurs.push("Vous devez choisir une devise.");
+      }
+
+      if (erreurs.length > 0) {
+        event.preventDefault();
+        messagesErreur.innerHTML = erreurs.map(e => `<p>${e}</p>`).join('');
+      } else {
+        messagesErreur.innerHTML = '';
+      }
+    });
+  </script>
+
+</body>
+</html>

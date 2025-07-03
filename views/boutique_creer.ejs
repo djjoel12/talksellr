@@ -1,0 +1,30 @@
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Créer ma boutique</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div class="container" style="max-width: 600px; margin: auto; padding: 30px;">
+    <h1 style="text-align:center;">🛍️ Créer ma boutique</h1>
+
+    <form action="/boutique/creer" method="POST" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 15px;">
+      <input type="text" name="nom" placeholder="Nom de la boutique" required class="form-input" />
+      <textarea name="description" placeholder="Description" rows="4" class="form-input"></textarea>
+
+      <input type="text" name="rue" placeholder="Rue" class="form-input" />
+      <input type="text" name="ville" placeholder="Ville" class="form-input" />
+      <input type="text" name="codePostal" placeholder="Code Postal (facultatif)" class="form-input" />
+      <input type="text" name="pays" placeholder="Pays" class="form-input" />
+      <input type="text" name="telephone" placeholder="Téléphone" class="form-input" />
+
+      <label for="logo" style="color: var(--jaune); font-weight: bold;">Logo de la boutique :</label>
+      <input type="file" id="logo" name="logo" accept="image/*" style="padding: 8px; background-color: var(--gris-fonce); color: var(--jaune); border: 1px solid var(--jaune); border-radius: 8px;" />
+
+      <button type="submit" class="produit-lien" style="margin-top: 10px;">✅ Créer la boutique</button>
+    </form>
+
+    <p style="text-align:center; margin-top: 20px;"><a href="/" style="color: var(--jaune); text-decoration: none;">← Retour à l’accueil</a></p>
+  </div>
+</body>
+</html>

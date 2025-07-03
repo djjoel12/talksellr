@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>modifier produits </title>
+   <link rel="stylesheet" href="/css/styles.css" />
+
+</head>
+<h1>Modifier le produit</h1>
+
+<form action="/produits/modifier/<%= produit._id %>" method="POST" enctype="multipart/form-data">
+  <label>Nom :</label><br />
+  <input type="text" name="nom" value="<%= produit.nom %>" required /><br />
+
+  <label>Devise :</label>
+  <select name="devise" required>
+    <option value="EUR" <%= produit.devise === 'EUR' ? 'selected' : '' %>>€ Euro</option>
+    <option value="USD" <%= produit.devise === 'USD' ? 'selected' : '' %>>$ Dollar</option>
+    <option value="XOF" <%= produit.devise === 'XOF' ? 'selected' : '' %>>CFA Franc</option>
+    <option value="GBP" <%= produit.devise === 'GBP' ? 'selected' : '' %>>£ Livre Sterling</option>
+  </select><br>
+
+  <label>Description :</label><br />
+  <textarea name="description"><%= produit.description %></textarea><br />
+
+  <label>Prix :</label><br />
+  <input type="number" name="prix" step="0.01" value="<%= produit.prix %>" required /><br />
+
+  <label>Changer l’image :</label><br />
+  <input type="file" name="image" accept="image/*" /><br />
+
+  <% if (produit.image) { %>
+    <img src="<%= produit.image %>" style="max-width: 100px;" />
+  <% } %>
+
+  <br /><button type="submit">💾 Enregistrer les modifications</button>
+</form>
+

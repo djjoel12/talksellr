@@ -1,0 +1,40 @@
+
+   <!DOCTYPE html>
+   <html lang="fr">
+   <head>
+     <meta charset="UTF-8">
+     <title>Dashboard Vendeur</title>
+     <link rel="stylesheet" href="/css/styles.css">
+   </head>
+   <body>
+     <h1 style="text-align:center;">Bienvenue <%= user.nom %> 👋</h1>
+
+     <div style="text-align: center; margin-bottom: 30px;">
+       <p>Vous êtes connecté en tant que <strong><%= user.role %></strong>.</p>
+     </div>
+
+     <div class="container">
+       <div class="produits-grid">
+         <a class="produit-card" href="/boutique/mon">
+           <h2>🛍️ Ma Boutique</h2>
+           <p>Voir ou modifier ma boutique</p>
+         </a>
+
+         <a class="produit-card" href="/produits/mes">
+           <h2>📦 Mes Produits</h2>
+           <p>Ajouter, modifier, supprimer un produit</p>
+         </a>
+
+         <a class="produit-card" href="#">
+           <h2>📊 Statistiques</h2>
+           <p>Ventes, vues, performances</p>
+         </a>
+
+         <a class="produit-card" href="/auth/logout">
+           <h2>🚪 Déconnexion</h2>
+           <p>Se déconnecter de l'espace vendeur</p>
+         </a>
+       </div>
+     </div>
+   </body>
+   </html>

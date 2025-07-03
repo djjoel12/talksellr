@@ -1,0 +1,59 @@
+       <!DOCTYPE html>
+       <html lang="fr">
+       <head>
+         <meta charset="UTF-8">
+         <title>Mon Panier</title>
+         <link rel="stylesheet" href="/css/styles.css">
+       </head>
+       <body>
+         <div class="container">
+           <h1>🛒 Mon Panier</h1>
+
+           <% if (panier.length === 0) { %>
+             <p class="message">Votre panier est vide.</p>
+             <p style="text-align:center;"><a href="/">← Retour à l’accueil</a></p>
+           <% } else { %>
+
+             <div class="produits-grid">
+               <% panier.forEach(item => { %>
+                 <div class="produit-card">
+                   <% if (item.produit.image) { %>
+                     <img src="<%= item.produit.image %>" alt="<%= item.produit.nom %>" class="produit-image">
+                   <% } %>
+                   <div class="produit-nom"><%= item.produit.nom %></div>
+                   <div class="produit-prix"><%= item.produit.prix %> <%= item.produit.devise %></div>
+                   <div>Quantité : <%= item.quantite %></div>
+
+                   <form action="/panier/supprimer/<%= item.produit._id %>" method="POST" style="margin-top: 10px;">
+                     <button class="produit-lien" style="background-color: crimson; color: white;">🗑 Supprimer</button>
+                   </form>
+                 </div>
+               <% }) %>
+             </div>
+
+             <!-- Formulaire de commande -->
+             <h2 style="margin-top: 40px;">Finaliser ma commande</h2>
+             <form action="/commande/valider" method="POST" style="max-width: 600px; margin: 0 auto;">
+               <div style="margin-bottom: 15px;">
+                 <label>Nom complet :</label><br>
+                 <input type="text" name="nom" required style="width: 100%; padding: 10px;">
+               </div>
+               <div style="margin-bottom: 15px;">
+                 <label>Téléphone (WhatsApp) :</label><br>
+                 <input type="text" name="telephone" required style="width: 100%; padding: 10px;">
+               </div>
+               <div style="margin-bottom: 15px;">
+                 <label>Adresse de livraison :</label><br>
+                 <textarea name="adresse" required rows="3" style="width: 100%; padding: 10px;"></textarea>
+               </div>
+
+               <button type="submit" class="produit-lien" style="width: 100%; font-size: 1.2rem;">✅ Valider ma commande</button>
+             </form>
+
+           <% } %>
+
+           <p style="text-align:center; margin-top: 40px;"><a href="/">← Retour à l’accueil</a></p>
+         </div>
+       </body>
+       </html>
+

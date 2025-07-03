@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Ma Boutique</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <h1>Créer / Modifier ma boutique</h1>
+
+  <form method="POST" action="/vendeur/boutique">
+    <label>Nom de la boutique :</label><br>
+    <input type="text" name="nom" value="<%= boutique?.nom || '' %>" required><br><br>
+
+    <label>Description :</label><br>
+    <textarea name="description"><%= boutique?.description || '' %></textarea><br><br>
+    
+    <input type="text" name="rue" placeholder="Rue" /><br />
+    <input type="text" name="ville" placeholder="Ville" /><br />
+    <input type="text" name="codePostal" placeholder="Code Postal" /><br />
+    
+
+    <form method="POST" action="/vendeur/boutique" enctype="multipart/form-data">
+      ...
+      <label>Logo :</label><br>
+      <% if (boutique?.logo) { %>
+        <img src="<%= boutique.logo %>" width="100" /><br>
+      <% } %>
+      <input type="file" name="logo"  value="<%= boutique?.logo || '' %>"><br><br>
+    
+
+    <label>Pays :</label><br>
+    <input type="text" name="pays" value="<%= boutique?.pays || '' %>"><br><br>
+
+    <button type="submit">Sauvegarder</button>
+  </form>
+</body>
+</html>
