@@ -56,6 +56,8 @@ const vendeurRoutes = require('./routes/vendeur');
 const produitRoutes = require('./routes/produit');
 const panierRouter = require('./routes/panier');
 const commandeRoutes = require('./routes/commandes');
+const cloudinary = require('./config/cloudinary');
+
 
 app.use('/produits', produitRoutes);
 app.use('/vendeur', vendeurRoutes);

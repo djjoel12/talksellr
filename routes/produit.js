@@ -6,7 +6,7 @@ const fs = require('fs');
 const Produit = require('../models/Product');
 const Boutique = require('../models/Boutique');
 const estVendeur = require('../middlewares/estVendeur');
-const cloudinary = require('cloudinary').v2; // Assure-toi que cloudinary est importé en haut
+
 
 // Configuration multer pour upload d'images (sur disque local dans public/uploads)
 const storage = multer.diskStorage({
@@ -98,7 +98,7 @@ router.post('/modifier/:id', estVendeur, upload.single('image'), async (req, res
     res.status(500).send('Erreur modification produit : ' + err.message);
   }
 });
-
+const cloudinary = require('cloudinary').v2;
 // fonction pour extraire le public_id à partir de l'URL
 function getPublicIdFromUrl(url) {
   const parts = url.split('/');
@@ -107,24 +107,24 @@ function getPublicIdFromUrl(url) {
   return publicId;
 }
 
+// Exemple de route suppression produit (routes/produit.js)
 router.post('/supprimer/:id', estVendeur, async (req, res) => {
   try {
     const produit = await Produit.findById(req.params.id);
     if (!produit) return res.status(404).send('Produit non trouvé');
 
-    // Supprimer image Cloudinary
-    if (produit.image) {
-      const publicId = getPublicIdFromUrl(produit.image);
-      await cloudinary.uploader.destroy(publicId);
+    // Si tu utilises Cloudinary et que tu stockes le public_id dans produit.cloudinary_id par exemple
+    if(produit.cloudinary_id) {
+      const cloudinary = require('cloudinary').v2;
+      await cloudinary.uploader.destroy(produit.cloudinary_id);
     }
 
-    // Supprimer produit en base
     await Produit.findByIdAndDelete(req.params.id);
-
     res.redirect('/produits/mes');
-  } catch (error) {
-    console.error('Erreur suppression produit:', error);
-    res.status(500).send('Erreur lors de la suppression');
+  } catch (err) {
+    console.error('Erreur lors de la suppression :', err);
+    res.status(500).send('Erreur lors de la suppression : ' + err.message);
   }
 });
+
 module.exports = router;
