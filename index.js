@@ -65,7 +65,7 @@ app.use('/boutique', boutiqueRoutes);
 app.use('/', indexRoutes);
 app.use('/auth', authRoutes);
 app.use('/panier', panierRouter);
-app.use('/commandes', commandeRoutes);
+app.use('/commande', commandeRoutes);
 
 // Lancement du serveur
 app.listen(PORT, () => {

@@ -6,6 +6,7 @@ const fs = require('fs');
 const Produit = require('../models/Product');
 const Boutique = require('../models/Boutique');
 const estVendeur = require('../middlewares/estVendeur');
+const cloudinary = require('../config/cloudinary'); // Assure-toi que ce chemin est correct
 
 
 // Configuration multer pour upload d'images (sur disque local dans public/uploads)
@@ -39,7 +40,8 @@ router.post('/ajouter', estVendeur, upload.single('image'), async (req, res) => 
       description: req.body.description,
       prix: parseFloat(req.body.prix),
       devise: req.body.devise || 'EUR',
-      image: imagePath,
+       image: result.secure_url, // 👈 URL Cloudinary
+        cloudinary_id: result.public_id, // 👈 important si tu veux pouvoir supprimer l’image
       boutique: boutique._id,
       vendeur: req.session.user.id,
     });
@@ -98,7 +100,7 @@ router.post('/modifier/:id', estVendeur, upload.single('image'), async (req, res
     res.status(500).send('Erreur modification produit : ' + err.message);
   }
 });
-const cloudinary = require('cloudinary').v2;
+
 // fonction pour extraire le public_id à partir de l'URL
 function getPublicIdFromUrl(url) {
   const parts = url.split('/');

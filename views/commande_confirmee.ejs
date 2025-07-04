@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Commande confirmée</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <h1>🎉 Merci <%= nom %>, votre commande a été enregistrée !</h1>
+  <p>Vous pouvez maintenant envoyer un message au vendeur via WhatsApp :</p>
+
+  <a
+    href="https://wa.me/<%= numeroWhatsApp %>?text=<%= messageWhatsApp %>"
+    target="_blank"
+    style="display: inline-block; padding: 10px 20px; background-color: green; color: white; border-radius: 6px; text-decoration: none;">
+    📲 Envoyer la commande sur WhatsApp
+  </a>
+
+  <br><br>
+  <a href="/" style="color: blue;">← Retour à l'accueil</a>
+</body>
+</html>

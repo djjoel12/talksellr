@@ -1,35 +1,21 @@
 const mongoose = require('mongoose');
 
 const commandeSchema = new mongoose.Schema({
-  client: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',  // ou 'Client' selon ta structure
-    required: true
-  },
-  produits: [{
-    produitId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Produit',
-      required: true
-    },
-    quantite: {
-      type: Number,
-      required: true,
-      min: 1
-    },
-    vendeurId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true
+  nom: String,
+  telephone: String,
+  adresse: String,
+  produits: [
+    {
+      produitId: { type: mongoose.Schema.Types.ObjectId, ref: 'Produit' },
+      nom: String,
+      prix: Number,
+      devise: String,
+      quantite: Number,
+      vendeurId: { type: mongoose.Schema.Types.ObjectId, ref: 'Utilisateur' }
     }
-  }],
-  dateCommande: {
-    type: Date,
-    default: Date.now
-  },
-  statut: {
-    type: String,
-    enum: ['en attente', 'confirmée', 'expédiée', 'livrée', 'annulée'],
-    default: 'en attente'
-  }
+  ],
+  total: Number,
+  date: { type: Date, default: Date.now }
 });
+
+module.exports = mongoose.model('Commande', commandeSchema);

@@ -5,7 +5,8 @@ const productSchema = new mongoose.Schema({
   description: String,
   prix: { type: Number, required: true },
   devise: { type: String, default: 'EUR' }, // Par défaut Euro
-  image: String,  // chemin vers image uploadée
+  image: { type: String }, // chemin vers image uploadée
+  cloudinary_id: { type: String },
   boutique: { type: mongoose.Schema.Types.ObjectId, ref: 'Boutique', required: true },
   dateCreation: { type: Date, default: Date.now },  // <-- bien fermer l'accolade ici
   vendeur: {

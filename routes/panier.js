@@ -2,6 +2,16 @@ const express = require('express');
 const router = express.Router();
 const Produit = require('../models/Product');
 
+
+
+// Dans ton contrôleur
+router.get('/panier', async (req, res) => {
+  const panier = await Panier.find({ client: req.session.user.id }).populate('produit');
+  const total = panier.reduce((acc, item) => acc + item.produit.prix * item.quantite, 0);
+
+  res.render('panier_valider', { panier, total });
+});
+
 // Ajouter un produit au panier (POST /panier/ajouter)
 router.post('/ajouter', async (req, res) => {
   try {
