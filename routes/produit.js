@@ -7,7 +7,7 @@ const Produit = require('../models/Product');
 const Boutique = require('../models/Boutique');
 const estVendeur = require('../middlewares/estVendeur');
 
-// Configuration multer pour upload d'images
+// Configuration multer pour upload d'images (sur disque local dans public/uploads)
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'public/uploads');
@@ -24,15 +24,13 @@ router.get('/ajouter', estVendeur, (req, res) => {
   res.render('produit_ajouter');
 });
 
-// POST ajouter produit
+// POST : ajouter produit avec upload image
 router.post('/ajouter', estVendeur, upload.single('image'), async (req, res) => {
   try {
-    if (!req.session.user || !req.session.user.id) {
-      return res.status(403).send('Accès refusé.');
-    }
     const boutique = await Boutique.findOne({ proprietaire: req.session.user.id });
     if (!boutique) return res.send('Vous devez d’abord créer votre boutique.');
 
+    // Chemin vers l'image uploadée
     const imagePath = req.file ? '/uploads/' + req.file.filename : null;
 
     const produit = new Produit({
@@ -42,25 +40,24 @@ router.post('/ajouter', estVendeur, upload.single('image'), async (req, res) => 
       devise: req.body.devise || 'EUR',
       image: imagePath,
       boutique: boutique._id,
-      vendeur: req.session.user.id  // <-- ici
+      vendeur: req.session.user.id,
     });
 
     await produit.save();
     res.redirect('/produits/mes');
   } catch (err) {
-    console.error('Erreur lors de l’ajout du produit :', err);
+    console.error('Erreur ajout produit:', err);
     res.status(500).send('Erreur ajout produit : ' + err.message);
   }
 });
 
-// GET mes produits
+// GET : liste des produits du vendeur
 router.get('/mes', estVendeur, async (req, res) => {
   try {
     const boutique = await Boutique.findOne({ proprietaire: req.session.user.id });
     if (!boutique) return res.send('Vous devez d’abord créer votre boutique.');
 
     const produits = await Produit.find({ boutique: boutique._id }).populate('vendeur', 'nom telephone');
-
     res.render('produit_mes', { produits });
   } catch (err) {
     console.error('Erreur affichage produits :', err);
@@ -68,34 +65,48 @@ router.get('/mes', estVendeur, async (req, res) => {
   }
 });
 
-
-// GET : formulaire de modification
+// GET : formulaire de modification produit
 router.get('/modifier/:id', estVendeur, async (req, res) => {
-  const produit = await Produit.findById(req.params.id);
-  if (!produit) return res.status(404).send('Produit non trouvé');
-  res.render('produit_modifier', { produit });
+  try {
+    const produit = await Produit.findById(req.params.id);
+    if (!produit) return res.status(404).send('Produit non trouvé');
+    res.render('produit_modifier', { produit });
+  } catch (err) {
+    console.error('Erreur récupération produit:', err);
+    res.status(500).send('Erreur serveur');
+  }
 });
 
-// POST : traitement de modification
+// POST : traitement modification produit
 router.post('/modifier/:id', estVendeur, upload.single('image'), async (req, res) => {
-  const updates = {
-    nom: req.body.nom,
-    description: req.body.description,
-    prix: req.body.prix,
-    devise: req.body.devise
-  };
-  if (req.file) {
-    updates.image = '/uploads/' + req.file.filename;
-  }
+  try {
+    const updates = {
+      nom: req.body.nom,
+      description: req.body.description,
+      prix: req.body.prix,
+      devise: req.body.devise,
+    };
+    if (req.file) {
+      updates.image = '/uploads/' + req.file.filename;
+    }
 
-  await Produit.findByIdAndUpdate(req.params.id, updates);
-  res.redirect('/produits/mes');
+    await Produit.findByIdAndUpdate(req.params.id, updates);
+    res.redirect('/produits/mes');
+  } catch (err) {
+    console.error('Erreur modification produit:', err);
+    res.status(500).send('Erreur modification produit : ' + err.message);
+  }
 });
 
 // POST : suppression d’un produit
 router.post('/supprimer/:id', estVendeur, async (req, res) => {
-  await Produit.findByIdAndDelete(req.params.id);
-  res.redirect('/produits/mes');
+  try {
+    await Produit.findByIdAndDelete(req.params.id);
+    res.redirect('/produits/mes');
+  } catch (err) {
+    console.error('Erreur suppression produit:', err);
+    res.status(500).send('Erreur suppression produit : ' + err.message);
+  }
 });
 
 module.exports = router;

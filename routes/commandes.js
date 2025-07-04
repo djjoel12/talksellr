@@ -3,6 +3,40 @@ const router = express.Router();
 const Produit = require('../models/Product');
 const Commande = require('../models/Commandes'); // ou le chemin correct
 
+// Créer une commande
+router.post('/creer', async (req, res) => {
+  try {
+    const { produits, vendeur } = req.body;
+
+    const commande = new Commande({
+      client: req.session.userId,
+      produits,
+      vendeur
+    });
+
+    await commande.save();
+    res.status(201).json({ message: 'Commande créée avec succès' });
+  } catch (err) {
+    res.status(500).json({ message: 'Erreur lors de la création de la commande', err });
+  }
+});
+
+// Voir toutes les commandes du vendeur connecté
+router.get('/vendeur', async (req, res) => {
+  try {
+    const commandes = await Commande.find({ vendeur: req.session.userId })
+      .populate('produits.produit')
+      .populate('client');
+    res.render('commandes/vendeur', { commandes });
+  } catch (err) {
+    res.status(500).send('Erreur serveur');
+  }
+});
+
+
+
+
+
 // Route pour valider la commande
 router.post('/valider', async (req, res) => {
   const { nom, telephone, adresse } = req.body;

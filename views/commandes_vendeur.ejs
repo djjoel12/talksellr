@@ -1,25 +1,52 @@
-<h1>Mes commandes</h1>
+  <!DOCTYPE html>
+  <html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <title>Mes Commandes</title>
+    <style>
+      body {
+        font-family: Arial;
+        padding: 20px;
+        background-color: #f2f2f2;
+      }
+      h1 {
+        color: #004080;
+      }
+      .commande {
+        background: white;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      }
+      .produit {
+        margin-left: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Mes Commandes</h1>
 
-<% if (commandes.length === 0) { %>
-  <p>Aucune commande trouvée pour vos produits.</p>
-<% } else { %>
-  <% commandes.forEach(cmd => { %>
-    <div style="border:1px solid #ccc; padding:15px; margin-bottom:20px;">
-      <p><strong>Commande ID :</strong> <%= cmd._id %></p>
-      <p><strong>Client :</strong> <%= cmd.client.nom %> (<%= cmd.client.email %>)</p>
-      <p><strong>Date :</strong> <%= cmd.dateCommande.toLocaleString() %></p>
-      <p><strong>Statut :</strong> <%= cmd.statut %></p>
+    <% if (commandes.length === 0) { %>
+      <p>Aucune commande pour le moment.</p>
+    <% } %>
 
-      <h3>Produits commandés dans cette commande :</h3>
-      <ul>
-        <% cmd.produits.forEach(item => { %>
-          <% if(item.vendeurId.toString() === vendeurId.toString()) { %>
-            <li>
-              Produit ID: <%= item.produitId %> — Quantité: <%= item.quantite %> — Prix unitaire: <%= item.prixUnitaire %>
+    <% commandes.forEach(c => { %>
+      <div class="commande">
+        <p><strong>Client :</strong> <%= c.client.nom %></p>
+        <p><strong>Date :</strong> <%= new Date(c.date).toLocaleDateString() %></p>
+        <p><strong>Statut :</strong> <%= c.statut %></p>
+
+        <h4>Produits :</h4>
+        <ul>
+          <% c.produits.forEach(p => { %>
+            <li class="produit">
+              <%= p.produit.nom %> - Quantité : <%= p.quantite %>
             </li>
-          <% } %>
-        <% }) %>
-      </ul>
-    </div>
-  <% }) %>
-<% } %>
+          <% }) %>
+        </ul>
+      </div>
+    <% }) %>
+  </body>
+  </html>
+
