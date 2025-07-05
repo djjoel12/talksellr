@@ -6,9 +6,11 @@ const cloudinary = require('./cloudinary');
 const storage = new CloudinaryStorage({
   cloudinary,
   params: {
-    folder: 'marketplace_produits',
+    folder: 'produits',
     allowed_formats: ['jpg', 'jpeg', 'png'],
   },
 });
 
-module.exports = storage;
+const upload = multer({ storage });
+
+module.exports = upload;
