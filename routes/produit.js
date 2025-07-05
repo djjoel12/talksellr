@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
+const upload = require('../config/storage'); // ✅ Pour uploader vers Cloudinary
 const path = require('path');
 const fs = require('fs');
 const Produit = require('../models/Product');
@@ -27,21 +27,20 @@ router.get('/ajouter', estVendeur, (req, res) => {
 });
 
 // POST : ajouter produit avec upload image
+
 router.post('/ajouter', estVendeur, upload.single('image'), async (req, res) => {
   try {
     const boutique = await Boutique.findOne({ proprietaire: req.session.user.id });
     if (!boutique) return res.send('Vous devez d’abord créer votre boutique.');
 
-    // Chemin vers l'image uploadée
-    const imagePath = req.file ? '/uploads/' + req.file.filename : null;
-
+    // ✅ L’image est automatiquement envoyée sur Cloudinary via Multer
     const produit = new Produit({
       nom: req.body.nom,
       description: req.body.description,
       prix: parseFloat(req.body.prix),
       devise: req.body.devise || 'EUR',
-       image: result.secure_url, // 👈 URL Cloudinary
-        cloudinary_id: result.public_id, // 👈 important si tu veux pouvoir supprimer l’image
+      image: req.file.path,           // ✅ URL de l’image Cloudinary
+      cloudinary_id: req.file.filename, // ✅ public_id utile si tu veux supprimer
       boutique: boutique._id,
       vendeur: req.session.user.id,
     });
@@ -53,7 +52,6 @@ router.post('/ajouter', estVendeur, upload.single('image'), async (req, res) => 
     res.status(500).send('Erreur ajout produit : ' + err.message);
   }
 });
-
 // GET : liste des produits du vendeur
 router.get('/mes', estVendeur, async (req, res) => {
   try {
