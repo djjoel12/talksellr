@@ -112,26 +112,34 @@ router.post('/boutique', estVendeur, upload.single('logo'), async (req, res) => 
   }
 });
 
-// Route GET affichage boutique du vendeur
+// Route GET : Affichage de la boutique du vendeur connecté
 router.get('/mon', estVendeur, async (req, res) => {
   try {
     const boutique = await Boutique.findOne({ proprietaire: req.session.user.id });
+
     if (!boutique) {
-      return res.render('boutique_mon', { boutique: null, produits: [] });
-      return res.status(404).send('Vous n\'avez pas encore de boutique.');
+      return res.render('boutique_mon', {
+        boutique: null,
+        produits: [],
+        message: "Vous n'avez pas encore créé de boutique."
+      });
     }
 
     const produits = await Produit.find({ boutique: boutique._id }).populate('vendeur', 'nom');
 
-    console.log('Produits récupérés:', produits); // Ajoute ça pour debug
+    console.log('Produits récupérés:', produits);
 
-    res.render('boutique_mon', { boutique, produits });
+    res.render('boutique_mon', {
+      boutique,
+      produits,
+      message: null
+    });
+
   } catch (error) {
     console.error('Erreur affichage boutique :', error);
-    res.status(500).send('Erreur affichage boutique : ' + error.message);
+    res.status(500).send('Erreur serveur : ' + error.message);
   }
 });
-
 
 
 // Dashboard vendeur
