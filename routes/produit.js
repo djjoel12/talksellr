@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
     cb(null, uniqueName);
   }
 });
-const upload = multer({ storage });
+
 
 // GET : formulaire d’ajout produit
 router.get('/ajouter', estVendeur, (req, res) => {
