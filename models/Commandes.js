@@ -6,7 +6,7 @@ const commandeSchema = new mongoose.Schema({
   adresse: String,
   produits: [
     {
-      produitId: { type: mongoose.Schema.Types.ObjectId, ref: 'Produit' },
+      produitId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
       nom: String,
       prix: Number,
       devise: String,

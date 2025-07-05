@@ -1,53 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const Produit = require('../models/Product');
-const Commande = require('../models/Commandes'); // ou le chemin correct
-const estVendeurConnecte = require('../middlewares/estVendeur');
+const Commande = require('../models/Commandes');
+const estVendeur = require('../middlewares/estVendeur');
 
-// Créer une commande
-router.post('/creer', async (req, res) => {
-  try {
-    const { produits, vendeur } = req.body;
-
-    const commande = new Commande({
-      client: req.session.userId,
-      produits,
-      vendeur
-    });
-
-    await commande.save();
-    res.status(201).json({ message: 'Commande créée avec succès' });
-  } catch (err) {
-    res.status(500).json({ message: 'Erreur lors de la création de la commande', err });
-  }
-});
-
-// Voir toutes les commandes du vendeur connecté
-router.get('/vendeur', async (req, res) => {
-  try {
-    const commandes = await Commande.find({ vendeur: req.session.userId })
-      .populate('produits.produit')
-      .populate('client');
-    res.render('commandes/vendeur', { commandes });
-  } catch (err) {
-    res.status(500).send('Erreur serveur');
-  }
-});
-
-
-
-
-
-// Route pour valider la commande
+// ✅ Route : Valider commande d’un client
 router.post('/valider', async (req, res) => {
   const { nom, telephone, adresse } = req.body;
   const panier = req.session.panier || [];
 
-  if (panier.length === 0) {
-    return res.send('Votre panier est vide.');
-  }
+  if (panier.length === 0) return res.send('Votre panier est vide.');
 
-  // Récupérer les produits
   const produitsIds = panier.map(item => item.produitId);
   const produits = await Produit.find({ _id: { $in: produitsIds } });
 
@@ -58,17 +21,18 @@ router.post('/valider', async (req, res) => {
 
   const devise = produits[0]?.devise || 'FCFA';
 
-  // Enregistrer la commande dans MongoDB
   const nouvelleCommande = new Commande({
-    client: { nom, telephone, adresse },
+    nom, telephone, adresse,
     produits: panier,
     total,
-    devise
+    date: new Date(),
   });
 
   await nouvelleCommande.save();
 
-  // Construire le message WhatsApp
+  req.session.panier = [];
+
+  // Message WhatsApp
   let message = `🛒 Nouvelle commande :\n\n👤 ${nom}\n📞 ${telephone}\n📍 ${adresse}\n\n📦 Produits :\n`;
   panier.forEach(item => {
     const produit = produits.find(p => p._id.toString() === item.produitId);
@@ -77,33 +41,34 @@ router.post('/valider', async (req, res) => {
     }
   });
   message += `\n💰 Total : ${total} ${devise}`;
-  const encodedMessage = encodeURIComponent(message);
-  const numeroWhatsApp = '225XXXXXXXXXX'; // Ton numéro
 
-  // Vider le panier
-  req.session.panier = [];
-
-  // Afficher page de confirmation avec bouton WhatsApp
+  const numeroWhatsApp = '225XXXXXXXXX'; // ton numéro
   res.render('commande_confirmee', {
     numeroWhatsApp,
-    messageWhatsApp: encodedMessage,
+    messageWhatsApp: encodeURIComponent(message),
     nom
   });
 });
 
-router.get('/mes', estVendeurConnecte, async (req, res) => {
+
+// ✅ Route : Voir les commandes liées à mes produits
+router.get('/mes-commandes', estVendeur, async (req, res) => {
   try {
-    const vendeurId = req.session.user._id;
+    // Récupère tous les produits appartenant au vendeur connecté
+    const mesProduits = await Produit.find({ vendeur: req.session.user.id }).select('_id');
 
-    // Chercher toutes les commandes où au moins un produit appartient au vendeur connecté
-    const commandes = await Commande.find({ 'produits.vendeurId': vendeurId })
-      .populate('client', 'nom email')
-      .sort({ dateCommande: -1 });
+    const mesProduitsIds = mesProduits.map(p => p._id); // Pas besoin de .toString()
 
-    res.render('commandes_vendeur', { commandes, vendeurId });
+    // Cherche toutes les commandes contenant ces produits
+    const commandes = await Commande.find({ "produits.produitId": { $in: mesProduitsIds } })
+      .populate('produits.produitId', 'nom prix image') // Charge les infos produit
+      
+      .sort({ date: -1 });
+
+    res.render('commande_mes', { commandes });
   } catch (err) {
-    console.error(err);
-    res.status(500).send('Erreur lors du chargement des commandes.');
+    console.error('Erreur affichage commandes :', err);
+    res.status(500).send('Erreur serveur');
   }
 });
 module.exports = router;

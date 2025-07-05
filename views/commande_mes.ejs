@@ -1,0 +1,41 @@
+        <!-- views/commande_mes.ejs -->
+        <!DOCTYPE html>
+        <html lang="fr">
+        <head>
+          <meta charset="UTF-8">
+          <title>Mes Commandes</title>
+          <style>
+            table { width: 90%; margin: auto; border-collapse: collapse; }
+            th, td { padding: 10px; border: 1px solid #ccc; }
+            th { background-color: #f0f0f0; }
+            h1 { text-align: center; }
+          </style>
+        </head>
+        <body>
+          <h1>Commandes sur mes produits</h1>
+          <% if (commandes.length === 0) { %>
+            <p style="text-align:center;">Aucune commande pour l’instant.</p>
+          <% } else { %>
+            <table>
+              <tr>
+                <th>Produit</th>
+                <th>Quantité</th>
+                <th>Client</th>
+                <th>Téléphone</th>
+                <th>Date</th>
+              </tr>
+              <% commandes.forEach(c => { %>
+                <% c.produits.forEach(p => { %>
+                  <tr>
+                    <td><%= p.produitId ? p.produitId.nom : 'Produit supprimé' %></td>
+                    <td><%= p.quantite %></td>
+                    <td><%= c.client?.nom || 'Client inconnu' %></td>
+                    <td><%= c.client?.telephone || 'N/A' %></td>
+                    <td><%= new Date(c.date).toLocaleString() %></td>
+                  </tr>
+                <% }) %>
+              <% }) %>
+            </table>
+          <% } %>
+        </body>
+        </html>

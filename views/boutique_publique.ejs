@@ -63,5 +63,90 @@
                           </li>
                         <% }) %>
                       </ul>
+                          <!-- 🔗 BOUTON PARTAGER LA BOUTIQUE -->
+                          <div style="text-align:center; margin-top: 30px;">
+                            <button onclick="toggleShare()" style="
+                              background-color: #4CAF50;
+                              color: white;
+                              padding: 12px 20px;
+                              border: none;
+                              border-radius: 8px;
+                              font-size: 1rem;
+                              cursor: pointer;
+                            ">
+                              📤 Partager cette boutique
+                            </button>
+
+                            <div id="shareBox" style="display:none; margin-top: 20px;">
+                              <% const boutiqueURL = `https://mon-site-marketplace.onrender.com/boutique/${boutique.slug}`; %>
+
+                              <!-- WhatsApp -->
+                              <a href="https://wa.me/?text=🔥 Découvrez cette boutique : <%= boutiqueURL %>" target="_blank" style="
+                                display:inline-block;
+                                margin: 10px;
+                                background-color: #25D366;
+                                color: white;
+                                padding: 10px 16px;
+                                border-radius: 6px;
+                                text-decoration: none;
+                                font-size: 16px;
+                              ">📱 WhatsApp</a>
+
+                              <!-- Facebook -->
+                              <a href="https://www.facebook.com/sharer/sharer.php?u=<%= boutiqueURL %>" target="_blank" style="
+                                display:inline-block;
+                                margin: 10px;
+                                background-color: #4267B2;
+                                color: white;
+                                padding: 10px 16px;
+                                border-radius: 6px;
+                                text-decoration: none;
+                                font-size: 16px;
+                              ">📘 Facebook</a>
+
+                              <!-- Email -->
+                              <a href="mailto:?subject=Découvrez cette boutique&body=Voici le lien : <%= boutiqueURL %>" style="
+                                display:inline-block;
+                                margin: 10px;
+                                background-color: #ff9800;
+                                color: white;
+                                padding: 10px 16px;
+                                border-radius: 6px;
+                                text-decoration: none;
+                                font-size: 16px;
+                              ">✉️ Email</a>
+
+                              <!-- Copier lien -->
+                              <button onclick="copyToClipboard('<%= boutiqueURL %>')" style="
+                                display:inline-block;
+                                margin: 10px;
+                                background-color: #555;
+                                color: white;
+                                padding: 10px 16px;
+                                border: none;
+                                border-radius: 6px;
+                                font-size: 16px;
+                                cursor: pointer;
+                              ">📋 Copier le lien</button>
+                            </div>
+                          </div>
+
+
+
+                          <script>
+                            function toggleShare() {
+                              const box = document.getElementById('shareBox');
+                              box.style.display = box.style.display === 'none' ? 'block' : 'none';
+                            }
+
+                            function copyToClipboard(texte) {
+                              navigator.clipboard.writeText(texte).then(() => {
+                                alert("Lien copié !");
+                              }, () => {
+                                alert("Erreur lors de la copie.");
+                              });
+                            }
+                          </script>
+
                     </body>
                     </html>
