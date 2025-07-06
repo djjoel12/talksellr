@@ -29,8 +29,8 @@
                   <tr>
                     <td><%= p.produitId ? p.produitId.nom : 'Produit supprimé' %></td>
                     <td><%= p.quantite %></td>
-                    <td><%= c.client?.nom || 'Client inconnu' %></td>
-                    <td><%= c.client?.telephone || 'N/A' %></td>
+                    <td><%= c.nom || 'Client inconnu' %></td>
+                    <td><%= c.telephone || 'N/A' %></td>
                     <td><%= new Date(c.date).toLocaleString() %></td>
                   </tr>
                 <% }) %>

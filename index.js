@@ -11,6 +11,8 @@ const PORT = process.env.PORT || 3000;
 
 console.log("MONGODB_URI:", process.env.MONGODB_URI);
 console.log("SESSION_SECRET:", process.env.SESSION_SECRET);
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
 // Connexion à MongoDB
 mongoose.connect(process.env.MONGODB_URI)
