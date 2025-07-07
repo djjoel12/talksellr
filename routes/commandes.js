@@ -6,6 +6,7 @@ const express = require('express');
 const router = express.Router();
 const Produit = require('../models/Product');
 const Commande = require('../models/Commandes');
+const User = require('../models/User'); // <-- ajouté pour récupérer vendeur
 const estConnecte = require('../middlewares/estConnecte');
 const estVendeur = require('../middlewares/estVendeur');
 
@@ -38,6 +39,15 @@ router.post('/valider', async (req, res) => {
   await nouvelleCommande.save();
   req.session.panier = [];
 
+  // Récupérer le vendeur du premier produit pour avoir son téléphone
+  let numeroWhatsApp = '225XXXXXXXXX'; // fallback
+  if (produits.length > 0) {
+    const vendeur = await User.findById(produits[0].vendeur);
+    if (vendeur && vendeur.telephone) {
+      numeroWhatsApp = vendeur.telephone;
+    }
+  }
+
   // Construction du message WhatsApp
   let message = `🛒 Nouvelle commande :\n\n👤 ${nom}\n📞 ${telephone}\n📍 ${adresse}\n\n📦 Produits :\n`;
   panier.forEach(item => {
@@ -47,8 +57,6 @@ router.post('/valider', async (req, res) => {
     }
   });
   message += `\n💰 Total : ${total} ${devise}`;
-
-  const numeroWhatsApp = '225XXXXXXXXX'; // Remplace par ton numéro WhatsApp
 
   // Rendu de la vue finale commande_confirmee.ejs
   res.render('commande_confirmee', {

@@ -10,12 +10,12 @@ router.get('/register', (req, res) => {
 
 // Traiter inscription
 router.post('/register', async (req, res) => {
-  const { nom, email, motDePasse, role } = req.body;
+  const { nom, email, motDePasse, telephone,role } = req.body;
   try {
     const existingUser = await User.findOne({ email });
     if(existingUser) return res.send('Email déjà utilisé');
 
-    const user = new User({ nom, email, motDePasse, role: role || 'client' });
+    const user = new User({ nom, email, motDePasse,telephone, role: role || 'client' });
     await user.save();
     res.redirect('/auth/login');
   } catch (error) {

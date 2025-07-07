@@ -6,7 +6,7 @@
 </head>
 <body>
   <h1>✅ Commande prête à être envoyée !</h1>
-  <p><a href="https://wa.me/<%= numeroWhatsApp %>?text=<%= messageWhatsApp %>" target="_blank">
+  <p><a href="https://wa.me/<%= numeroWhatsApp.replace(/\D/g, '') %>?text=<%= messageWhatsApp %>" target="_blank" rel="noopener noreferrer">
     📤 Envoyer la commande sur WhatsApp
   </a></p>
   <a href="/">Retour</a>
