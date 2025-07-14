@@ -7,6 +7,7 @@ const productSchema = new mongoose.Schema({
   devise: { type: String, default: 'EUR' }, // Par défaut Euro
   image: { type: String }, // chemin vers image uploadée
   cloudinary_id: { type: String },
+  videoUrl: String,        // <-- NOUVEAU champ URL vidéo
   boutique: { type: mongoose.Schema.Types.ObjectId, ref: 'Boutique', required: true },
   dateCreation: { type: Date, default: Date.now },  // <-- bien fermer l'accolade ici
   vendeur: {

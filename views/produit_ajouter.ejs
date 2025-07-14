@@ -49,6 +49,7 @@
     }
 
     input[type="text"],
+    input[type="url"],
     input[type="number"],
     select,
     textarea,
@@ -67,6 +68,7 @@
     }
 
     input[type="text"]:focus,
+    input[type="url"]:focus,
     input[type="number"]:focus,
     select:focus,
     textarea:focus,
@@ -157,6 +159,11 @@
     <input id="image" type="file" name="image" accept="image/*" />
     <img id="preview" src="#" alt="Aperçu image" style="display:none;" />
 
+    <label for="videoUrl">URL vidéo (optionnel) :</label>
+    <input id="video" type="file" name="video" accept="video/*" />
+    <!-- Aperçu de la vidéo -->
+    <video id="videoPreview" controls style="display:none; max-width:100%; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 0 8px rgba(52, 152, 219, 0.4);"></video>
+
     <button type="submit">Ajouter</button>
   </form>
 
@@ -179,6 +186,23 @@
       }
     });
   </script>
+  <script>
+    const inputVideo = document.getElementById('video');
+    const videoPreview = document.getElementById('videoPreview');
+
+    inputVideo.addEventListener('change', function () {
+      const file = this.files[0];
+      if (file) {
+        const videoURL = URL.createObjectURL(file);
+        videoPreview.src = videoURL;
+        videoPreview.style.display = 'block';
+      } else {
+        videoPreview.src = '';
+        videoPreview.style.display = 'none';
+      }
+    });
+  </script>
+
 
   <script>
     const form = document.querySelector('form');

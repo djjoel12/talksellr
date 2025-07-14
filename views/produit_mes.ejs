@@ -1,31 +1,215 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <title>mes produits</title>
-   <link rel="stylesheet" href="/css/styles.css" />
+                  <!DOCTYPE html>
+                  <html lang="fr">
+                  <head>
+                    <meta charset="UTF-8" />
+                    <title>Mes produits</title>
+                    <link rel="stylesheet" href="/css/styles.css" />
+                    <style>
+                      .message {
+                        max-width: 480px;
+                        margin: 10px auto;
+                        padding: 10px 15px;
+                        border-radius: 5px;
+                        font-weight: 600;
+                        text-align: center;
+                      }
+                      .message.success {
+                        background-color: #d4edda;
+                        color: #155724;
+                        border: 1px solid #c3e6cb;
+                      }
+                      .message.error {
+                        background-color: #f8d7da;
+                        color: #721c24;
+                        border: 1px solid #f5c6cb;
+                      }
+                      ul {
+                        list-style-type: none;
+                        padding: 0;
+                        max-width: 600px;
+                        margin: 0 auto;
+                      }
+                      li {
+                        background: #f9f9f9;
+                        padding: 15px;
+                        margin-bottom: 15px;
+                        border-radius: 8px;
+                        box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
+                      }
+                      li h3 {
+                        margin: 0 0 8px 0;
+                      }
+                      li img {
+                        display: block;
+                        margin-bottom: 8px;
+                        max-width: 100px;
+                        border-radius: 4px;
+                        box-shadow: 0 0 6px rgba(52, 152, 219, 0.3);
+                      }
+                      video {
+                        display: block;
+                        margin-bottom: 8px;
+                        max-width: 100%;
+                        border-radius: 10px;
+                        box-shadow: 0 0 8px rgba(52, 152, 219, 0.4);
+                      }
+                      .btn-whatsapp {
+                        display: inline-block;
+                        background-color: #25D366;
+                        color: white;
+                        padding: 10px 20px;
+                        border-radius: 8px;
+                        text-decoration: none;
+                        font-weight: 600;
+                        transition: background-color 0.3s ease;
+                        margin-top: 10px;
+                        cursor: pointer;
+                      }
+                      .btn-whatsapp:hover {
+                        background-color: #128C4A;
+                      }
+                      button.ameliorerPhotoBtn,
+                      button.previewPhotoBtn,
+                      button.resetPreviewBtn {
+                        background-color: #3498db;
+                        color: white;
+                        border: none;
+                        padding: 6px 12px;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        transition: background-color 0.3s ease;
+                        user-select: none;
+                        margin-right: 5px;
+                      }
+                      button.ameliorerPhotoBtn:disabled,
+                      button.previewPhotoBtn:disabled,
+                      button.resetPreviewBtn:disabled {
+                        background-color: #95a5a6;
+                        cursor: not-allowed;
+                      }
+                    </style>
+                  </head>
+                  <body>
+                    <p style="text-align:center;"><a href="/">← Retour à l’accueil</a></p>
+                    <h1 style="text-align:center;">Mes produits</h1>
+                    <p style="text-align:center; margin-bottom: 30px;">
+                      <a href="/produits/ajouter" style="font-weight:bold;">Ajouter un nouveau produit</a>
+                    </p>
 
-</head>
-<p><a href="/">Retour à l’accueil</a></p>
-<h1>Mes produits</h1>
-<a href="/produits/ajouter">Ajouter un nouveau produit</a>
+                    <div id="messageBox"></div>
 
-<ul>
-  <% produits.forEach(p => { %>
-    <li>
-        <h3><%= p.nom %> - <%= p.prix %> <%= p.devise %></h3>
-      <% if(p.image) { %>
-        <img src="<%= p.image %>" style="max-width: 100px" />
-      <% } %>
-      <p><%= p.description %></p>
-        
-        <a href="/produits/modifier/<%= p._id %>">✏️ Modifier</a> |
-        <form action="/produits/supprimer/<%= p._id %>" method="POST" style="display:inline;" onsubmit="return confirm('Supprimer ce produit ?');">
-          <button type="submit" style="background-color: red; color: white; border: none;">🗑️ Supprimer</button>
-        </form>
-        
-    </li>
-  <% }) %>
-</ul>
+                    <ul>
+                      <% produits.forEach(p => { %>
+                        <li>
+                          <h3><%= p.nom %> - <%= p.prix %> <%= p.devise %></h3>
 
+                          <% if(p.videoUrl) { %>
+                            <video src="<%= p.videoUrl %>" controls muted playsinline></video>
+                          <% } else if(p.image) { %>
+                            <img id="photoProduit-<%= p._id %>" src="<%= p.image %>" alt="Image de <%= p.nom %>" />
+                          <% } else { %>
+                            <p>Aucune image ni vidéo disponible</p>
+                          <% } %>
 
+                          <p><%= p.description %></p>
+
+                          <% 
+                            const numeroWhatsApp = p.vendeur?.telephone || '22500000000';
+                            const message = encodeURIComponent(`Bonjour, je suis intéressé(e) par le produit "${p.nom}" au prix de ${p.prix} ${p.devise}. Comment puis-je commander ?`);
+                            const whatsappLink = `https://wa.me/${numeroWhatsApp}?text=${message}`;
+                          %>
+                          <a href="<%= whatsappLink %>" target="_blank" class="btn-whatsapp">Commander via WhatsApp</a>
+
+                          <br /><br />
+
+                          <a href="/produits/modifier/<%= p._id %>">✏️ Modifier</a> |
+                          <form action="/produits/supprimer/<%= p._id %>" method="POST" style="display:inline;" onsubmit="return confirm('Supprimer ce produit ?');">
+                            <button type="submit" style="background-color: red; color: white; border: none;">🗑️ Supprimer</button>
+                          </form>
+
+                          <br /><br />
+
+                          <button class="previewPhotoBtn" data-id="<%= p._id %>" data-img-url="<%= p.image %>">Prévisualiser amélioration</button>
+                          <button class="resetPreviewBtn" data-id="<%= p._id %>" data-img-url="<%= p.image %>">Revenir à l’original</button>
+                          <button class="ameliorerPhotoBtn" data-id="<%= p._id %>">Améliorer ma photo</button>
+                        </li>
+                      <% }) %>
+                    </ul>
+
+                    <script>
+                      const messageBox = document.getElementById('messageBox');
+
+                      function showMessage(message, type = 'success') {
+                        messageBox.innerHTML = `<div class="message ${type}">${message}</div>`;
+                        setTimeout(() => { messageBox.innerHTML = ''; }, 4000);
+                      }
+
+                      document.querySelectorAll('.previewPhotoBtn').forEach(button => {
+                        button.addEventListener('click', () => {
+                          const productId = button.getAttribute('data-id');
+                          const originalUrl = button.getAttribute('data-img-url');
+
+                          if (!originalUrl) {
+                            showMessage("Aucune image à prévisualiser.", "error");
+                            return;
+                          }
+
+                          const transformedUrl = originalUrl.replace(
+                            '/upload/',
+                            '/upload/c_fill,w_200,h_200,r_20/'
+                          ) + `?t=${Date.now()}`;
+
+                          const img = document.getElementById('photoProduit-' + productId);
+                          if (img) {
+                            img.src = transformedUrl;
+                          }
+                        });
+                      });
+
+                      document.querySelectorAll('.resetPreviewBtn').forEach(button => {
+                        button.addEventListener('click', () => {
+                          const productId = button.getAttribute('data-id');
+                          const originalUrl = button.getAttribute('data-img-url');
+
+                          const img = document.getElementById('photoProduit-' + productId);
+                          if (img) {
+                            img.src = originalUrl;
+                          }
+                        });
+                      });
+
+                      document.querySelectorAll('.ameliorerPhotoBtn').forEach(button => {
+                        button.addEventListener('click', async () => {
+                          button.disabled = true;
+                          const productId = button.getAttribute('data-id');
+
+                          try {
+                            const response = await fetch(`/produits/ameliorer/${productId}`, {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                            });
+
+                            const data = await response.json();
+
+                            if (response.ok) {
+                              showMessage(data.message, 'success');
+
+                              const img = document.getElementById('photoProduit-' + productId);
+                              if (img) {
+                                const url = new URL(img.src);
+                                url.searchParams.set('t', Date.now());
+                                img.src = url.toString();
+                              }
+                            } else {
+                              showMessage(`Erreur : ${data.message}`, 'error');
+                            }
+                          } catch (error) {
+                            showMessage('Erreur serveur, merci de réessayer plus tard.', 'error');
+                          } finally {
+                            button.disabled = false;
+                          }
+                        });
+                      });
+                    </script>
+                  </body>
+                  </html>
