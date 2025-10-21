@@ -49,6 +49,13 @@ const boutiqueSchema = new mongoose.Schema({
     enum: ["actif", "suspendu", "fermé"],
     default: "actif"
   },
+// Après
+template: {
+  type: String,
+  default: 'standard' // valeur par défaut
+
+},
+
   dateCreation: {
     type: Date,
     default: Date.now,

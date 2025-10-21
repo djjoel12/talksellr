@@ -59,6 +59,8 @@ const produitRoutes = require('./routes/produit');
 const panierRouter = require('./routes/panier');
 const commandesRoutes = require('./routes/commandes');
 const cloudinary = require('./config/cloudinary');
+const templateRoutes = require('./routes/templates');
+
 
 
 app.use('/produits', produitRoutes);
@@ -68,6 +70,7 @@ app.use('/', indexRoutes);
 app.use('/auth', authRoutes);
 app.use('/panier', panierRouter);
 app.use('/commandes', commandesRoutes);
+app.use('/templates', templateRoutes);
 
 // Lancement du serveur
 app.listen(PORT, () => {

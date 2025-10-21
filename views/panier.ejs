@@ -1,60 +1,138 @@
-             <!DOCTYPE html>
-             <html lang="fr">
-             <head>
-               <meta charset="UTF-8">
-               <title>Mon Panier</title>
-               <link rel="stylesheet" href="/css/styles.css">
-             </head>
-             <body>
-               <div class="container">
-                 <h1>🛒 Mon Panier</h1>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Mon Panier</title>
+  <style>
+    .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+    .panier-item { 
+      display: flex; 
+      align-items: center; 
+      padding: 15px; 
+      border-bottom: 1px solid #eee;
+      gap: 20px;
+    }
+    .produit-image { width: 100px; height: 100px; object-fit: cover; border-radius: 8px; }
+    .produit-info { flex: 1; }
+    .produit-nom { font-weight: bold; margin-bottom: 5px; }
+    .produit-prix { color: #e60000; font-weight: bold; }
+    .quantite-controls { display: flex; align-items: center; gap: 10px; }
+    .total-section { 
+      background: #f9f9f9; 
+      padding: 20px; 
+      margin-top: 20px; 
+      border-radius: 8px;
+      text-align: right;
+    }
+    .btn { 
+      padding: 10px 20px; 
+      background: #000; 
+      color: white; 
+      text-decoration: none; 
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-block;
+    }
+    .btn-danger { background: #dc3545; }
+    .btn-primary { background: #e60000; }
+    .btn-success { background: #28a745; }
+    .empty-cart { text-align: center; padding: 40px; }
+    .commande-form { margin-top: 20px; padding: 20px; background: #f0f8ff; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🛒 Mon Panier</h1>
 
-                 <% if (panier.length === 0) { %>
-                   <p class="message">Votre panier est vide.</p>
-                   <p style="text-align:center;"><a href="/">← Retour à l’accueil</a></p>
-                 <% } else { %>
+    <% if (panier.length === 0) { %>
+      <div class="empty-cart">
+        <h2>Votre panier est vide</h2>
+        <p>Découvrez nos produits et ajoutez-les à votre panier !</p>
+        <!-- CORRECTION : Lien direct vers la boutique -->
+        <a href="<%= slug ? `/boutique/${slug}` : '/' %>" class="btn">← Retour à l'accueil</a>
+      </div>
+    <% } else { %>
 
-                   <div class="produits-grid">
-                     <% panier.forEach(item => { %>
-                       <div class="produit-card">
-                         <% if (item.produit && item.produit.image) { %>
-                           <img src="<%= item.produit.image %>" alt="<%= item.produit.nom %>" class="produit-image">
-                         <% } %>
-                         <div Cannot GET /class="produit-nom"><%= item.produit ? item.produit.nom : 'Produit supprimé' %></div>
-                         <div class="produit-prix"><%= item.produit ? item.produit.prix : 'N/A' %> <%= item.produit ? item.produit.devise : '' %></div>
-                         <div>Quantité : <%= item.quantite %></div>
+      <div class="panier-items">
+        <% panier.forEach(item => { %>
+          <div class="panier-item">
+            <% if (item.produit && item.produit.image) { %>
+              <img src="<%= item.produit.image %>" alt="<%= item.produit.nom %>" class="produit-image">
+            <% } %>
+            
+            <div class="produit-info">
+              <div class="produit-nom">
+                <%= item.produit ? item.produit.nom : 'Produit non disponible' %>
+              </div>
+              <div class="produit-prix">
+                <%= item.produit ? item.produit.prix : '0' %> <%= item.produit ? item.produit.devise : '' %>
+              </div>
+              <div class="produit-vendeur">
+                Vendeur: <%= item.produit && item.produit.vendeur ? item.produit.vendeur.nom : 'N/A' %>
+              </div>
+            </div>
 
-                         <% if (item.produit) { %>
-                         <form action="/panier/supprimer/<%= item.produit._id %>" method="POST" style="margin-top: 10px;">
-                           <button class="produit-lien" style="background-color: crimson; color: white;">🗑 Supprimer</button>
-                         </form>
-                         <% } %>
-                       </div>
-                     <% }) %>
-                   </div>
+            <div class="quantite-controls">
+              <span>Quantité: <%= item.quantite %></span>
+            </div>
 
-                   <!-- Formulaire de commande -->
-                   <h2 style="margin-top: 40px;">Finaliser ma commande</h2>
-                   <form action="/commandes/valider" method="POST" style="max-width: 600px; margin: 0 auto;">
-                     <div style="margin-bottom: 15px;">
-                       <label>Nom complet :</label><br>
-                       <input type="text" name="nom" required style="width: 100%; padding: 10px;">
-                     </div>
-                     <div style="margin-bottom: 15px;">
-                       <label>Téléphone (WhatsApp) :</label><br>
-                       <input type="text" name="telephone" required style="width: 100%; padding: 10px;">
-                     </div>
-                     <div style="margin-bottom: 15px;">
-                       <label>Adresse de livraison :</label><br>
-                       <textarea name="adresse" required rows="3" style="width: 100%; padding: 10px;"></textarea>
-                     </div>
+            <div class="sous-total">
+              <strong>
+                <%= item.produit ? (item.produit.prix * item.quantite).toFixed(2) : '0.00' %> 
+                <%= item.produit ? item.produit.devise : '' %>
+              </strong>
+            </div>
 
-                     <button type="submit" class="produit-lien" style="width: 100%; font-size: 1.2rem;">✅ Valider ma commande</button>
-                   </form>
+            <% if (item.produit) { %>
+              <form action="/panier/supprimer/<%= item.produit._id %>" method="POST" style="display: inline;">
+                <button type="submit" class="btn btn-danger">🗑 Supprimer</button>
+              </form>
+            <% } %>
+          </div>
+        <% }) %>
+      </div>
 
-                 <% } %>
+      <div class="total-section">
+        <h2>
+          Total: 
+          <% if (typeof total !== 'undefined') { %>
+            <%= total.toFixed(2) %> 
+          <% } else { %>
+            0.00
+          <% } %>
+          <%= panier[0] && panier[0].produit ? panier[0].produit.devise : '' %>
+        </h2>
+      </div>
 
-                 <p style="text-align:center; margin-top: 40px;"><a href="/">← Retour à l’accueil</a></p>
-               </div>
-             </body>
-             </html>
+      <!-- Formulaire de commande -->
+      <div class="commande-form">
+        <h2>Finaliser ma commande</h2>
+        <form action="/commandes/valider" method="POST">
+          <div style="margin-bottom: 15px;">
+            <label><strong>Nom complet :</strong></label><br>
+            <input type="text" name="nom" required style="width: 100%; padding: 10px; margin-top: 5px;">
+          </div>
+          
+          <div style="margin-bottom: 15px;">
+            <label><strong>Téléphone (WhatsApp) :</strong></label><br>
+            <input type="text" name="telephone" required style="width: 100%; padding: 10px; margin-top: 5px;">
+          </div>
+          
+          <div style="margin-bottom: 20px;">
+            <label><strong>Adresse de livraison :</strong></label><br>
+            <textarea name="adresse" required rows="3" style="width: 100%; padding: 10px; margin-top: 5px;"></textarea>
+          </div>
+
+          <div style="display: flex; gap: 10px;">
+            <!-- CORRECTION : Lien direct vers la boutique -->
+            <a href="<%= slug ? `/boutique/${slug}` : '/' %>" class="btn">← Continuer mes achats</a>
+            <button type="submit" class="btn btn-success">✅ Valider ma commande</button>
+          </div>
+        </form>
+      </div>
+
+    <% } %>
+  </div>
+</body>
+</html>

@@ -11,83 +11,247 @@ const estConnecte = require('../middlewares/estConnecte');
 const estVendeur = require('../middlewares/estVendeur');
 
 // ✅ Route : Valider commande d’un client
+// ✅ Route : Valider commande d'un client
+// ✅ Route : Valider commande d'un client
 router.post('/valider', async (req, res) => {
-  const { nom, telephone, adresse } = req.body;
-  const panier = req.session.panier || [];
+  try {
+    console.log('🛒 Début validation commande');
+    const { nom, telephone, adresse } = req.body;
+    const panier = req.session.panier || [];
 
-  if (panier.length === 0) return res.send('Votre panier est vide.');
+    console.log('📋 Panier:', panier);
 
-  const produitsIds = panier.map(item => item.produitId);
-  const produits = await Produit.find({ _id: { $in: produitsIds } });
+    if (panier.length === 0) return res.send('Votre panier est vide.');
 
-  const total = panier.reduce((acc, item) => {
-    const produit = produits.find(p => p._id.toString() === item.produitId);
-    return acc + (produit ? produit.prix * item.quantite : 0);
-  }, 0);
+    // Récupérer les produits complets depuis la BDD
+    const produitsIds = panier.map(item => item.produitId);
+    const produits = await Produit.find({ _id: { $in: produitsIds } })
+      .populate('vendeur', 'nom telephone')
+      .populate('boutique', 'slug nom'); // <-- IMPORTANT: peupler la boutique
 
-  const devise = produits[0]?.devise || 'FCFA';
+    console.log('📦 Produits trouvés:', produits.length);
 
-  const nouvelleCommande = new Commande({
-    nom,
-    telephone,
-    adresse,
-    produits: panier,
-    total,
-    date: new Date(),
-  });
-
-  await nouvelleCommande.save();
-  req.session.panier = [];
-
-  // Récupérer le vendeur du premier produit pour avoir son téléphone
-  let numeroWhatsApp = '225XXXXXXXXX'; // fallback
-  if (produits.length > 0) {
-    const vendeur = await User.findById(produits[0].vendeur);
-    if (vendeur && vendeur.telephone) {
-      numeroWhatsApp = vendeur.telephone;
+    if (produits.length === 0) {
+      return res.send('Aucun produit trouvé.');
     }
+
+    // Calculer le total et préparer les produits pour la commande
+    let total = 0;
+    const produitsCommande = panier.map(item => {
+      const produit = produits.find(p => p._id.toString() === item.produitId);
+      if (produit) {
+        const sousTotal = produit.prix * item.quantite;
+        total += sousTotal;
+        
+        console.log('👤 Vendeur du produit:', produit.vendeur._id);
+        console.log('🏪 Boutique du produit:', produit.boutique); // Debug
+        
+        return {
+          produitId: produit._id,
+          nom: produit.nom,
+          prix: produit.prix,
+          devise: produit.devise,
+          quantite: item.quantite,
+          vendeurId: produit.vendeur._id,
+          boutiqueId: produit.boutique._id // <-- Ajouter l'ID de la boutique
+        };
+      }
+      return null;
+    }).filter(Boolean);
+
+    console.log('📝 Produits commande:', produitsCommande);
+
+    // Créer la commande
+    const nouvelleCommande = new Commande({
+      nom,
+      telephone,
+      adresse,
+      produits: produitsCommande,
+      total,
+      date: new Date(),
+    });
+
+    await nouvelleCommande.save();
+    
+    console.log('✅ Commande sauvegardée ID:', nouvelleCommande._id);
+    
+    // Vider le panier après commande
+    req.session.panier = [];
+
+    // Récupérer le premier vendeur pour WhatsApp
+    const premierVendeur = produits[0].vendeur;
+    const numeroWhatsApp = premierVendeur.telephone || '225XXXXXXXXX';
+
+    // Récupérer la boutique du premier produit pour le slug
+    const premiereBoutique = produits[0].boutique;
+    const slugBoutique = premiereBoutique ? premiereBoutique.slug : 'boutique';
+
+    // Construction du message WhatsApp
+    let message = `🛒 NOUVELLE COMMANDE 🛒\n\n`;
+    message += `👤 Client: ${nom}\n`;
+    message += `📞 Téléphone: ${telephone}\n`;
+    message += `📍 Adresse: ${adresse}\n\n`;
+    message += `📦 Produits commandés:\n`;
+    
+    produitsCommande.forEach(item => {
+      message += `- ${item.nom} x${item.quantite} → ${item.prix * item.quantite} ${item.devise}\n`;
+    });
+    
+    message += `\n💰 Total: ${total} ${produits[0].devise}\n`;
+    message += `📅 Date: ${new Date().toLocaleString()}`;
+
+    // CORRECTION : Utiliser nouvelleCommande au lieu de commande
+    res.render('commande_confirmee', {
+      numeroWhatsApp: numeroWhatsApp.replace(/\D/g, ''),
+      messageWhatsApp: encodeURIComponent(message),
+      slug: slugBoutique, // <-- CORRIGÉ : utiliser slugBoutique
+      nom: nom,
+      commande: nouvelleCommande // <-- CORRIGÉ : utiliser nouvelleCommande
+    });
+
+  } catch (err) {
+    console.error('❌ Erreur validation commande:', err);
+    res.status(500).send('Erreur lors de la validation de la commande: ' + err.message);
   }
-
-  // Construction du message WhatsApp
-  let message = `🛒 Nouvelle commande :\n\n👤 ${nom}\n📞 ${telephone}\n📍 ${adresse}\n\n📦 Produits :\n`;
-  panier.forEach(item => {
-    const produit = produits.find(p => p._id.toString() === item.produitId);
-    if (produit) {
-      message += `- ${produit.nom} x${item.quantite} → ${produit.prix * item.quantite} ${produit.devise}\n`;
-    }
-  });
-  message += `\n💰 Total : ${total} ${devise}`;
-
-  // Rendu de la vue finale commande_confirmee.ejs
-  res.render('commande_confirmee', {
-    numeroWhatsApp,
-    messageWhatsApp: encodeURIComponent(message),
-    nom
-  });
 });
-
 // Route GET panier (affichage du panier)
+
+// À la place, redirige vers /panier
 router.get('/valider', (req, res) => {
-  res.render('panier', { panier: req.session.panier || [] });
+  res.redirect('/panier');
 });
 
 // ✅ Route : Voir les commandes liées à mes produits (vendeur)
-router.get('/mes-commandes', estVendeur, async (req, res) => {
+// ✅ Route : Mettre à jour le statut d'une commande
+router.post('/:id/statut', estVendeur, async (req, res) => {
   try {
-    // Récupère tous les produits du vendeur connecté
-    const mesProduits = await Produit.find({ vendeur: req.session.user.id }).select('_id');
-    const mesProduitsIds = mesProduits.map(p => p._id);
+    const { statut } = req.body;
+    const commandeId = req.params.id;
 
-    // Cherche toutes les commandes contenant ces produits
-    const commandes = await Commande.find({ "produits.produitId": { $in: mesProduitsIds } })
-      .populate('produits.produitId', 'nom prix image')
-      .sort({ date: -1 });
+    console.log('🔄 Mise à jour statut commande:', commandeId, '→', statut);
 
-    res.render('commande_mes', { commandes });
+    // Vérifier que la commande existe
+    const commande = await Commande.findById(commandeId);
+    if (!commande) {
+      return res.status(404).json({ success: false, error: 'Commande non trouvée' });
+    }
+
+    // Vérifier que la commande contient des produits du vendeur
+    const mesProduits = await Produit.find({ vendeur: req.session.user.id });
+    const mesProduitsIds = mesProduits.map(p => p._id.toString());
+
+    const produitDuVendeur = commande.produits.some(produit => {
+      if (!produit.produitId) return false;
+      const produitIdStr = produit.produitId._id ? 
+        produit.produitId._id.toString() : 
+        produit.produitId.toString();
+      return mesProduitsIds.includes(produitIdStr);
+    });
+
+    if (!produitDuVendeur) {
+      return res.status(403).json({ success: false, error: 'Non autorisé à modifier cette commande' });
+    }
+
+    // Mettre à jour le statut
+    await Commande.findByIdAndUpdate(commandeId, { statut });
+
+    res.json({ success: true, message: 'Statut mis à jour' });
+
   } catch (err) {
-    console.error('Erreur affichage commandes :', err);
-    res.status(500).send('Erreur serveur');
+    console.error('❌ Erreur mise à jour statut:', err);
+    res.status(500).json({ success: false, error: 'Erreur lors de la mise à jour: ' + err.message });
   }
 });
+// ✅ Route : Voir les commandes liées à mes produits (vendeur)
+// ✅ Route : Voir les commandes liées à mes produits (vendeur)
+// ✅ Route : Voir les commandes liées à mes produits (vendeur) - VERSION CORRIGÉE
+router.get('/mes-commandes', estVendeur, async (req, res) => {
+  try {
+    console.log('🔍 Recherche des commandes pour vendeur:', req.session.user.id);
+    
+    // Récupère tous les produits du vendeur connecté
+    const mesProduits = await Produit.find({ vendeur: req.session.user.id }).select('_id');
+    const mesProduitsIds = mesProduits.map(p => p._id.toString()); // Convertir en string pour comparaison
+    
+    console.log('📦 IDs des produits du vendeur (string):', mesProduitsIds);
 
+    if (mesProduitsIds.length === 0) {
+      console.log('ℹ️ Le vendeur n\'a aucun produit');
+      return res.render('commande_mes', { 
+        commandes: [],
+        user: req.session.user
+      });
+    }
+
+    // Cherche toutes les commandes
+    const toutesCommandes = await Commande.find()
+      .populate('produits.produitId', 'nom prix image')
+      .populate('produits.vendeurId', 'nom telephone')
+      .sort({ date: -1 });
+
+    console.log('🛒 Toutes commandes trouvées:', toutesCommandes.length);
+
+    // Filtre SIMPLIFIÉ et CORRECT
+    const commandesFiltrees = toutesCommandes.filter(commande => {
+      return commande.produits.some(produit => {
+        if (!produit.produitId) return false;
+        
+        // Convertir en string pour comparaison
+        const produitIdStr = produit.produitId._id ? produit.produitId._id.toString() : produit.produitId.toString();
+        
+        // Vérifier si le produit appartient au vendeur
+        const appartientAuVendeur = mesProduitsIds.includes(produitIdStr);
+        
+        if (appartientAuVendeur) {
+          console.log('✅ Produit trouvé:', produitIdStr, 'dans la commande:', commande._id);
+        }
+        
+        return appartientAuVendeur;
+      });
+    });
+
+    console.log('🎯 Commandes après filtrage:', commandesFiltrees.length);
+
+    // Afficher le détail pour debug
+    commandesFiltrees.forEach((commande, index) => {
+      console.log(`📋 Commande ${index + 1}:`, {
+        id: commande._id,
+        client: commande.nom,
+        nbProduits: commande.produits.length,
+        total: commande.total
+      });
+    });
+
+    res.render('commande_mes', { 
+      commandes: commandesFiltrees,
+      user: req.session.user
+    });
+
+  } catch (err) {
+    console.error('❌ Erreur affichage commandes :', err);
+    res.status(500).send('Erreur serveur: ' + err.message);
+  }
+});
+// ✅ Route : Mettre à jour le statut d'une commande
+
+// Route temporaire de débogage - À SUPPRIMER après
+router.get('/debug-all', async (req, res) => {
+  try {
+    const toutesCommandes = await Commande.find()
+      .populate('produits.produitId')
+      .populate('produits.vendeurId');
+    
+    const mesProduits = await Produit.find({ vendeur: req.session.user.id });
+    
+    res.json({
+      toutesCommandes: toutesCommandes,
+      mesProduits: mesProduits,
+      userId: req.session.user.id,
+      totalCommandes: toutesCommandes.length,
+      mesProduitsCount: mesProduits.length
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 module.exports = router;

@@ -1,40 +1,297 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Vendeur - <%= user.nom %></title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --zara-black: #000000;
+      --zara-white: #ffffff;
+      --zara-light-gray: #f5f5f5;
+      --zara-medium-gray: #e5e5e5;
+      --zara-dark-gray: #666666;
+      --zara-text: #1a1a1a;
+      --zara-border: #ddd;
+      --border-radius: 8px;
+      --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
 
-   <!DOCTYPE html>
-   <html lang="fr">
-   <head>
-     <meta charset="UTF-8">
-     <title>Dashboard Vendeur</title>
-     <link rel="stylesheet" href="/css/styles.css">
-   </head>
-   <body>
-     <h1 style="text-align:center;">Bienvenue <%= user.nom %> 👋</h1>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-     <div style="text-align: center; margin-bottom: 30px;">
-       <p>Vous êtes connecté en tant que <strong><%= user.role %></strong>.</p>
-     </div>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: var(--zara-white);
+      color: var(--zara-text);
+      line-height: 1.5;
+      font-weight: 300;
+      min-height: 100vh;
+    }
 
-     <div class="container">
-       <div class="produits-grid">
-         <a class="produit-card" href="/boutique/mon">
-           <h2>🛍️ Ma Boutique</h2>
-           <p>Voir ou modifier ma boutique</p>
-         </a>
+    .dashboard-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
 
-         <a class="produit-card" href="/produits/mes">
-           <h2>📦 Mes Produits</h2>
-           <p>Ajouter, modifier, supprimer un produit</p>
-         </a>
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+      border-bottom: 1px solid var(--zara-border);
+      padding-bottom: 30px;
+    }
 
-         <a class="produit-card" href="#">
-           <h2>📊 Statistiques</h2>
-           <p>Ventes, vues, performances</p>
-         </a>
+    .header h1 {
+      font-size: 2.2rem;
+      font-weight: 300;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--zara-black);
+      margin-bottom: 15px;
+    }
 
-         <a class="produit-card" href="/auth/logout">
-           <h2>🚪 Déconnexion</h2>
-           <p>Se déconnecter de l'espace vendeur</p>
-         </a>
-       </div>
-     </div>
-   </body>
-   </html>
+    .user-info {
+      color: var(--zara-dark-gray);
+      font-size: 1rem;
+      letter-spacing: 1px;
+    }
+
+    .boutique-status {
+      background: var(--zara-black);
+      color: var(--zara-white);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      margin-top: 10px;
+      display: inline-block;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .actions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 25px;
+    }
+
+    .action-card {
+      background: var(--zara-white);
+      border: 1px solid var(--zara-border);
+      border-radius: var(--border-radius);
+      padding: 30px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .action-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--zara-black);
+    }
+
+    .action-icon {
+      font-size: 2.2rem;
+      margin-bottom: 20px;
+      color: var(--zara-black);
+    }
+
+    .action-title {
+      font-size: 1.2rem;
+      font-weight: 400;
+      margin-bottom: 12px;
+      color: var(--zara-black);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .action-description {
+      color: var(--zara-dark-gray);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      letter-spacing: 0.5px;
+    }
+
+    .premium-card {
+      background: var(--zara-black);
+      color: var(--zara-white);
+      border-color: var(--zara-black);
+    }
+
+    .premium-card .action-title,
+    .premium-card .action-description {
+      color: var(--zara-white);
+    }
+
+    .premium-card .action-icon {
+      color: var(--zara-white);
+    }
+
+    .urgent-card {
+      background: var(--zara-white);
+      border: 2px solid var(--zara-black);
+    }
+
+    .urgent-card .action-title {
+      color: var(--zara-black);
+    }
+
+    .quick-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 25px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .quick-btn {
+      padding: 10px 20px;
+      background: var(--zara-white);
+      color: var(--zara-black);
+      text-decoration: none;
+      border: 1px solid var(--zara-black);
+      border-radius: 4px;
+      font-size: 0.8rem;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .quick-btn:hover {
+      background: var(--zara-black);
+      color: var(--zara-white);
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-container {
+        padding: 30px 15px;
+      }
+
+      .header h1 {
+        font-size: 1.8rem;
+      }
+
+      .actions-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .action-card {
+        padding: 25px;
+      }
+
+      .quick-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .quick-btn {
+        width: 200px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Header -->
+    <div class="header">
+      <h1>Tableau de Bord</h1>
+      <div class="user-info">
+        <p>Bienvenue, <strong><%= user.nom %></strong></p>
+        <p>Connecté en tant que <strong><%= user.role %></strong></p>
+        <% if (boutique && boutique.slug) { %>
+          <div class="boutique-status">
+            <i class="fas fa-store"></i> <%= boutique.nom %>
+          </div>
+        <% } %>
+      </div>
+      
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <a href="/produits/ajouter" class="quick-btn">
+          <i class="fas fa-plus"></i> Nouveau Produit
+        </a>
+        <% if (boutique && boutique.slug) { %>
+          <a href="/boutique/<%= boutique.slug %>" target="_blank" class="quick-btn">
+            <i class="fas fa-external-link-alt"></i> Voir Boutique
+          </a>
+        <% } %>
+        <a href="/auth/logout" class="quick-btn">
+          <i class="fas fa-sign-out-alt"></i> Déconnexion
+        </a>
+      </div>
+    </div>
+
+    <!-- Main Actions Grid -->
+    <div class="actions-grid">
+      <!-- Boutique Management -->
+      <% if (boutique && boutique.slug) { %>
+        <a href="/boutique/<%= boutique.slug %>" target="_blank" class="action-card premium-card">
+          <div class="action-icon">🌐</div>
+          <div class="action-title">Voir ma Boutique Publique</div>
+          <div class="action-description">
+            Visualisez votre boutique exactement comme vos clients la voient
+          </div>
+        </a>
+      <% } else { %>
+        <a href="/boutique/creer" class="action-card urgent-card">
+          <div class="action-icon">🏗️</div>
+          <div class="action-title">Créer ma Boutique</div>
+          <div class="action-description">
+            Lancez votre boutique en ligne et commencez à vendre dès maintenant
+          </div>
+        </a>
+      <% } %>
+
+      <a href="/boutique/mon" class="action-card">
+        <div class="action-icon">🛍️</div>
+        <div class="action-title">Gérer ma Boutique</div>
+        <div class="action-description">
+          Modifiez les informations, logo, description et paramètres de votre boutique
+        </div>
+      </a>
+
+      <a href="/produits/mes" class="action-card">
+        <div class="action-icon">📦</div>
+        <div class="action-title">Mes Produits</div>
+        <div class="action-description">
+          Gérez votre catalogue produits : ajouter, modifier, supprimer
+        </div>
+      </a>
+
+      <a href="/produits/ajouter" class="action-card">
+        <div class="action-icon">✨</div>
+        <div class="action-title">Ajouter un Produit</div>
+        <div class="action-description">
+          Créez une nouvelle fiche produit avec images et descriptions
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Animation au chargement
+    document.addEventListener('DOMContentLoaded', function() {
+      const cards = document.querySelectorAll('.action-card');
+      cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+          card.style.transition = 'all 0.5s ease';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, index * 100);
+      });
+    });
+  </script>
+</body>
+</html>

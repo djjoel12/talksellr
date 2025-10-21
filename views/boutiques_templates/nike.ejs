@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title><%= boutique.nom %> - Boutique en Ligne</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #131921;
+      --secondary: #232f3e;
+      --accent: #ff9900;
+      --accent-dark: #cc7a00;
+      --price: #b12704;
+      --success: #007600;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --gray: #565959;
+      --light-gray: #eaeded;
+      --border: #ddd;
+      --shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.15);
+      --transition: all 0.2s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Amazon Ember', Arial, sans-serif;
+      background-color: var(--light-gray);
+      color: var(--dark);
+      line-height: 1.4;
+    }
+
+    /* Header Amazon Style */
+    .amazon-header {
+      background: var(--primary);
+      padding: 0.8rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .header-container {
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 0 15px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo {
+      color: white;
+      font-size: 1.8rem;
+      font-weight: bold;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .logo i {
+      color: var(--accent);
+    }
+
+    .delivery-info {
+      color: white;
+      font-size: 0.8rem;
+    }
+
+    .delivery-info .location {
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .search-bar {
+      flex: 1;
+      max-width: 800px;
+      display: flex;
+    }
+
+    .search-select {
+      background: #f3f3f3;
+      border: none;
+      border-radius: 4px 0 0 4px;
+      padding: 0 10px;
+      border-right: 1px solid var(--border);
+    }
+
+    .search-input {
+      flex: 1;
+      border: none;
+      padding: 10px;
+      font-size: 0.9rem;
+    }
+
+    .search-button {
+      background: var(--accent);
+      border: none;
+      border-radius: 0 4px 4px 0;
+      padding: 0 15px;
+      cursor: pointer;
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-item {
+      color: white;
+      text-decoration: none;
+      font-size: 0.8rem;
+    }
+
+    .nav-item .line1 {
+      font-size: 0.7rem;
+    }
+
+    .nav-item .line2 {
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .cart {
+      display: flex;
+      align-items: end;
+      gap: 5px;
+    }
+
+    .cart-count {
+      color: var(--accent);
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    /* Secondary Nav */
+    .secondary-nav {
+      background: var(--secondary);
+      padding: 8px 0;
+    }
+
+    .nav-links {
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 0 15px;
+      display: flex;
+      gap: 20px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Products Grid Amazon Style */
+    .products-section {
+      max-width: 1500px;
+      margin: 20px auto;
+      padding: 0 15px;
+    }
+
+    .products-header {
+      background: white;
+      padding: 15px 20px;
+      margin-bottom: 15px;
+      border-radius: 4px;
+      box-shadow: var(--shadow);
+    }
+
+    .results-count {
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 15px;
+    }
+
+    /* Product Card Amazon Style */
+    .product-card {
+      background: white;
+      border-radius: 4px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      position: relative;
+      border: 1px solid transparent;
+    }
+
+    .product-card:hover {
+      box-shadow: var(--shadow-hover);
+      border-color: var(--accent);
+    }
+
+    .product-badges {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .badge {
+      padding: 3px 8px;
+      border-radius: 3px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .badge-best {
+      background: #ffd814;
+      color: var(--primary);
+    }
+
+    .badge-deal {
+      background: #cc0c39;
+      color: white;
+    }
+
+    .badge-new {
+      background: var(--success);
+      color: white;
+    }
+
+    .product-image {
+      width: 100%;
+      height: 200px;
+      object-fit: contain;
+      margin-bottom: 15px;
+      cursor: pointer;
+    }
+
+    .product-title {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #0066c0;
+      margin-bottom: 8px;
+      cursor: pointer;
+      line-height: 1.3;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .product-title:hover {
+      color: #c45500;
+      text-decoration: underline;
+    }
+
+    .product-rating {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 8px;
+    }
+
+    .stars {
+      color: var(--accent);
+      font-size: 0.9rem;
+    }
+
+    .rating-count {
+      color: #0066c0;
+      font-size: 0.8rem;
+    }
+
+    .rating-count:hover {
+      text-decoration: underline;
+    }
+
+    .product-features {
+      list-style: none;
+      margin-bottom: 10px;
+    }
+
+    .product-features li {
+      font-size: 0.8rem;
+      color: var(--gray);
+      margin-bottom: 3px;
+      position: relative;
+      padding-left: 12px;
+    }
+
+    .product-features li:before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--gray);
+    }
+
+    .price-section {
+      margin-bottom: 15px;
+    }
+
+    .price {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: var(--price);
+      margin-bottom: 2px;
+    }
+
+    .shipping {
+      font-size: 0.8rem;
+      color: var(--success);
+      margin-bottom: 5px;
+    }
+
+    .delivery-date {
+      font-size: 0.9rem;
+      color: var(--gray);
+      margin-bottom: 10px;
+    }
+
+    .stock-status {
+      color: var(--success);
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .product-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .btn-add-cart {
+      background: #ffd814;
+      border: none;
+      border-radius: 20px;
+      padding: 8px 15px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-add-cart:hover {
+      background: #f7ca00;
+    }
+
+    .btn-buy-now {
+      background: #ffa41c;
+      border: none;
+      border-radius: 20px;
+      padding: 8px 15px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-buy-now:hover {
+      background: #fa8900;
+    }
+
+    .wishlist {
+      color: #0066c0;
+      font-size: 0.8rem;
+      text-decoration: none;
+      margin-top: 5px;
+    }
+
+    .wishlist:hover {
+      text-decoration: underline;
+    }
+
+    /* Empty State */
+    .empty-state {
+      background: white;
+      padding: 60px 20px;
+      text-align: center;
+      border-radius: 4px;
+      box-shadow: var(--shadow);
+    }
+
+    .empty-icon {
+      font-size: 4rem;
+      color: var(--light-gray);
+      margin-bottom: 20px;
+    }
+
+    /* Footer Amazon Style */
+    .amazon-footer {
+      background: var(--secondary);
+      color: white;
+      margin-top: 50px;
+    }
+
+    .back-to-top {
+      background: var(--primary);
+      text-align: center;
+      padding: 15px;
+      cursor: pointer;
+    }
+
+    .footer-content {
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+    }
+
+    .footer-column h4 {
+      margin-bottom: 15px;
+      font-size: 1rem;
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 8px;
+    }
+
+    .footer-links a {
+      color: #ddd;
+      text-decoration: none;
+      font-size: 0.8rem;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-bottom {
+      background: var(--primary);
+      padding: 30px 20px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #999;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header-container {
+        flex-wrap: wrap;
+      }
+      
+      .search-bar {
+        order: 3;
+        min-width: 100%;
+        margin-top: 10px;
+      }
+      
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header Amazon Style -->
+  <header class="amazon-header">
+    <div class="header-container">
+      <a href="#" class="logo">
+        <i class="fas fa-shopping-bag"></i>
+        <span><%= boutique.nom %></span>
+      </a>
+      
+      <div class="delivery-info">
+        <div class="line1">Livrer à</div>
+        <div class="location">
+          <i class="fas fa-map-marker-alt"></i>
+          Paris 75001
+        </div>
+      </div>
+
+      <div class="search-bar">
+        <select class="search-select">
+          <option>Toutes</option>
+          <option>Électronique</option>
+          <option>Mode</option>
+          <option>Maison</option>
+        </select>
+        <input type="text" class="search-input" placeholder="Rechercher des produits...">
+        <button class="search-button">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+
+      <div class="header-nav">
+        <a href="#" class="nav-item">
+          <div class="line1">Bonjour</div>
+          <div class="line2">Identifiez-vous</div>
+        </a>
+        <a href="#" class="nav-item">
+          <div class="line1">Commandes</div>
+          <div class="line2">et retours</div>
+        </a>
+        <a href="#" class="nav-item cart">
+          <i class="fas fa-shopping-cart" style="font-size: 1.5rem;"></i>
+          <div class="cart-count">0</div>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Secondary Navigation -->
+  <nav class="secondary-nav">
+    <ul class="nav-links">
+      <li><a href="#"><i class="fas fa-bars"></i> Toutes</a></li>
+      <li><a href="#">Meilleures Ventes</a></li>
+      <li><a href="#">Nouveautés</a></li>
+      <li><a href="#">Promotions</a></li>
+      <li><a href="#">Prime</a></li>
+      <li><a href="#">Service Client</a></li>
+    </ul>
+  </nav>
+
+  <!-- Products Section -->
+  <section class="products-section">
+    <div class="products-header">
+      <div class="results-count">
+        <%= produits && produits.length > 0 ? produits.length + ' résultats' : 'Aucun produit trouvé' %>
+      </div>
+    </div>
+
+    <div class="products-grid">
+      <% if (produits && produits.length > 0) { %>
+        <% produits.forEach((produit, index) => { %>
+          <div class="product-card">
+            <div class="product-badges">
+              <% if (index < 1) { %>
+                <div class="badge badge-best">Meilleure vente</div>
+              <% } %>
+              <% if (produit.prix < 50) { %>
+                <div class="badge badge-deal">Bon plan</div>
+              <% } %>
+              <div class="badge badge-new">Nouveau</div>
+            </div>
+
+            <img 
+              src="<%= produit.image || '/images/placeholder-product.jpg' %>" 
+              alt="<%= produit.nom %>" 
+              class="product-image"
+              onclick="window.location.href='/boutique/produit/<%= produit._id %>'"
+            >
+
+            <h3 class="product-title" onclick="window.location.href='/boutique/produit/<%= produit._id %>'">
+              <%= produit.nom %>
+            </h3>
+
+            <div class="product-rating">
+              <div class="stars">
+                <% for(let i = 0; i < 5; i++) { %>
+                  <% if (i < 4) { %>
+                    <i class="fas fa-star"></i>
+                  <% } else { %>
+                    <i class="fas fa-star-half-alt"></i>
+                  <% } %>
+                <% } %>
+              </div>
+              <a href="#" class="rating-count">2,458</a>
+            </div>
+
+            <% if (produit.description) { %>
+              <ul class="product-features">
+                <% const features = produit.description.split(',').slice(0, 3); %>
+                <% features.forEach(feature => { %>
+                  <li><%= feature.trim() %></li>
+                <% }) %>
+              </ul>
+            <% } %>
+
+            <div class="price-section">
+              <div class="price"><%= produit.prix %> <%= produit.devise %></div>
+              <div class="shipping">Livraison GRATUITE</div>
+              <div class="delivery-date">Livraison <strong>demain</strong></div>
+            </div>
+
+            <div class="stock-status">En stock</div>
+
+            <div class="product-actions">
+              <button class="btn-add-cart" onclick="addToCart('<%= produit._id %>')">
+                Ajouter au panier
+              </button>
+              <button class="btn-buy-now" onclick="buyNow('<%= produit._id %>')">
+                Acheter maintenant
+              </button>
+              <a href="#" class="wishlist">
+                <i class="far fa-heart"></i> Ajouter à la liste d'envies
+              </a>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <div class="empty-state">
+          <div class="empty-icon">
+            <i class="fas fa-box-open"></i>
+          </div>
+          <h3>Aucun produit disponible</h3>
+          <p>Notre catalogue sera bientôt en ligne. Revenez vite !</p>
+        </div>
+      <% } %>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="amazon-footer">
+    <div class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+      Retour en haut de page
+    </div>
+    
+    <div class="footer-content">
+      <div class="footer-column">
+        <h4>À propos</h4>
+        <ul class="footer-links">
+          <li><a href="#">Carrières</a></li>
+          <li><a href="#">À propos de nous</a></li>
+          <li><a href="#">Relations investisseurs</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h4>Gagnez de l'argent</h4>
+        <ul class="footer-links">
+          <li><a href="#">Vendez sur <%= boutique.nom %></a></li>
+          <li><a href="#">Devenez partenaire</a></li>
+          <li><a href="#">Programme d'affiliation</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h4>Moyens de paiement</h4>
+        <ul class="footer-links">
+          <li><a href="#">Cartes de crédit</a></li>
+          <li><a href="#">Paiement en 4x</a></li>
+          <li><a href="#">Chèques cadeaux</a></li>
+          <li><a href="#">Paiement à la livraison</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h4>Besoin d'aide ?</h4>
+        <ul class="footer-links">
+          <li><a href="#">Voir ou suivre vos commandes</a></li>
+          <li><a href="#">Tarifs et politiques de livraison</a></li>
+          <li><a href="#">Retours et remplacements</a></li>
+          <li><a href="#">Service Client</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2024 <%= boutique.nom %>. Tous droits réservés.</p>
+    </div>
+  </footer>
+
+  <script>
+    // E-commerce functionality
+    let cartItems = 0;
+
+    function addToCart(productId) {
+      cartItems++;
+      updateCartCount();
+      showNotification('Produit ajouté au panier !');
+      
+      // Animation
+      const cart = document.querySelector('.cart-count');
+      cart.style.transform = 'scale(1.3)';
+      setTimeout(() => {
+        cart.style.transform = 'scale(1)';
+      }, 300);
+    }
+
+    function buyNow(productId) {
+      addToCart(productId);
+      // Rediriger vers la page de commande
+      setTimeout(() => {
+        window.location.href = '/checkout';
+      }, 500);
+    }
+
+    function updateCartCount() {
+      document.querySelector('.cart-count').textContent = cartItems;
+    }
+
+    function showNotification(message) {
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        background: var(--success);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 4px;
+        box-shadow: var(--shadow-hover);
+        z-index: 10000;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        font-size: 0.9rem;
+      `;
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+      }, 100);
+      
+      setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    }
+
+    // Rating stars interaction
+    document.querySelectorAll('.stars').forEach(stars => {
+      stars.addEventListener('click', (e) => {
+        if (e.target.classList.contains('fa-star')) {
+          const rating = Array.from(stars.children).indexOf(e.target) + 1;
+          alert(`Vous avez noté ${rating} étoiles`);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZARA | Mode Contemporaine</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Variables Zara - Palette sobre et élégante */
+    :root {
+      --zara-black: #000000;
+      --zara-white: #ffffff;
+      --zara-light-gray: #f5f5f5;
+      --zara-medium-gray: #e5e5e5;
+      --zara-dark-gray: #666666;
+      --zara-text: #1a1a1a;
+      --zara-border: #ddd;
+      --spacing-xs: 8px;
+      --spacing-sm: 16px;
+      --spacing-md: 24px;
+      --spacing-lg: 32px;
+      --spacing-xl: 48px;
+    }
+
+    /* Reset Zara */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      color: var(--zara-text);
+      background: var(--zara-white);
+      line-height: 1.5;
+      font-weight: 300;
+      min-height: 100vh;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* Header Zara - Ultra minimaliste */
+    header {
+      background: var(--zara-white);
+      border-bottom: 1px solid var(--zara-border);
+      padding: var(--spacing-sm) 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .header-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 var(--spacing-sm);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 300;
+      letter-spacing: 2px;
+      color: var(--zara-black);
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: var(--spacing-lg);
+    }
+
+    .nav-links a {
+      font-weight: 300;
+      font-size: 13px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: opacity 0.3s ease;
+      opacity: 0.8;
+    }
+
+    .nav-links a:hover {
+      opacity: 1;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: var(--spacing-md);
+      align-items: center;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    .search-bar input {
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--zara-black);
+      padding: 8px 12px;
+      width: 180px;
+      font-size: 13px;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s ease;
+    }
+
+    .search-bar input:focus {
+      border-bottom-color: var(--zara-black);
+    }
+
+    .search-bar input::placeholder {
+      color: var(--zara-dark-gray);
+      font-weight: 300;
+    }
+
+    .search-bar button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--zara-black);
+      font-size: 14px;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      color: var(--zara-black);
+      font-size: 16px;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+      opacity: 0.8;
+      padding: 8px;
+    }
+
+    .icon-btn:hover {
+      opacity: 1;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      background: var(--zara-black);
+      color: var(--zara-white);
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 400;
+    }
+
+    /* Hero Section Zara - Typographie forte */
+    .hero {
+      background: var(--zara-light-gray);
+      padding: var(--spacing-xl) 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 var(--spacing-sm);
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 300;
+      margin-bottom: var(--spacing-md);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--zara-black);
+    }
+
+    .hero p {
+      font-size: 16px;
+      margin-bottom: var(--spacing-lg);
+      font-weight: 300;
+      letter-spacing: 1px;
+      color: var(--zara-dark-gray);
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: var(--zara-black);
+      color: var(--zara-white);
+      padding: 16px 40px;
+      font-weight: 400;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transition: all 0.3s ease;
+      border: 1px solid var(--zara-black);
+      cursor: pointer;
+    }
+
+    .cta-button:hover {
+      background: var(--zara-white);
+      color: var(--zara-black);
+    }
+
+    /* Sections */
+    .section {
+      padding: var(--spacing-xl) 0;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .section-title {
+      font-size: 28px;
+      font-weight: 300;
+      margin-bottom: var(--spacing-sm);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--zara-black);
+    }
+
+    .section-subtitle {
+      color: var(--zara-dark-gray);
+      max-width: 600px;
+      margin: 0 auto;
+      font-size: 14px;
+      font-weight: 300;
+      letter-spacing: 1px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 var(--spacing-sm);
+    }
+
+    /* Produits Grid Zara - Layout magazine */
+    .produits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--spacing-lg);
+      margin-top: var(--spacing-lg);
+    }
+
+    .produit-card {
+      background: var(--zara-white);
+      transition: opacity 0.3s ease;
+      position: relative;
+    }
+
+    .produit-card:hover {
+      opacity: 0.8;
+    }
+
+    .produit-image {
+      width: 100%;
+      height: 450px;
+      object-fit: cover;
+      background: var(--zara-light-gray);
+    }
+
+    .produit-content {
+      padding: var(--spacing-sm) 0;
+    }
+
+    .produit-name {
+      font-weight: 400;
+      margin-bottom: var(--spacing-xs);
+      font-size: 14px;
+      color: var(--zara-black);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .produit-prix {
+      font-weight: 400;
+      color: var(--zara-black);
+      margin-bottom: var(--spacing-xs);
+      font-size: 16px;
+    }
+
+    .produit-boutique {
+      color: var(--zara-dark-gray);
+      font-size: 12px;
+      margin-bottom: var(--spacing-sm);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .produit-actions {
+      display: flex;
+      gap: var(--spacing-xs);
+      margin-top: var(--spacing-md);
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      text-align: center;
+      font-weight: 400;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid var(--zara-black);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      flex: 1;
+    }
+
+    .btn-primary {
+      background: var(--zara-black);
+      color: var(--zara-white);
+    }
+
+    .btn-primary:hover {
+      background: var(--zara-white);
+      color: var(--zara-black);
+    }
+
+    .btn-outline {
+      background: var(--zara-white);
+      color: var(--zara-black);
+      border: 1px solid var(--zara-black);
+    }
+
+    .btn-outline:hover {
+      background: var(--zara-black);
+      color: var(--zara-white);
+    }
+
+    /* État vide Zara */
+    .empty-state {
+      text-align: center;
+      padding: var(--spacing-xl);
+      background: var(--zara-white);
+    }
+
+    .empty-state i {
+      font-size: 48px;
+      color: var(--zara-dark-gray);
+      margin-bottom: var(--spacing-md);
+      opacity: 0.5;
+    }
+
+    .empty-state h3 {
+      color: var(--zara-black);
+      margin-bottom: var(--spacing-sm);
+      font-weight: 300;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .empty-state p {
+      color: var(--zara-dark-gray);
+      margin-bottom: var(--spacing-lg);
+      font-weight: 300;
+      letter-spacing: 1px;
+    }
+
+    /* Footer Zara - Minimaliste */
+    footer {
+      background: var(--zara-white);
+      border-top: 1px solid var(--zara-border);
+      padding: var(--spacing-xl) 0 var(--spacing-md);
+      margin-top: var(--spacing-xl);
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--spacing-lg);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .footer-column h3 {
+      font-size: 13px;
+      margin-bottom: var(--spacing-md);
+      font-weight: 400;
+      color: var(--zara-black);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .footer-links a {
+      color: var(--zara-dark-gray);
+      transition: color 0.3s ease;
+      font-size: 12px;
+      font-weight: 300;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .footer-links a:hover {
+      color: var(--zara-black);
+    }
+
+    .social-links {
+      display: flex;
+      gap: var(--spacing-sm);
+      margin-top: var(--spacing-md);
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: var(--zara-light-gray);
+      color: var(--zara-black);
+      border-radius: 0;
+      transition: all 0.3s ease;
+      font-size: 14px;
+    }
+
+    .social-link:hover {
+      background: var(--zara-black);
+      color: var(--zara-white);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: var(--spacing-md);
+      border-top: 1px solid var(--zara-border);
+      color: var(--zara-dark-gray);
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* Responsive Zara */
+    @media (max-width: 768px) {
+      .header-container {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+      }
+
+      .nav-links {
+        gap: var(--spacing-md);
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .hero h1 {
+        font-size: 32px;
+      }
+
+      .section-title {
+        font-size: 24px;
+      }
+
+      .produits-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .produit-image {
+        height: 400px;
+      }
+    }
+
+    /* Animations Zara - Discrètes et élégantes */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .produit-card {
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    /* Messages flash Zara */
+    .flash-message {
+      position: fixed;
+      top: 100px;
+      right: 20px;
+      background: var(--zara-black);
+      color: var(--zara-white);
+      padding: 16px 20px;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      z-index: 1000;
+      animation: slideInRight 0.5s ease;
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideOutRight {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header Zara -->
+  <header>
+    <div class="header-container">
+      <div class="logo">ZARA</div>
+      
+      <nav class="nav-links">
+        <a href="#" onclick="goToSubdomain('<%= slug %>')">ACCUEIL</a>
+        <a href="#produits">PRODUITS</a>
+        <a href="/boutique/mon">MA BOUTIQUE</a>
+        <% if (typeof user !== 'undefined' && user) { %>
+          <a href="/vendeur/dashboard">DASHBOARD</a>
+        <% } %>
+      </nav>
+      
+      <div class="header-actions">
+        <div class="search-bar">
+          <input type="text" placeholder="RECHERCHER">
+          <button><i class="fas fa-search"></i></button>
+        </div>
+        
+        <% if (typeof user !== 'undefined' && user) { %>
+          <a href="/vendeur/dashboard" class="icon-btn">
+            <i class="fas fa-user"></i>
+          </a>
+        <% } else { %>
+          <a href="/auth/login" class="icon-btn">
+            <i class="fas fa-user"></i>
+          </a>
+        <% } %>
+        
+        <a href="/panier" class="icon-btn" style="position: relative;">
+          <i class="fas fa-bag-shopping"></i>
+          <% if (typeof panierCount !== 'undefined' && panierCount > 0) { %>
+            <span class="cart-count"><%= panierCount %></span>
+          <% } %>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Messages flash -->
+  <% if (typeof message !== 'undefined' && message) { %>
+    <div class="flash-message">
+      <span><%= message %></span>
+    </div>
+    <script>
+      setTimeout(() => {
+        const flashMessage = document.querySelector('.flash-message');
+        if (flashMessage) {
+          flashMessage.style.animation = 'slideOutRight 0.5s ease';
+          setTimeout(() => flashMessage.remove(), 500);
+        }
+      }, 3000);
+    </script>
+  <% } %>
+
+  <!-- Hero Section Zara -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>NOUVELLE COLLECTION</h1>
+      <p>Découvrez les dernières créations de nos vendeurs partenaires</p>
+      <a href="#produits" class="cta-button">VOIR LA COLLECTION</a>
+    </div>
+  </section>
+
+  <!-- Produits Section Zara -->
+  <section class="section" id="produits">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">PRODUITS</h2>
+        <p class="section-subtitle">Sélection des pièces les plus prisées</p>
+      </div>
+      
+      <% if (typeof produits !== 'undefined' && produits.length > 0) { %>
+        <div class="produits-grid">
+          <% produits.forEach(produit => { %>
+            <div class="produit-card">
+              <img src="<%= produit.image %>" alt="<%= produit.nom %>" class="produit-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQ1MCIgdmlld0JveD0iMCAwIDMwMCA0NTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iNDUwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik0xMjUgMTc1SDE3NVYyMjVIMTI1VjE3NVoiIGZpbGw9IiNENkQ2RDYiLz4KPHN2Zz4K'">
+              <div class="produit-content">
+                <h3 class="produit-name"><%= produit.nom %></h3>
+                <p class="produit-prix"><%= produit.prix %> <%= produit.devise %></p>
+                <p class="produit-boutique">
+                  <% if (produit.boutique && produit.boutique.nom) { %>
+                    <%= produit.boutique.nom %>
+                  <% } else if (produit.vendeur && produit.vendeur.nom) { %>
+                    <%= produit.vendeur.nom %>
+                  <% } else { %>
+                    BOUTIQUE
+                  <% } %>
+                </p>
+                <div class="produit-actions">
+                  <form action="/panier/ajouter/<%= produit._id %>" method="POST" style="display: inline; flex: 1;">
+                    <button type="submit" class="btn btn-primary">
+                      AJOUTER AU PANIER
+                    </button>
+                  </form>
+                  <a href="/boutique/produit/<%= produit._id %>" class="btn btn-outline">
+                    DÉTAILS
+                  </a>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="empty-state">
+          <i class="fas fa-shirt"></i>
+          <h3>AUCUN PRODUIT DISPONIBLE</h3>
+          <p>Revenez bientôt pour découvrir nos nouvelles collections</p>
+          <% if (typeof user !== 'undefined' && user && user.role === 'vendeur') { %>
+            <a href="/produits/ajouter" class="btn btn-primary">
+              AJOUTER UN PRODUIT
+            </a>
+          <% } else if (typeof user !== 'undefined' && user) { %>
+            <a href="/boutique/creer" class="btn btn-primary">
+              CRÉER MA BOUTIQUE
+            </a>
+          <% } else { %>
+            <a href="/auth/register" class="btn btn-primary">
+              DEVENIR VENDEUR
+            </a>
+          <% } %>
+        </div>
+      <% } %>
+    </div>
+  </section>
+
+  <!-- Footer Zara -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3>ZARA</h3>
+          <p style="color: var(--zara-dark-gray); font-size: 12px; font-weight: 300; letter-spacing: 1px; line-height: 1.6;">
+            Plateforme de mode contemporaine pour vendeurs sélectionnés.
+          </p>
+          <div class="social-links">
+            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-pinterest"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+          </div>
+        </div>
+        
+        <div class="footer-column">
+          <h3>CATÉGORIES</h3>
+          <ul class="footer-links">
+            <li><a href="#">FEMME</a></li>
+            <li><a href="#">HOMME</a></li>
+            <li><a href="#">ENFANT</a></li>
+            <li><a href="#">BEAUTÉ</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-column">
+          <h3>ASSISTANCE</h3>
+          <ul class="footer-links">
+            <li><a href="#">AIDE</a></li>
+            <li><a href="#">LIVRAISON</a></li>
+            <li><a href="#">RETOURS</a></li>
+            <li><a href="#">CONTACT</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-column">
+          <h3>INFORMATIONS</h3>
+          <ul class="footer-links">
+            <li><a href="#">CONDITIONS</a></li>
+            <li><a href="#">CONFIDENTIALITÉ</a></li>
+            <li><a href="#">COOKIES</a></li>
+            <li><a href="#">ACCESSIBILITÉ</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2024 ZARA. TOUS DROITS RÉSERVÉS</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Animation Zara - Discrète et élégante
+    document.addEventListener('DOMContentLoaded', function() {
+      // Effet de recherche
+      const searchInput = document.querySelector('.search-bar input');
+      if (searchInput) {
+        searchInput.addEventListener('focus', function() {
+          this.parentElement.style.borderBottom = '1px solid var(--zara-black)';
+        });
+
+        searchInput.addEventListener('blur', function() {
+          this.parentElement.style.borderBottom = '1px solid transparent';
+        });
+      }
+
+      // Animation au scroll pour les produits
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.animationDelay = '0.1s';
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.produit-card').forEach(card => {
+        observer.observe(card);
+      });
+    });
+  </script>
+</body>
+</html>

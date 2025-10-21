@@ -1,41 +1,641 @@
-        <!-- views/commande_mes.ejs -->
-        <!DOCTYPE html>
-        <html lang="fr">
-        <head>
-          <meta charset="UTF-8">
-          <title>Mes Commandes</title>
-          <style>
-            table { width: 90%; margin: auto; border-collapse: collapse; }
-            th, td { padding: 10px; border: 1px solid #ccc; }
-            th { background-color: #f0f0f0; }
-            h1 { text-align: center; }
-          </style>
-        </head>
-        <body>
-          <h1>Commandes sur mes produits</h1>
-          <% if (commandes.length === 0) { %>
-            <p style="text-align:center;">Aucune commande pour l’instant.</p>
-          <% } else { %>
-            <table>
-              <tr>
-                <th>Produit</th>
-                <th>Quantité</th>
-                <th>Client</th>
-                <th>Téléphone</th>
-                <th>Date</th>
-              </tr>
-              <% commandes.forEach(c => { %>
-                <% c.produits.forEach(p => { %>
-                  <tr>
-                    <td><%= p.produitId ? p.produitId.nom : 'Produit supprimé' %></td>
-                    <td><%= p.quantite %></td>
-                    <td><%= c.nom || 'Client inconnu' %></td>
-                    <td><%= c.telephone || 'N/A' %></td>
-                    <td><%= new Date(c.date).toLocaleString() %></td>
-                  </tr>
-                <% }) %>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Mes Commandes</title>
+  <style>
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8f9fa;
+      --bg-card: #ffffff;
+      --text-primary: #000000;
+      --text-secondary: #6c757d;
+      --border: #dee2e6;
+      --success: #28a745;
+      --warning: #ffc107;
+      --info: #17a2b8;
+      --danger: #dc3545;
+      --shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Header */
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .page-title {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    /* Filtres */
+    .filters-bar {
+      background: var(--bg-card);
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+      box-shadow: var(--shadow);
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .filter-select {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+    }
+
+    .search-box {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      min-width: 250px;
+    }
+
+    /* Commandes */
+    .commande-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .commande-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .commande-header {
+      padding: 20px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .commande-info {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .commande-id {
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .commande-date {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .statut {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .statut-enattente { background: #fff3cd; color: #856404; }
+    .statut-confirmee { background: #d1ecf1; color: #0c5460; }
+    .statut-enpreparation { background: #ffeaa7; color: #8d6e00; }
+    .statut-expediee { background: #cce7ff; color: #004085; }
+    .statut-encoursdelivraison { background: #e2e3ff; color: #383d41; }
+    .statut-livree { background: #d4edda; color: #155724; }
+    .statut-annulee { background: #f8d7da; color: #721c24; }
+
+    .commande-body {
+      padding: 20px;
+    }
+
+    .client-info {
+      background: var(--bg-secondary);
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+    }
+
+    .client-detail {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .produits-list {
+      margin: 20px 0;
+    }
+
+    .produit-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .produit-item:last-child {
+      border-bottom: none;
+    }
+
+    .produit-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .produit-image {
+      width: 50px;
+      height: 50px;
+      background: var(--bg-secondary);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .produit-nom {
+      font-weight: 600;
+    }
+
+    .produit-vendeur {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .produit-prix {
+      text-align: right;
+    }
+
+    .produit-total {
+      font-weight: 700;
+    }
+
+    .produit-unite {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    /* Actions */
+    .commande-actions {
+      padding: 20px;
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .action-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .statut-selector {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-width: 180px;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: var(--text-primary);
+      color: var(--bg-primary);
+    }
+
+    .btn-primary:hover {
+      background: #333;
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .btn-whatsapp {
+      background: #25D366;
+      color: white;
+    }
+
+    .btn-whatsapp:hover {
+      background: #128C7E;
+    }
+
+    .total-section {
+      text-align: right;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 2px solid var(--border);
+    }
+
+    /* États vides */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-secondary);
+    }
+
+    .empty-state-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .page-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+      }
+
+      .filters-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .commande-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+      }
+
+      .commande-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .action-group {
+        justify-content: space-between;
+      }
+
+      .produit-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .produit-prix {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- En-tête avec statistiques -->
+    <div class="page-header">
+      <h1 class="page-title">📦 Mes Commandes</h1>
+      <div class="debug-info" style="background: #fff3cd; padding: 10px; border-radius: 6px; font-size: 0.9rem;">
+        <strong>Debug:</strong> 
+        <%= commandes.length %> commande(s) | Vendeur: <%= user.nom %>
+      </div>
+    </div>
+
+    <!-- Statistiques rapides -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number"><%= commandes.length %></div>
+        <div class="stat-label">Total Commandes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number"><%= commandes.filter(c => c.statut === 'En attente').length %></div>
+        <div class="stat-label">En Attente</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number"><%= commandes.filter(c => c.statut === 'En cours de livraison').length %></div>
+        <div class="stat-label">En Livraison</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number"><%= commandes.filter(c => c.statut === 'Livrée').length %></div>
+        <div class="stat-label">Livrées</div>
+      </div>
+    </div>
+
+    <!-- Barre de filtres -->
+    <div class="filters-bar">
+      <div class="filter-group">
+        <label>Statut:</label>
+        <select class="filter-select" onchange="filtrerCommandes()">
+          <option value="all">Tous les statuts</option>
+          <option value="En attente">En attente</option>
+          <option value="Confirmée">Confirmée</option>
+          <option value="En préparation">En préparation</option>
+          <option value="Expédiée">Expédiée</option>
+          <option value="En cours de livraison">En cours de livraison</option>
+          <option value="Livrée">Livrée</option>
+          <option value="Annulée">Annulée</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <label>Tri:</label>
+        <select class="filter-select" onchange="trierCommandes()">
+          <option value="date-desc">Plus récentes</option>
+          <option value="date-asc">Plus anciennes</option>
+          <option value="total-desc">Montant (↓)</option>
+          <option value="total-asc">Montant (↑)</option>
+        </select>
+      </div>
+
+      <input type="text" class="search-box" placeholder="🔍 Rechercher une commande..." onkeyup="rechercherCommandes()">
+    </div>
+
+    <% if (commandes.length === 0) { %>
+      <div class="empty-state">
+        <div class="empty-state-icon">📦</div>
+        <h3 style="margin-bottom: 10px; color: var(--text-primary);">Aucune commande</h3>
+        <p>Les commandes de vos produits apparaîtront ici.</p>
+      </div>
+    <% } else { %>
+      
+      <% commandes.forEach((commande, index) => { %>
+        <div class="commande-card" data-commande-id="<%= commande._id %>" data-statut="<%= commande.statut %>" data-total="<%= commande.total %>">
+          <!-- En-tête de la commande -->
+          <div class="commande-header">
+            <div class="commande-info">
+              <div class="commande-id">Commande #<%= commande._id.toString().slice(-6).toUpperCase() %></div>
+              <div class="commande-date"><%= new Date(commande.date).toLocaleDateString('fr-FR') %></div>
+            </div>
+            <span class="statut statut-<%= commande.statut ? commande.statut.toLowerCase().replace(/ /g, '') : 'enattente' %>">
+              <%= commande.statut || 'En attente' %>
+            </span>
+          </div>
+
+          <!-- Corps de la commande -->
+          <div class="commande-body">
+            <!-- Informations client -->
+            <div class="client-info">
+              <div class="client-detail">
+                <span>👤</span>
+                <div>
+                  <strong><%= commande.nom %></strong>
+                  <div style="font-size: 0.85rem; color: var(--text-secondary);">Client</div>
+                </div>
+              </div>
+              <div class="client-detail">
+                <span>📞</span>
+                <div>
+                  <strong><%= commande.telephone %></strong>
+                  <div style="font-size: 0.85rem; color: var(--text-secondary);">Téléphone</div>
+                </div>
+              </div>
+              <div class="client-detail">
+                <span>📍</span>
+                <div>
+                  <strong><%= commande.adresse %></strong>
+                  <div style="font-size: 0.85rem; color: var(--text-secondary);">Adresse</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Produits -->
+            <div class="produits-list">
+              <h4 style="margin-bottom: 15px; color: var(--text-primary);">Produits commandés (<%= commande.produits.length %>)</h4>
+              
+              <% commande.produits.forEach((produit, pIndex) => { %>
+                <div class="produit-item">
+                  <div class="produit-info">
+                    <div class="produit-image">🛍️</div>
+                    <div>
+                      <div class="produit-nom">
+                        <%= produit.produitId ? produit.produitId.nom : 'Produit non trouvé' %>
+                      </div>
+                      <div class="produit-vendeur">
+                        Quantité: <%= produit.quantite %>
+                        <% if (produit.vendeurId) { %>
+                          • Vendeur: <%= produit.vendeurId.nom %>
+                        <% } %>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="produit-prix">
+                    <div class="produit-total"><%= produit.prix * produit.quantite %> <%= produit.devise %></div>
+                    <div class="produit-unite"><%= produit.prix %> <%= produit.devise %>/unité</div>
+                  </div>
+                </div>
               <% }) %>
-            </table>
-          <% } %>
-        </body>
-        </html>
+            </div>
+
+            <!-- Total -->
+            <div class="total-section">
+              Total: <span style="color: var(--text-primary);"><%= commande.total %> <%= commande.produits[0] && commande.produits[0].devise %></span>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="commande-actions">
+            <div class="action-group">
+              <select class="statut-selector" id="statut-<%= commande._id %>">
+                <option value="En attente" <%= commande.statut === 'En attente' ? 'selected' : '' %>>En attente</option>
+                <option value="Confirmée" <%= commande.statut === 'Confirmée' ? 'selected' : '' %>>Confirmée</option>
+                <option value="En préparation" <%= commande.statut === 'En préparation' ? 'selected' : '' %>>En préparation</option>
+                <option value="Expédiée" <%= commande.statut === 'Expédiée' ? 'selected' : '' %>>Expédiée</option>
+                <option value="En cours de livraison" <%= commande.statut === 'En cours de livraison' ? 'selected' : '' %>>En cours de livraison</option>
+                <option value="Livrée" <%= commande.statut === 'Livrée' ? 'selected' : '' %>>Livrée</option>
+                <option value="Annulée" <%= commande.statut === 'Annulée' ? 'selected' : '' %>>Annulée</option>
+              </select>
+              <button class="btn btn-primary" onclick="mettreAJourStatut('<%= commande._id %>')">
+                💾 Sauvegarder
+              </button>
+              <span id="message-<%= commande._id %>" style="font-size: 0.85rem; margin-left: 10px;"></span>
+            </div>
+
+            <div class="action-group">
+              <% if (commande.telephone) { %>
+                <a href="https://wa.me/<%= commande.telephone.replace(/\D/g, '') %>?text=Bonjour <%= encodeURIComponent(commande.nom) %>, je suis <%= user.nom %>. Votre commande #<%= commande._id.toString().slice(-6) %> est maintenant '<%= commande.statut %>'." 
+                   target="_blank" 
+                   class="btn btn-whatsapp">
+                  📱 WhatsApp
+                </a>
+              <% } %>
+              <button class="btn" onclick="afficherDetails('<%= commande._id %>')">
+                📋 Détails
+              </button>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    <% } %>
+
+    <!-- Pied de page -->
+    <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border);">
+      <a href="/vendeur/dashboard" class="btn" style="background: transparent; color: var(--text-primary); border: 1px solid var(--border);">
+        ← Retour au dashboard
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Fonction de mise à jour du statut
+    async function mettreAJourStatut(commandeId) {
+      const selecteur = document.getElementById(`statut-${commandeId}`);
+      const messageElement = document.getElementById(`message-${commandeId}`);
+      const nouveauStatut = selecteur.value;
+      
+      messageElement.textContent = '⏳ Mise à jour...';
+      messageElement.style.color = '#6c757d';
+      
+      try {
+        const response = await fetch(`/commandes/${commandeId}/statut`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ statut: nouveauStatut })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          messageElement.textContent = '✅ Statut mis à jour';
+          messageElement.style.color = '#28a745';
+          
+          // Mettre à jour le badge de statut
+          const badgeStatut = document.querySelector(`[data-commande-id="${commandeId}"] .statut`);
+          badgeStatut.textContent = nouveauStatut;
+          badgeStatut.className = `statut statut-${nouveauStatut.toLowerCase().replace(/ /g, '')}`;
+          
+          // Mettre à jour l'attribut data
+          document.querySelector(`[data-commande-id="${commandeId}"]`).dataset.statut = nouveauStatut;
+          
+          setTimeout(() => messageElement.textContent = '', 3000);
+        } else {
+          throw new Error(result.error);
+        }
+      } catch (error) {
+        messageElement.textContent = '❌ Erreur: ' + error.message;
+        messageElement.style.color = '#dc3545';
+        setTimeout(() => messageElement.textContent = '', 5000);
+      }
+    }
+
+    // Fonctions de filtrage (basiques)
+    function filtrerCommandes() {
+      const filtre = document.querySelector('.filter-select').value;
+      const commandes = document.querySelectorAll('.commande-card');
+      
+      commandes.forEach(commande => {
+        if (filtre === 'all' || commande.dataset.statut === filtre) {
+          commande.style.display = 'block';
+        } else {
+          commande.style.display = 'none';
+        }
+      });
+    }
+
+    function rechercherCommandes() {
+      const recherche = document.querySelector('.search-box').value.toLowerCase();
+      const commandes = document.querySelectorAll('.commande-card');
+      
+      commandes.forEach(commande => {
+        const texte = commande.textContent.toLowerCase();
+        commande.style.display = texte.includes(recherche) ? 'block' : 'none';
+      });
+    }
+
+    function afficherDetails(commandeId) {
+      alert(`Détails de la commande ${commandeId} - Fonctionnalité à implémenter`);
+    }
+
+    // Raccourci clavier pour sauvegarder (Ctrl + S)
+    document.addEventListener('keydown', function(e) {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        const commandeActive = document.querySelector('.commande-card:hover');
+        if (commandeActive) {
+          const commandeId = commandeActive.dataset.commandeId;
+          mettreAJourStatut(commandeId);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

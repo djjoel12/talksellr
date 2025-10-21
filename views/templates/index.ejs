@@ -1,0 +1,105 @@
+<!-- views/templates/index.ejs -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Templates disponibles</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .templates-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .template-card {
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+      text-align: center;
+      transition: transform 0.3s;
+    }
+
+    .template-card:hover {
+      transform: scale(1.05);
+    }
+
+    .template-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .template-card h3 {
+      margin: 10px 0;
+      font-size: 1.2em;
+    }
+
+    .template-card form button {
+      background: #000;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .template-card form button:hover {
+      background: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>Templates disponibles</h1>
+
+  <div class="templates-grid">
+    <!-- Template Nike -->
+    <div class="template-card">
+      <img src="/images/template-nike.jpg" alt="Template Nike">
+      <h3>Style Nike</h3>
+      <form action="/boutique/choisir-template" method="POST">
+        <input type="hidden" name="template" value="nike">
+        <button type="submit">Choisir ce template</button>
+      </form>
+    </div>
+
+    <!-- Template Dior -->
+    <div class="template-card">
+      <img src="/images/template-dior.jpg" alt="Template Dior">
+      <h3>Style Dior</h3>
+      <form action="/boutique/choisir-template" method="POST">
+        <input type="hidden" name="template" value="dior">
+        <button type="submit">Choisir ce template</button>
+      </form>
+    </div>
+
+    <!-- Template Zara -->
+    <div class="template-card">
+      <img src="/images/template-zara.jpg" alt="Template Zara">
+      <h3>Style Zara</h3>
+      <form action="/boutique/choisir-template" method="POST">
+        <input type="hidden" name="template" value="zara">
+        <button type="submit">Choisir ce template</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,250 +1,847 @@
-                                 <!DOCTYPE html>
-                                 <html lang="fr">
-                                 <head>
-                                   <meta charset="UTF-8" />
-                                   <title>Ma Boutique</title>
-                                   <link rel="stylesheet" href="/css/styles.css" />
-                                   <style>
-                                     :root {
-                                       --bleu-clair: #3498db;
-                                       --bleu-foncé: #2c3e50;
-                                       --blanc: #ffffff;
-                                       --gris: #ecf0f1;
-                                       --gris-foncé: #bdc3c7;
-                                     }
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ma Boutique - Espace Vendeur</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --amazon-orange: #ff9900;
+      --amazon-dark: #131921;
+      --amazon-light: #232f3e;
+      --amazon-gray: #eaeded;
+      --amazon-text: #0f1111;
+      --amazon-border: #d5dbdb;
+      --amazon-hover: #febd69;
+    }
 
-                                     body {
-                                       background-color: var(--gris);
-                                       color: var(--bleu-foncé);
-                                       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                                       margin: 0;
-                                       padding: 30px;
-                                     }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-                                     .container {
-                                       max-width: 900px;
-                                       margin: auto;
-                                       background-color: var(--blanc);
-                                       padding: 30px;
-                                       border-radius: 12px;
-                                       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-                                     }
+    body {
+      background-color: var(--amazon-gray);
+      color: var(--amazon-text);
+      font-family: Arial, sans-serif;
+      line-height: 1.5;
+    }
 
-                                     h1 {
-                                       text-align: center;
-                                       color: var(--bleu-clair);
-                                       margin-bottom: 30px;
-                                     }
+    /* Header Amazon-like */
+    .amazon-header {
+      background-color: var(--amazon-dark);
+      color: white;
+      padding: 10px 0;
+    }
 
-                                     ul {
-                                       display: flex;
-                                       justify-content: space-around;
-                                       flex-wrap: wrap;
-                                       padding: 0;
-                                       list-style: none;
-                                       margin-bottom: 30px;
-                                     }
+    .header-top {
+      display: flex;
+      align-items: center;
+      padding: 0 15px;
+      max-width: 1500px;
+      margin: 0 auto;
+    }
 
-                                     ul li a {
-                                       background-color: var(--bleu-clair);
-                                       color: var(--blanc);
-                                       padding: 10px 20px;
-                                       border-radius: 30px;
-                                       text-decoration: none;
-                                       font-weight: 500;
-                                       transition: background-color 0.3s ease;
-                                     }
+    .logo {
+      display: flex;
+      align-items: center;
+      margin-right: 20px;
+    }
 
-                                     ul li a:hover {
-                                       background-color: #5dade2;
-                                     }
+    .logo a {
+      color: white;
+      text-decoration: none;
+      font-size: 24px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+    }
 
-                                     .message {
-                                       text-align: center;
-                                       background-color: var(--gris-foncé);
-                                       padding: 20px;
-                                       border-radius: 10px;
-                                     }
+    .logo-icon {
+      color: var(--amazon-orange);
+      margin-right: 5px;
+    }
 
-                                     .produit-card {
-                                       background-color: var(--gris);
-                                       padding: 20px;
-                                       border-radius: 10px;
-                                       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-                                       text-align: center;
-                                       margin-bottom: 20px;
-                                     }
+    .delivery-info {
+      display: flex;
+      align-items: center;
+      margin-right: 20px;
+      padding: 5px 10px;
+      border: 1px solid transparent;
+    }
 
-                                     .produit-card h2, .produit-card h4 {
-                                       color: var(--bleu-foncé);
-                                     }
+    .delivery-info:hover {
+      border: 1px solid white;
+      border-radius: 2px;
+    }
 
-                                     .produit-card img {
-                                       max-width: 150px;
-                                       border-radius: 10px;
-                                       margin-bottom: 10px;
-                                     }
+    .delivery-location {
+      font-size: 12px;
+      color: #cccccc;
+    }
 
-                                     .produit-lien {
-                                       display: inline-block;
-                                       margin-top: 15px;
-                                       padding: 10px 20px;
-                                       background-color: var(--bleu-clair);
-                                       color: var(--blanc);
-                                       text-decoration: none;
-                                       border-radius: 30px;
-                                       transition: background-color 0.3s ease;
-                                     }
+    .delivery-address {
+      font-size: 14px;
+      font-weight: bold;
+    }
 
-                                     .produit-lien:hover {
-                                       background-color: #5dade2;
-                                     }
+    .nav-main {
+      display: flex;
+      flex-grow: 1;
+      justify-content: flex-end;
+    }
 
-                                     .produits-grid {
-                                       display: grid;
-                                       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                                       gap: 20px;
-                                       margin-top: 20px;
-                                     }
-                                   </style>
-                                 </head>
-                                 <body>
-                                   <div class="container">
-                                     <h1>🎯 Mon Espace Boutique</h1>
-                                     <ul>
-                                       <li><a href="/">Accueil</a></li>
-                                       <li><a href="/produits/ajouter">Ajouter un produit</a></li>
-                                       <li><a href="/produits/mes">Voir mes produits</a></li>
-                                       <li><a href="/commandes/mes-commandes">📦 Mes Commandes</a></li>
-                                     </ul>
+    .nav-links {
+      display: flex;
+      list-style: none;
+    }
 
-                                     <% if (!boutique || Object.keys(boutique).length === 0) { %>
-                                       <div class="message">
-                                         <p>🚫 Vous n'avez pas encore de boutique.</p>
-                                         <a href="/boutique/creer" class="produit-lien">Créer ma boutique</a>
-                                       </div>
-                                     <% } else { %>
-                                       <div class="produit-card">
-                                         <% if (boutique.logo) { %>
-                                           <img src="<%= boutique.logo %>" alt="Logo boutique" />
-                                         <% } %>
+    .nav-links li {
+      margin-left: 10px;
+    }
 
-                                         <h2><%= boutique.nom %></h2>
-                                         <p><%= boutique.description %></p>
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      padding: 8px 10px;
+      font-size: 14px;
+      border: 1px solid transparent;
+      border-radius: 2px;
+    }
 
-                                         <hr style="margin: 15px 0; border: 1px solid var(--bleu-clair);" />
+    .nav-links a:hover {
+      border: 1px solid white;
+    }
 
-                                         <p><strong>Adresse :</strong><br>
-                                           <%= boutique.adresse.rue %>, <%= boutique.adresse.ville %> <%= boutique.adresse.codePostal %><br>
-                                           <%= boutique.adresse.pays %>
-                                         </p>
+    .nav-links i {
+      margin-right: 5px;
+    }
 
-                                         <p><strong>Téléphone :</strong> <%= boutique.telephone %></p>
+    /* Navigation secondaire */
+    .nav-secondary {
+      background-color: var(--amazon-light);
+      padding: 10px 15px;
+    }
 
-                                         <% if (produits && produits.length > 0) { %>
-                                           <h3>📦 Produits de la boutique</h3>
-                                           <div class="produits-grid">
-                                             <% produits.forEach(p => { %>
-                                               <div class="produit-card">
-                                                 <% if(p.image) { %>
-                                                   <img src="<%= p.image %>" alt="<%= p.nom %>" />
-                                                 <% } %>
-                                                 <h4><%= p.nom %></h4>
-                                                 <p><%= p.prix %> <%= p.devise %></p>
-                                               </div>
-                                             <% }) %>
-                                           </div>
-                                         <% } else { %>
-                                           <p>Aucun produit pour l'instant.</p>
-                                         <% } %>
+    .nav-secondary-container {
+      display: flex;
+      align-items: center;
+      max-width: 1500px;
+      margin: 0 auto;
+    }
 
-                                         <a href="/boutique/mon/modifier" class="produit-lien">✏️ Modifier ma boutique</a>
-                                       </div>
+    .nav-all {
+      display: flex;
+      align-items: center;
+      color: white;
+      text-decoration: none;
+      padding: 5px 10px;
+      border: 1px solid transparent;
+      border-radius: 2px;
+      margin-right: 15px;
+    }
 
-                                       <!-- 🔗 BOUTON PARTAGER LA BOUTIQUE -->
-                                       <div style="text-align:center; margin-top: 30px;">
-                                         <button onclick="toggleShare()" style="
-                                           background-color: #4CAF50;
-                                           color: white;
-                                           padding: 12px 20px;
-                                           border: none;
-                                           border-radius: 8px;
-                                           font-size: 1rem;
-                                           cursor: pointer;
-                                         ">
-                                           📤 Partager cette boutique
-                                         </button>
+    .nav-all:hover {
+      border: 1px solid white;
+    }
 
-                                         <div id="shareBox" style="display:none; margin-top: 20px;">
-                                           <% const boutiqueURL = `https://mon-site-marketplace.onrender.com/boutique/${boutique.slug}`; %>
+    .nav-all i {
+      margin-right: 5px;
+    }
 
-                                           <a href="https://wa.me/?text=🔥 Découvrez cette boutique : <%= boutiqueURL %>" target="_blank" style="
-                                             display:inline-block;
-                                             margin: 10px;
-                                             background-color: #25D366;
-                                             color: white;
-                                             padding: 10px 16px;
-                                             border-radius: 6px;
-                                             text-decoration: none;
-                                             font-size: 16px;
-                                           ">📱 WhatsApp</a>
+    .secondary-links {
+      display: flex;
+      list-style: none;
+    }
 
-                                           <a href="https://www.facebook.com/sharer/sharer.php?u=<%= boutiqueURL %>" target="_blank" style="
-                                             display:inline-block;
-                                             margin: 10px;
-                                             background-color: #4267B2;
-                                             color: white;
-                                             padding: 10px 16px;
-                                             border-radius: 6px;
-                                             text-decoration: none;
-                                             font-size: 16px;
-                                           ">📘 Facebook</a>
+    .secondary-links li {
+      margin-right: 15px;
+    }
 
-                                           <a href="mailto:?subject=Découvrez cette boutique&body=Voici le lien : <%= boutiqueURL %>" style="
-                                             display:inline-block;
-                                             margin: 10px;
-                                             background-color: #ff9800;
-                                             color: white;
-                                             padding: 10px 16px;
-                                             border-radius: 6px;
-                                             text-decoration: none;
-                                             font-size: 16px;
-                                           ">✉️ Email</a>
+    .secondary-links a {
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+      padding: 5px 10px;
+      border: 1px solid transparent;
+      border-radius: 2px;
+    }
 
-                                           <button id="copier-btn" onclick="copyToClipboard('<%= boutiqueURL %>')" style="
-                                             display:inline-block;
-                                             margin: 10px;
-                                             background-color: #555;
-                                             color: white;
-                                             padding: 10px 16px;
-                                             border: none;
-                                             border-radius: 6px;
-                                             font-size: 16px;
-                                             cursor: pointer;
-                                           ">📋 Copier le lien</button>
-                                         </div>
-                                       </div>
-                                     <% } %>
-                                   </div>
+    .secondary-links a:hover {
+      border: 1px solid white;
+    }
 
-                                   <script>
-                                     function toggleShare() {
-                                       const box = document.getElementById('shareBox');
-                                       box.style.display = box.style.display === 'none' ? 'block' : 'none';
-                                     }
+    /* Main Content */
+    .container {
+      max-width: 1500px;
+      margin: 20px auto;
+      padding: 0 15px;
+    }
 
-                                     function copyToClipboard(texte) {
-                                       navigator.clipboard.writeText(texte).then(() => {
-                                         const btn = document.getElementById('copier-btn');
-                                         const oldText = btn.innerText;
-                                         btn.innerText = "✅ Lien copié !";
-                                         setTimeout(() => {
-                                           btn.innerText = oldText;
-                                         }, 2000);
-                                       }, () => {
-                                         alert("Erreur lors de la copie.");
-                                       });
-                                     }
-                                   </script>
-                                 </body>
-                                 </html>
+    .page-title {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: var(--amazon-text);
+      font-weight: 400;
+    }
+
+    /* Dashboard Cards */
+    .dashboard-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .dashboard-card {
+      background: white;
+      border-radius: 4px;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      border: 1px solid var(--amazon-border);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--amazon-border);
+    }
+
+    .card-header i {
+      font-size: 24px;
+      color: var(--amazon-light);
+      margin-right: 10px;
+    }
+
+    .card-header h3 {
+      font-size: 18px;
+      font-weight: 400;
+    }
+
+    .card-content {
+      margin-bottom: 15px;
+    }
+
+    .card-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .amazon-btn {
+      background: var(--amazon-orange);
+      color: var(--amazon-text);
+      border: 1px solid var(--amazon-border);
+      border-radius: 3px;
+      padding: 8px 15px;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .amazon-btn:hover {
+      background: var(--amazon-hover);
+    }
+
+    .amazon-btn i {
+      margin-right: 5px;
+    }
+
+    /* Boutique Info */
+    .boutique-section {
+      background: white;
+      border-radius: 4px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      border: 1px solid var(--amazon-border);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--amazon-border);
+    }
+
+    .section-header i {
+      font-size: 20px;
+      color: var(--amazon-light);
+      margin-right: 10px;
+    }
+
+    .section-header h2 {
+      font-size: 20px;
+      font-weight: 400;
+    }
+
+    .boutique-info {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 20px;
+    }
+
+    .boutique-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .logo-img {
+      width: 150px;
+      height: 150px;
+      border-radius: 4px;
+      object-fit: cover;
+      border: 1px solid var(--amazon-border);
+      margin-bottom: 10px;
+    }
+
+    .logo-placeholder {
+      width: 150px;
+      height: 150px;
+      background-color: var(--amazon-gray);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    .logo-placeholder i {
+      font-size: 40px;
+      color: #cccccc;
+    }
+
+    .boutique-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+    }
+
+    .info-item {
+      margin-bottom: 10px;
+    }
+
+    .info-label {
+      font-size: 14px;
+      color: #565959;
+      margin-bottom: 5px;
+    }
+
+    .info-value {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    /* Products Grid */
+    .products-section {
+      background: white;
+      border-radius: 4px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      border: 1px solid var(--amazon-border);
+    }
+
+    .section-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .product-card {
+      border: 1px solid var(--amazon-border);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .product-card:hover {
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .product-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      background-color: var(--amazon-gray);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .product-image i {
+      font-size: 40px;
+      color: #cccccc;
+    }
+
+    .product-info {
+      padding: 15px;
+    }
+
+    .product-name {
+      font-size: 16px;
+      margin-bottom: 10px;
+      height: 40px;
+      overflow: hidden;
+    }
+
+    .product-price {
+      font-size: 18px;
+      font-weight: bold;
+      color: #b12704;
+    }
+
+    /* Share Section */
+    .share-section {
+      background: white;
+      border-radius: 4px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      border: 1px solid var(--amazon-border);
+    }
+
+    .share-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .share-header i {
+      font-size: 20px;
+      color: var(--amazon-light);
+      margin-right: 10px;
+    }
+
+    .share-header h3 {
+      font-size: 18px;
+      font-weight: 400;
+    }
+
+    .share-options {
+      display: none;
+      margin-top: 15px;
+      padding: 15px;
+      background-color: var(--amazon-gray);
+      border-radius: 4px;
+    }
+
+    .share-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .share-btn {
+      display: flex;
+      align-items: center;
+      padding: 8px 15px;
+      border-radius: 3px;
+      text-decoration: none;
+      font-size: 14px;
+      border: 1px solid var(--amazon-border);
+    }
+
+    .share-btn.whatsapp {
+      background: #25D366;
+      color: white;
+    }
+
+    .share-btn.facebook {
+      background: #4267B2;
+      color: white;
+    }
+
+    .share-btn.email {
+      background: #ff9800;
+      color: white;
+    }
+
+    .share-btn.copy {
+      background: #555;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .share-btn i {
+      margin-right: 5px;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #565959;
+    }
+
+    .empty-state i {
+      font-size: 50px;
+      margin-bottom: 15px;
+      color: #cccccc;
+    }
+
+    .empty-state p {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    /* Footer */
+    .amazon-footer {
+      background-color: var(--amazon-light);
+      color: white;
+      padding: 30px 0;
+      margin-top: 30px;
+    }
+
+    .footer-content {
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 0 15px;
+      text-align: center;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      margin-bottom: 20px;
+    }
+
+    .footer-links li {
+      margin: 0 15px;
+    }
+
+    .footer-links a {
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    .copyright {
+      font-size: 12px;
+      color: #cccccc;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header-top {
+        flex-wrap: wrap;
+      }
+      
+      .delivery-info {
+        display: none;
+      }
+      
+      .nav-links {
+        flex-wrap: wrap;
+      }
+      
+      .boutique-info {
+        grid-template-columns: 1fr;
+      }
+      
+      .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      }
+      
+      .share-buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header Amazon-like -->
+  <header class="amazon-header">
+    <div class="header-top">
+      <div class="logo">
+        <a href="/"><span class="logo-icon"><i class="fas fa-store"></i></span> MaBoutique</a>
+      </div>
+      <div class="delivery-info">
+        <div>
+          <div class="delivery-location">Livrer à</div>
+          <div class="delivery-address">Paris 75001</div>
+        </div>
+      </div>
+      <nav class="nav-main">
+        <ul class="nav-links">
+          <li><a href="/"><i class="fas fa-home"></i> Accueil</a></li>
+          <li><a href="/produits/ajouter"><i class="fas fa-plus-circle"></i> Ajouter</a></li>
+          <li><a href="/produits/mes"><i class="fas fa-box-open"></i> Mes Produits</a></li>
+          <li><a href="/commandes/mes-commandes"><i class="fas fa-shipping-fast"></i> Commandes</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="nav-secondary">
+      <div class="nav-secondary-container">
+        <a href="#" class="nav-all"><i class="fas fa-bars"></i> Tous</a>
+        <ul class="secondary-links">
+          <li><a href="/boutique/mon">Ma Boutique</a></li>
+          <li><a href="/analytics">Analytics</a></li>
+          <li><a href="/promotions">Promotions</a></li>
+          <li><a href="/support">Support</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <h1 class="page-title">Tableau de bord de votre boutique</h1>
+
+    <% if (!boutique || Object.keys(boutique).length === 0) { %>
+      <!-- Section pour créer une boutique -->
+      <div class="dashboard-cards">
+        <div class="dashboard-card">
+          <div class="card-header">
+            <i class="fas fa-store"></i>
+            <h3>Créer votre boutique</h3>
+          </div>
+          <div class="card-content">
+            <p>Vous n'avez pas encore de boutique. Créez-en une pour commencer à vendre vos produits.</p>
+          </div>
+          <div class="card-actions">
+            <a href="/boutique/creer" class="amazon-btn"><i class="fas fa-plus"></i> Créer ma boutique</a>
+          </div>
+        </div>
+        
+        <div class="dashboard-card">
+          <div class="card-header">
+            <i class="fas fa-question-circle"></i>
+            <h3>Comment ça marche</h3>
+          </div>
+          <div class="card-content">
+            <p>Créez votre boutique en quelques minutes, ajoutez vos produits et commencez à vendre.</p>
+          </div>
+        </div>
+        
+        <div class="dashboard-card">
+          <div class="card-header">
+            <i class="fas fa-chart-line"></i>
+            <h3>Avantages</h3>
+          </div>
+          <div class="card-content">
+            <p>Accédez à des millions de clients, gérez facilement vos stocks et vos commandes.</p>
+          </div>
+        </div>
+      </div>
+    <% } else { %>
+      <!-- Dashboard avec les informations de la boutique -->
+      <div class="dashboard-cards">
+        <div class="dashboard-card">
+          <div class="card-header">
+            <i class="fas fa-chart-bar"></i>
+            <h3>Vue d'ensemble</h3>
+          </div>
+          <div class="card-content">
+            <p><strong><%= produits && produits.length > 0 ? produits.length : 0 %></strong> produits en vente</p>
+            <p><strong>0</strong> commandes ce mois</p>
+          </div>
+          <div class="card-actions">
+            <a href="/analytics" class="amazon-btn">Voir les détails</a>
+          </div>
+        </div>
+        
+        <div class="dashboard-card">
+          <div class="card-header">
+            <i class="fas fa-box-open"></i>
+            <h3>Gestion des produits</h3>
+          </div>
+          <div class="card-content">
+            <p>Ajoutez, modifiez ou supprimez vos produits.</p>
+          </div>
+          <div class="card-actions">
+            <a href="/produits/ajouter" class="amazon-btn"><i class="fas fa-plus"></i> Ajouter un produit</a>
+          </div>
+        </div>
+        
+        <div class="dashboard-card">
+          <div class="card-header">
+            <i class="fas fa-cog"></i>
+            <h3>Paramètres</h3>
+          </div>
+          <div class="card-content">
+            <p>Modifiez les informations de votre boutique.</p>
+          </div>
+          <div class="card-actions">
+            <a href="/boutique/mon/modifier" class="amazon-btn">Modifier</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Informations de la boutique -->
+      <div class="boutique-section">
+        <div class="section-header">
+          <i class="fas fa-store"></i>
+          <h2>Informations de la boutique</h2>
+        </div>
+        
+        <div class="boutique-info">
+          <div class="boutique-logo">
+            <% if (boutique.logo) { %>
+              <img src="<%= boutique.logo %>" alt="Logo boutique" class="logo-img" />
+            <% } else { %>
+              <div class="logo-placeholder">
+                <i class="fas fa-store"></i>
+              </div>
+            <% } %>
+            <a href="/boutique/mon/modifier" class="amazon-btn">Modifier</a>
+          </div>
+          
+          <div class="boutique-details">
+            <div class="info-item">
+              <div class="info-label">Nom de la boutique</div>
+              <div class="info-value"><%= boutique.nom %></div>
+            </div>
+            
+            <div class="info-item">
+              <div class="info-label">Description</div>
+              <div class="info-value"><%= boutique.description %></div>
+            </div>
+            
+            <div class="info-item">
+              <div class="info-label">Adresse</div>
+              <div class="info-value">
+                <%= boutique.adresse.rue %>, <%= boutique.adresse.ville %> <%= boutique.adresse.codePostal %><br>
+                <%= boutique.adresse.pays %>
+              </div>
+            </div>
+            
+            <div class="info-item">
+              <div class="info-label">Téléphone</div>
+              <div class="info-value"><%= boutique.telephone %></div>
+            </div>
+            
+            <div class="info-item">
+              <div class="info-label">URL de la boutique</div>
+              <div class="info-value">https://mon-site-marketplace.onrender.com/boutique/<%= boutique.slug %></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Produits de la boutique -->
+      <div class="products-section">
+        <div class="section-actions">
+          <div class="section-header">
+            <i class="fas fa-boxes"></i>
+            <h2>Produits de la boutique</h2>
+          </div>
+          <a href="/produits/ajouter" class="amazon-btn"><i class="fas fa-plus"></i> Ajouter un produit</a>
+        </div>
+        
+        <% if (produits && produits.length > 0) { %>
+          <div class="products-grid">
+            <% produits.forEach(p => { %>
+              <div class="product-card">
+                <% if(p.image) { %>
+                  <img src="<%= p.image %>" alt="<%= p.nom %>" class="product-image" />
+                <% } else { %>
+                  <div class="product-image">
+                    <i class="fas fa-image"></i>
+                  </div>
+                <% } %>
+                <div class="product-info">
+                  <div class="product-name"><%= p.nom %></div>
+                  <div class="product-price"><%= p.prix %> <%= p.devise %></div>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <div class="empty-state">
+            <i class="fas fa-box-open"></i>
+            <p>Aucun produit pour l'instant.</p>
+            <a href="/produits/ajouter" class="amazon-btn"><i class="fas fa-plus"></i> Ajouter un produit</a>
+          </div>
+        <% } %>
+      </div>
+
+      <!-- Section Partage -->
+      <div class="share-section">
+        <div class="share-header">
+          <i class="fas fa-share-alt"></i>
+          <h3>Partager votre boutique</h3>
+        </div>
+        
+        <button onclick="toggleShare()" class="amazon-btn"><i class="fas fa-share-alt"></i> Partager cette boutique</button>
+        
+        <div id="shareBox" class="share-options">
+          <div class="share-buttons">
+            <% const boutiqueURL = `https://mon-site-marketplace.onrender.com/boutique/${boutique.slug}`; %>
+            
+            <a href="https://wa.me/?text=🔥 Découvrez cette boutique : <%= boutiqueURL %>" target="_blank" class="share-btn whatsapp">
+              <i class="fab fa-whatsapp"></i> WhatsApp
+            </a>
+
+            <a href="https://www.facebook.com/sharer/sharer.php?u=<%= boutiqueURL %>" target="_blank" class="share-btn facebook">
+              <i class="fab fa-facebook-f"></i> Facebook
+            </a>
+
+            <a href="mailto:?subject=Découvrez cette boutique&body=Voici le lien : <%= boutiqueURL %>" class="share-btn email">
+              <i class="fas fa-envelope"></i> Email
+            </a>
+
+            <button id="copier-btn" onclick="copyToClipboard('<%= boutiqueURL %>')" class="share-btn copy">
+              <i class="fas fa-copy"></i> Copier le lien
+            </button>
+          </div>
+        </div>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- Footer Amazon-like -->
+  <footer class="amazon-footer">
+    <div class="footer-content">
+      <ul class="footer-links">
+        <li><a href="/conditions">Conditions d'utilisation</a></li>
+        <li><a href="/confidentialite">Politique de confidentialité</a></li>
+        <li><a href="/aide">Aide</a></li>
+        <li><a href="/a-propos">À propos</a></li>
+      </ul>
+      <div class="copyright">
+        © 2025 djamta.com. Tous droits réservés.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleShare() {
+      const box = document.getElementById('shareBox');
+      box.style.display = box.style.display === 'none' || box.style.display === '' ? 'block' : 'none';
+    }
+
+    function copyToClipboard(texte) {
+      navigator.clipboard.writeText(texte).then(() => {
+        const btn = document.getElementById('copier-btn');
+        const oldText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check"></i> Lien copié !';
+        setTimeout(() => {
+          btn.innerHTML = oldText;
+        }, 2000);
+      }, () => {
+        alert("Erreur lors de la copie.");
+      });
+    }
+  </script>
+</body>
+</html>

@@ -3,12 +3,79 @@
 <head>
   <meta charset="UTF-8">
   <title>Envoyer sur WhatsApp</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: #ffffff;
+      color: #000000;
+      text-align: center;
+      padding: 50px 20px;
+      line-height: 1.6;
+    }
+    
+    h1 {
+      font-weight: 300;
+      font-size: 24px;
+      margin-bottom: 30px;
+      letter-spacing: 1px;
+    }
+    
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-width: 300px;
+      margin: 0 auto;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 15px 30px;
+      text-decoration: none;
+      font-weight: 400;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      border: 1px solid #000000;
+      cursor: pointer;
+    }
+    
+    .btn-whatsapp {
+      background: #000000;
+      color: #ffffff;
+    }
+    
+    .btn-whatsapp:hover {
+      background: #ffffff;
+      color: #000000;
+    }
+    
+    .btn-accueil {
+      background: #ffffff;
+      color: #000000;
+    }
+    
+    .btn-accueil:hover {
+      background: #000000;
+      color: #ffffff;
+    }
+  </style>
 </head>
 <body>
   <h1>✅ Commande prête à être envoyée !</h1>
-  <p><a href="https://wa.me/<%= numeroWhatsApp.replace(/\D/g, '') %>?text=<%= messageWhatsApp %>" target="_blank" rel="noopener noreferrer">
-    📤 Envoyer la commande sur WhatsApp
-  </a></p>
-  <a href="/">Retour</a>
+  
+  <div class="button-container">
+    <a href="https://wa.me/<%= numeroWhatsApp.replace(/\D/g, '') %>?text=<%= messageWhatsApp %>" 
+       target="_blank" 
+       rel="noopener noreferrer"
+       class="btn btn-whatsapp">
+      📤 Envoyer sur WhatsApp
+    </a>
+    
+    <a href="/boutique/<%= slug %>" class="btn btn-accueil">
+      🏠 Retour à l'accueil
+    </a>
+  </div>
 </body>
 </html>

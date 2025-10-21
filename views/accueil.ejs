@@ -3,74 +3,926 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Accueil Marketplace</title>
-  <link rel="stylesheet" href="/css/styles.css" />
+  <title>Marketplace Pro - Votre destination shopping</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #ff6b35;
+      --primary-dark: #e55a2b;
+      --primary-light: #fff0eb;
+      --secondary: #1a1a1a;
+      --accent: #ff9e64;
+      --light: #ffffff;
+      --dark: #000000;
+      --gray-light: #f5f5f5;
+      --gray: #666666;
+      --gray-dark: #333333;
+      --success: #27ae60;
+      --white: #ffffff;
+      --black: #000000;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+      --transition: all 0.3s ease;
+      --border: 1px solid #e0e0e0;
+      --radius: 12px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background-color: var(--light);
+      color: var(--secondary);
+      line-height: 1.6;
+    }
+
+    /* Header */
+    .header {
+      background: var(--white);
+      border-bottom: 2px solid var(--primary);
+      padding: 1.2rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--primary);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-icon {
+      background: var(--primary);
+      color: var(--white);
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 8px rgba(255, 107, 53, 0.3);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--gray-dark);
+      font-weight: 600;
+      background: var(--gray-light);
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      border: 2px solid var(--white);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .auth-links {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn {
+      padding: 0.7rem 1.5rem;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-outline:hover {
+      background: var(--primary);
+      color: var(--white);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(255, 107, 53, 0.2);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--white);
+      box-shadow: 0 4px 8px rgba(255, 107, 53, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(255, 107, 53, 0.4);
+    }
+
+    .btn-secondary {
+      background: var(--secondary);
+      color: var(--white);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-secondary:hover {
+      background: var(--dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Search Section */
+    .search-section {
+      padding: 4rem 0;
+      background: linear-gradient(135deg, var(--white) 0%, var(--primary-light) 100%);
+      border-bottom: 1px solid var(--primary-light);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .search-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+      opacity: 0.1;
+      border-radius: 50%;
+    }
+
+    .search-section h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      font-weight: 800;
+      color: var(--secondary);
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .search-section p {
+      font-size: 1.2rem;
+      margin-bottom: 2.5rem;
+      color: var(--gray-dark);
+      text-align: center;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      font-weight: 500;
+    }
+
+    .search-form {
+      max-width: 700px;
+      margin: 0 auto;
+      display: flex;
+      border-radius: 50px;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      border: 2px solid var(--primary);
+      background: var(--white);
+      position: relative;
+      z-index: 2;
+    }
+
+    .search-input {
+      flex: 1;
+      padding: 1.2rem 2rem;
+      border: none;
+      font-size: 1.1rem;
+      outline: none;
+      background: var(--white);
+      color: var(--secondary);
+    }
+
+    .search-input::placeholder {
+      color: var(--gray);
+    }
+
+    .search-btn {
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      padding: 0 2rem;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 1.1rem;
+    }
+
+    .search-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    /* Dashboard Vendeur */
+    .dashboard {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin: 3rem auto;
+      max-width: 900px;
+      box-shadow: var(--shadow);
+      border-top: 4px solid var(--primary);
+      position: relative;
+    }
+
+    .dashboard::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+
+    .dashboard h2 {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      color: var(--secondary);
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .dashboard-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .dashboard-link {
+      background: var(--gray-light);
+      padding: 1.2rem 1.5rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      color: var(--secondary);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      transition: var(--transition);
+      border: 2px solid transparent;
+    }
+
+    .dashboard-link:hover {
+      background: var(--primary);
+      color: var(--white);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--primary);
+    }
+
+    /* Products Section */
+    .products-section {
+      padding: 4rem 0;
+      background: var(--gray-light);
+    }
+
+    .section-header {
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+
+    .section-header h2 {
+      font-size: 2.5rem;
+      color: var(--secondary);
+      margin-bottom: 1rem;
+      font-weight: 800;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-header h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    .section-header p {
+      color: var(--gray-dark);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .produits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .produit-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      border: 1px solid #f0f0f0;
+      position: relative;
+    }
+
+    .produit-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .produit-badge {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      background: var(--primary);
+      color: var(--white);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      z-index: 2;
+      box-shadow: 0 4px 8px rgba(255, 107, 53, 0.3);
+    }
+
+    .produit-image-container {
+      height: 220px;
+      overflow: hidden;
+      position: relative;
+      background: var(--gray-light);
+    }
+
+    .produit-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: var(--transition);
+    }
+
+    .produit-card:hover .produit-image {
+      transform: scale(1.08);
+    }
+
+    .produit-content {
+      padding: 1.5rem;
+    }
+
+    .vendeur-info {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      color: var(--gray);
+    }
+
+    .vendeur-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    .produit-titre {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      color: var(--secondary);
+      line-height: 1.4;
+    }
+
+    .produit-prix {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+    }
+
+    .produit-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .produit-lien {
+      background: var(--primary);
+      color: var(--white);
+      padding: 0.75rem 1.5rem;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 8px rgba(255, 107, 53, 0.3);
+    }
+
+    .produit-lien:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(255, 107, 53, 0.4);
+    }
+
+    .cart-icon {
+      background: var(--secondary);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      transition: var(--transition);
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .cart-icon:hover {
+      background: var(--dark);
+      transform: translateY(-2px) scale(1.1);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      max-width: 500px;
+      margin: 0 auto;
+      border: 2px solid var(--primary-light);
+    }
+
+    .empty-icon {
+      font-size: 4rem;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      opacity: 0.7;
+    }
+
+    .empty-state h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--secondary);
+      font-weight: 700;
+    }
+
+    .empty-state p {
+      color: var(--gray-dark);
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--secondary);
+      color: var(--white);
+      padding: 4rem 0 2rem;
+      margin-top: 0;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-column h3 {
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+      color: var(--white);
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+
+    .footer-column h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-links a {
+      color: #cccccc;
+      text-decoration: none;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .footer-links a:hover {
+      color: var(--primary);
+      transform: translateX(5px);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid var(--gray-dark);
+      color: #999999;
+      font-size: 0.9rem;
+    }
+
+    /* Stats */
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      margin: 3rem 0;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 1.5rem;
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      min-width: 150px;
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--primary);
+      display: block;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--gray-dark);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .nav {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .search-section h1 {
+        font-size: 2.2rem;
+      }
+
+      .produits-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .dashboard-links {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        gap: 1.5rem;
+      }
+
+      .stat-item {
+        min-width: 120px;
+        padding: 1rem;
+      }
+
+      .stat-number {
+        font-size: 2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .produits-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .search-form {
+        flex-direction: column;
+        border-radius: var(--radius);
+      }
+
+      .search-input {
+        border-radius: var(--radius) var(--radius) 0 0;
+        padding: 1rem 1.5rem;
+      }
+
+      .search-btn {
+        border-radius: 0 0 var(--radius) var(--radius);
+        padding: 1rem;
+      }
+
+      .search-section h1 {
+        font-size: 1.8rem;
+      }
+
+      .section-header h2 {
+        font-size: 2rem;
+      }
+    }
+  </style>
 </head>
 <body>
 
-  <form method="GET" action="/" role="search" aria-label="Recherche produits" class="search-form">
-    <input
-      type="text"
-      name="q"
-      placeholder="Rechercher un produit..."
-      value="<%= typeof q !== 'undefined' ? q : '' %>"
-      aria-label="Champ de recherche des produits"
-      class="search-input"
-      autocomplete="off"
-    />
-    <button type="submit" aria-label="Lancer la recherche" class="search-btn">🔍</button>
-  </form>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <a href="/" class="logo">
+          <div class="logo-icon">
+            <i class="fas fa-store"></i>
+          </div>
+          <span>Marketplace Pro</span>
+        </a>
 
-  <a href="/panier" class="panier-link">Voir mon panier</a>
-
-  <% if (user) { %>
-    <p style="text-align:center; margin-bottom:20px;">
-      Bienvenue <%= user.nom %> (<%= user.role %>) | <a href="/auth/logout" style="color: var(--jaune);">Déconnexion</a>
-    </p>
-  <% } else { %>
-    <p style="text-align:center; margin-bottom:20px;">
-      <a href="/auth/login" style="color: var(--jaune);">Se connecter</a> | <a href="/auth/register" style="color: var(--jaune);">S’inscrire</a>
-    </p>
-  <% } %>
-
-  <% if (isVendeur) { %>
-    <h2 style="text-align:center; user-select:none;">Tableau de bord vendeur</h2>
-    <ul style="max-width: 200px; margin: 0 auto 40px auto; list-style:none; padding:0;">
-      <li><a href="/boutique/mon" style="color: var(--jaune); text-decoration:none;">Gérer ma boutique</a></li>
-    </ul>
-  <% } %>
-
-  <h1 style="user-select:none;">Bienvenue sur la marketplace multi-vendeurs</h1>
-  <h1 style="text-align:center; user-select:none; margin-bottom:30px;">Tous les Produits</h1>
-
-  <% if (!produits || produits.length === 0) { %>
-    <p style="text-align:center;">Aucun produit trouvé.</p>
-  <% } else { %>
-    <div class="produits-grid" role="list">
-      <% produits.forEach(p => { %>
-        <div
-          class="produit-card"
-          tabindex="0"
-          role="listitem"
-          aria-label="Produit <%= p.nom %> à <%= p.prix.toFixed(2) %> <%= p.devise %>"
-        >
-          <% if (p.image) { %>
-            <img src="<%= p.image %>" alt="Image de <%= p.nom %>" class="produit-image" />
+        <nav class="nav">
+          <% if (user) { %>
+            <div class="user-info">
+              <div class="user-avatar">
+                <i class="fas fa-user"></i>
+              </div>
+              <span><%= user.nom %> (<%= user.role %>)</span>
+            </div>
+            <a href="/auth/logout" class="btn btn-outline">
+              <i class="fas fa-sign-out-alt"></i> Déconnexion
+            </a>
           <% } else { %>
-            <img src="/images/no-image.png" alt="Pas d'image disponible" class="produit-image" />
+            <div class="auth-links">
+              <a href="/auth/login" class="btn btn-outline">
+                <i class="fas fa-sign-in-alt"></i> Connexion
+              </a>
+              <a href="/auth/register" class="btn btn-primary">
+                <i class="fas fa-user-plus"></i> Inscription
+              </a>
+            </div>
           <% } %>
+          
+          <a href="/panier" class="btn btn-secondary">
+            <i class="fas fa-shopping-cart"></i> Panier
+          </a>
+        </nav>
+      </div>
+    </div>
+  </header>
 
-          <p style="margin: 5px 0;">Vendu par : <strong><%= p.vendeur ? p.vendeur.nom : 'Inconnu' %></strong></p>
+  <!-- Search Section -->
+  <section class="search-section">
+    <div class="container">
+      <h1>Découvrez l'excellence en ligne</h1>
+      <p>Des produits exceptionnels, des vendeurs de confiance, une expérience shopping unique</p>
+      
+      <form method="GET" action="/" role="search" aria-label="Recherche produits" class="search-form">
+        <input
+          type="text"
+          name="q"
+          placeholder="Rechercher un produit, une catégorie, une marque..."
+          value="<%= typeof q !== 'undefined' ? q : '' %>"
+          aria-label="Champ de recherche des produits"
+          class="search-input"
+          autocomplete="off"
+        />
+        <button type="submit" aria-label="Lancer la recherche" class="search-btn">
+          <i class="fas fa-search"></i>
+        </button>
+      </form>
 
-          <div class="produit-titre"><%= p.nom %></div>
-          <div class="produit-prix"><%= p.prix.toFixed(2) %> <%= p.devise %></div>
-
-          <a href="/boutique/produit/<%= p._id %>" class="produit-lien" aria-label="Voir les détails de <%= p.nom %>">Voir</a>
+      <!-- Stats -->
+      <div class="stats">
+        <div class="stat-item">
+          <span class="stat-number">10K+</span>
+          <span class="stat-label">Produits</span>
         </div>
-      <% }) %>
+        <div class="stat-item">
+          <span class="stat-number">500+</span>
+          <span class="stat-label">Vendeurs</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">50K+</span>
+          <span class="stat-label">Clients</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">99%</span>
+          <span class="stat-label">Satisfaits</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dashboard Vendeur -->
+  <% if (isVendeur) { %>
+    <div class="container">
+      <div class="dashboard">
+        <h2><i class="fas fa-chart-line"></i> Tableau de bord vendeur</h2>
+        <div class="dashboard-links">
+          <a href="/boutique/mon" class="dashboard-link">
+            <i class="fas fa-store"></i> Gérer ma boutique
+          </a>
+          <a href="/produits/ajouter" class="dashboard-link">
+            <i class="fas fa-plus-circle"></i> Ajouter un produit
+          </a>
+          <a href="/produits/mes" class="dashboard-link">
+            <i class="fas fa-box-open"></i> Mes produits
+          </a>
+          <a href="/commandes/mes-commandes" class="dashboard-link">
+            <i class="fas fa-shipping-fast"></i> Commandes
+          </a>
+        </div>
+      </div>
     </div>
   <% } %>
 
+  <!-- Products Section -->
+  <section class="products-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Produits Populaires</h2>
+        <p>Découvrez notre sélection de produits les plus appréciés par notre communauté</p>
+      </div>
+
+      <% if (!produits || produits.length === 0) { %>
+        <div class="empty-state">
+          <div class="empty-icon">
+            <i class="fas fa-search"></i>
+          </div>
+          <h3>Aucun produit trouvé</h3>
+          <p>Essayez de modifier vos critères de recherche ou parcourir nos catégories</p>
+          <a href="/" class="btn btn-primary">
+            <i class="fas fa-home"></i> Retour à l'accueil
+          </a>
+        </div>
+      <% } else { %>
+        <div class="produits-grid" role="list">
+          <% produits.forEach(p => { %>
+            <div
+              class="produit-card"
+              tabindex="0"
+              role="listitem"
+              aria-label="Produit <%= p.nom %> à <%= p.prix.toFixed(2) %> <%= p.devise %>"
+            >
+              <% if (Math.random() > 0.7) { %>
+                <div class="produit-badge">Nouveau</div>
+              <% } %>
+              
+              <div class="produit-image-container">
+                <% if (p.image) { %>
+                  <img src="<%= p.image %>" alt="Image de <%= p.nom %>" class="produit-image" />
+                <% } else { %>
+                  <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--gray);background:var(--primary-light);">
+                    <i class="fas fa-image fa-3x" style="color:var(--primary);opacity:0.5;"></i>
+                  </div>
+                <% } %>
+              </div>
+
+              <div class="produit-content">
+                <div class="vendeur-info">
+                  <div class="vendeur-avatar">
+                    <i class="fas fa-store"></i>
+                  </div>
+                  <span><%= p.vendeur ? p.vendeur.nom : 'Inconnu' %></span>
+                </div>
+
+                <div class="produit-titre"><%= p.nom %></div>
+                <div class="produit-prix"><%= p.prix.toFixed(2) %> <%= p.devise %></div>
+
+                <div class="produit-actions">
+                  <a href="/boutique/produit/<%= p._id %>" class="produit-lien" aria-label="Voir les détails de <%= p.nom %>">
+                    <i class="fas fa-eye"></i> Voir
+                  </a>
+                  <div class="cart-icon" aria-label="Ajouter au panier">
+                    <i class="fas fa-shopping-cart"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3>Marketplace Pro</h3>
+          <p style="color: #cccccc; line-height: 1.6; margin-bottom: 1.5rem;">Votre marketplace premium pour des achats en ligne exceptionnels. Qualité, confiance et innovation.</p>
+          <div style="display: flex; gap: 1rem;">
+            <a href="#" style="color: #cccccc; font-size: 1.2rem;"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" style="color: #cccccc; font-size: 1.2rem;"><i class="fab fa-twitter"></i></a>
+            <a href="#" style="color: #cccccc; font-size: 1.2rem;"><i class="fab fa-instagram"></i></a>
+            <a href="#" style="color: #cccccc; font-size: 1.2rem;"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        
+        <div class="footer-column">
+          <h3>Navigation</h3>
+          <ul class="footer-links">
+            <li><a href="/"><i class="fas fa-chevron-right"></i> Accueil</a></li>
+            <li><a href="/produits"><i class="fas fa-chevron-right"></i> Tous les produits</a></li>
+            <li><a href="/categories"><i class="fas fa-chevron-right"></i> Catégories</a></li>
+            <li><a href="/vendeurs"><i class="fas fa-chevron-right"></i> Vendeurs</a></li>
+            <li><a href="/promotions"><i class="fas fa-chevron-right"></i> Promotions</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-column">
+          <h3>Assistance</h3>
+          <ul class="footer-links">
+            <li><a href="/aide"><i class="fas fa-chevron-right"></i> Centre d'aide</a></li>
+            <li><a href="/contact"><i class="fas fa-chevron-right"></i> Nous contacter</a></li>
+            <li><a href="/conditions"><i class="fas fa-chevron-right"></i> Conditions</a></li>
+            <li><a href="/confidentialite"><i class="fas fa-chevron-right"></i> Confidentialité</a></li>
+            <li><a href="/faq"><i class="fas fa-chevron-right"></i> FAQ</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2023 Marketplace Pro. Tous droits réservés. | Conçu avec <i class="fas fa-heart" style="color: var(--primary);"></i> pour vous</p>
+      </div>
+    </div>
+  </footer>
+
 </body>
 </html>
-

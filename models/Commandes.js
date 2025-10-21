@@ -11,11 +11,16 @@ const commandeSchema = new mongoose.Schema({
       prix: Number,
       devise: String,
       quantite: Number,
-      vendeurId: { type: mongoose.Schema.Types.ObjectId, ref: 'Utilisateur' }
+      vendeurId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
     }
   ],
   total: Number,
-  date: { type: Date, default: Date.now }
+  date: { type: Date, default: Date.now },
+  statut: { 
+    type: String, 
+    default: 'En attente',
+    enum: ['En attente', 'Confirmée', 'En préparation', 'Expédiée', 'En cours de livraison', 'Livrée', 'Annulée']
+  }
 });
 
 module.exports = mongoose.model('Commande', commandeSchema);

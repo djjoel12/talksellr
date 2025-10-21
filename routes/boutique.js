@@ -35,8 +35,9 @@ router.get('/creer', estConnecte, (req, res) => {
   res.render('boutique_creer');
 });
 
-// Route POST création boutique (avec fermeture try/catch correcte)
-router.post('/creer', estConnecte,  upload.single('logo'),async (req, res) => {
+// Route POST création boutique (avec fermeture try/catch correcte)it Boutique.findOne({ slug });
+   // ...existing code...
+router.post('/creer', estConnecte, upload.single('logo'), async (req, res) => {
   try {
     const { nom, description, rue, ville, codePostal, pays, telephone } = req.body;
 
@@ -69,11 +70,49 @@ router.post('/creer', estConnecte,  upload.single('logo'),async (req, res) => {
     });
     await boutique.save();
 
-    res.redirect('/boutique/mon');
+    // Affiche la page publique avec le nom de la boutique
+   // Redirection vers le dashboard vendeur
+res.redirect('/vendeur/dashboard');
+
+    // Si tu veux rediriger vers la page "mon", remplace la ligne précédente par :
+    // res.redirect('/boutique/mon');
   } catch (err) {
     res.status(500).send('Erreur création boutique : ' + err.message);
   }
 });
+// ...existing code...
+const Template = require('../models/Template');
+
+router.get('/templates', estVendeur, async (req, res) => {
+  try {
+    const templates = await Template.find();
+    res.render('templates_disponibles', { templates });
+  } catch (err) {
+    res.status(500).send('Erreur chargement templates : ' + err.message);
+  }
+});
+// ✅ Route POST : le vendeur choisit un template
+router.post('/choisir-template', estVendeur, async (req, res) => {
+  try {
+    const { template } = req.body; // nike, dior, zara
+    const boutique = await Boutique.findOne({ proprietaire: req.session.user.id });
+
+    if (!boutique) {
+      return res.redirect('/boutique/creer');
+    }
+
+    // On enregistre le choix du template dans la boutique
+    boutique.template = template;
+    await boutique.save();
+
+    // Une fois choisi, redirection vers la boutique
+    res.redirect('/boutique/mon');
+  } catch (error) {
+    console.error('Erreur lors du choix du template :', error);
+    res.status(500).send('Erreur serveur : ' + error.message);
+  }
+});
+
 
 // Route POST création ou modification boutique avec logo (upload)
 router.post('/boutique', estVendeur, upload.single('logo'), async (req, res) => {
@@ -163,9 +202,34 @@ router.get('/:slug', async (req, res) => {
       return res.status(404).send('Boutique non trouvée');
     }
 
-    const produits = await Produit.find({ boutique: boutique._id }).populate('vendeur', 'nom');
+    const produits = await Produit.find({ boutique: boutique._id });
 
-    res.render('boutique_publique', { boutique, produits });
+    // 🔥 DÉTECTION AUTOMATIQUE DU TEMPLATE
+    let templatePath;
+    let templateData = {
+      boutique, 
+      produits,
+      slug: boutique.slug,
+      user: req.user
+    };
+
+    // Cas 1: Boutique avec template personnalisé
+    if (boutique.template && boutique.template !== 'standard') {
+      templatePath = `boutiques_templates/${boutique.template}`;
+    }
+    // Cas 2: Template standard dans le dossier boutiques_templates
+    else if (boutique.template === 'standard') {
+      templatePath = 'boutiques_templates/standard';
+    }
+    // Cas 3: Ancien template boutique_publique (par défaut)
+    else {
+      templatePath = 'boutique_publique';
+    }
+
+    console.log('Template utilisé:', templatePath); // Debug
+    
+    res.render(templatePath, templateData);
+
   } catch (error) {
     console.error('Erreur serveur:', error);
     res.status(500).send('Erreur serveur : ' + error.message);
@@ -187,8 +251,8 @@ router.get('/', async (req, res) => {
 router.get('/produit/:id', async (req, res, next) => {
   try {
     const produit = await Produit.findById(req.params.id)
-   .populate('vendeur', 'nom email')       // charge les champs nom et email du vendeur
-    .populate('boutique', 'nom adresse');    // charge les champs nom et adresse de la boutique
+   .populate('vendeur', 'nom email telephone')       // charge les champs nom et email du vendeur
+    .populate('boutique', 'nom slug adresse');    // charge les champs nom et adresse de la boutique
 
 
     
