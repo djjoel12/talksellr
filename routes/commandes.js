@@ -165,13 +165,14 @@ router.post('/:id/statut', estVendeur, async (req, res) => {
 // ✅ Route : Voir les commandes liées à mes produits (vendeur)
 // ✅ Route : Voir les commandes liées à mes produits (vendeur)
 // ✅ Route : Voir les commandes liées à mes produits (vendeur) - VERSION CORRIGÉE
+// ✅ Route : Voir les commandes liées à mes produits (vendeur) - VERSION AVEC IMAGES
 router.get('/mes-commandes', estVendeur, async (req, res) => {
   try {
     console.log('🔍 Recherche des commandes pour vendeur:', req.session.user.id);
     
     // Récupère tous les produits du vendeur connecté
     const mesProduits = await Produit.find({ vendeur: req.session.user.id }).select('_id');
-    const mesProduitsIds = mesProduits.map(p => p._id.toString()); // Convertir en string pour comparaison
+    const mesProduitsIds = mesProduits.map(p => p._id.toString());
     
     console.log('📦 IDs des produits du vendeur (string):', mesProduitsIds);
 
@@ -183,44 +184,30 @@ router.get('/mes-commandes', estVendeur, async (req, res) => {
       });
     }
 
-    // Cherche toutes les commandes
+    // Cherche toutes les commandes avec population des images
     const toutesCommandes = await Commande.find()
-      .populate('produits.produitId', 'nom prix image')
+      .populate({
+        path: 'produits.produitId',
+        select: 'nom prix image imagesGallery',
+        model: 'Product'
+      })
       .populate('produits.vendeurId', 'nom telephone')
       .sort({ date: -1 });
 
     console.log('🛒 Toutes commandes trouvées:', toutesCommandes.length);
 
-    // Filtre SIMPLIFIÉ et CORRECT
+    // Filtre les commandes
     const commandesFiltrees = toutesCommandes.filter(commande => {
       return commande.produits.some(produit => {
         if (!produit.produitId) return false;
-        
-        // Convertir en string pour comparaison
-        const produitIdStr = produit.produitId._id ? produit.produitId._id.toString() : produit.produitId.toString();
-        
-        // Vérifier si le produit appartient au vendeur
-        const appartientAuVendeur = mesProduitsIds.includes(produitIdStr);
-        
-        if (appartientAuVendeur) {
-          console.log('✅ Produit trouvé:', produitIdStr, 'dans la commande:', commande._id);
-        }
-        
-        return appartientAuVendeur;
+        const produitIdStr = produit.produitId._id ? 
+          produit.produitId._id.toString() : 
+          produit.produitId.toString();
+        return mesProduitsIds.includes(produitIdStr);
       });
     });
 
     console.log('🎯 Commandes après filtrage:', commandesFiltrees.length);
-
-    // Afficher le détail pour debug
-    commandesFiltrees.forEach((commande, index) => {
-      console.log(`📋 Commande ${index + 1}:`, {
-        id: commande._id,
-        client: commande.nom,
-        nbProduits: commande.produits.length,
-        total: commande.total
-      });
-    });
 
     res.render('commande_mes', { 
       commandes: commandesFiltrees,

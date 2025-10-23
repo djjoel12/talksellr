@@ -152,25 +152,27 @@ router.post('/boutique', estVendeur, upload.single('logo'), async (req, res) => 
 });
 
 // Route GET : Affichage de la boutique du vendeur connecté
+// Route GET : Affichage de la boutique du vendeur connecté avec choix de template
 router.get('/mon', estVendeur, async (req, res) => {
   try {
     const boutique = await Boutique.findOne({ proprietaire: req.session.user.id });
+    const templates = await Template.find(); // Récupérer tous les templates
 
     if (!boutique) {
       return res.render('boutique_mon', {
         boutique: null,
         produits: [],
+        templates: templates,
         message: "Vous n'avez pas encore créé de boutique."
       });
     }
 
     const produits = await Produit.find({ boutique: boutique._id }).populate('vendeur', 'nom');
 
-    console.log('Produits récupérés:', produits);
-
     res.render('boutique_mon', {
       boutique,
       produits,
+      templates: templates,
       message: null
     });
 
@@ -179,7 +181,6 @@ router.get('/mon', estVendeur, async (req, res) => {
     res.status(500).send('Erreur serveur : ' + error.message);
   }
 });
-
 
 // Dashboard vendeur
 router.get('/vendeur/dashboard', estVendeur, async (req, res) => {

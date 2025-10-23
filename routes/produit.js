@@ -71,13 +71,19 @@ router.post(
 );
 
 // GET : mes produits (affiche numéro vendeur)
+// GET : mes produits avec galerie
 router.get('/mes', estVendeur, async (req, res) => {
   try {
     const boutique = await Boutique.findOne({ proprietaire: req.session.user.id });
-    if (!boutique) return res.send('Vous devez d’abord créer votre boutique.');
+    if (!boutique) return res.send('Vous devez d\'abord créer votre boutique.');
 
-    const produits = await Produit.find({ boutique: boutique._id }).populate('vendeur', 'nom telephone');
-    res.render('produit_mes', { produits });
+    const produits = await Produit.find({ boutique: boutique._id })
+      .populate('vendeur', 'nom telephone')
+      .sort({ dateCreation: -1 });
+
+    res.render('produit_mes', { 
+      produits: JSON.parse(JSON.stringify(produits)) // Pour sérialiser les données pour EJS
+    });
   } catch (err) {
     console.error('Erreur affichage produits :', err);
     res.status(500).send('Erreur affichage produits : ' + err.message);
@@ -143,7 +149,164 @@ router.post('/supprimer/:id', estVendeur, async (req, res) => {
     res.status(500).send('Erreur lors de la suppression : ' + err.message);
   }
 });
+// GET : Formulaire d'import en masse
+router.get('/import-masse', estVendeur, (req, res) => {
+  res.render('produit_import_masse');
+});
 
+// POST : Import en masse avec plusieurs photos par produit
+// POST : Import en masse avec plusieurs photos par produit
+// POST : Import en masse avec galerie de photos
+// POST : Import en masse avec galerie de photos - VERSION CORRIGÉE
+// POST : Import en masse avec galerie de photos - VERSION CORRIGÉ
+// POST : Import en masse avec gestion correcte des fichiers multiples
+router.post('/import-masse', estVendeur, upload.any(), async (req, res) => {
+  try {
+    const boutique = await Boutique.findOne({ proprietaire: req.session.user.id });
+    if (!boutique) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Vous devez d\'abord créer votre boutique.' 
+      });
+    }
+
+    const produitsData = JSON.parse(req.body.produits);
+    const fichiers = req.files || [];
+    const produitsCrees = [];
+    const erreurs = [];
+
+    console.log(`🔄 Début import de ${produitsData.length} produits`);
+    console.log(`📁 Total fichiers reçus: ${fichiers.length}`);
+
+    // Grouper les fichiers par produit
+    const fichiersParProduit = {};
+    
+    fichiers.forEach(file => {
+      // Extraire le numéro du produit du fieldname
+      const match = file.fieldname.match(/(photos|video)-(\d+)/);
+      if (match) {
+        const type = match[1]; // 'photos' ou 'video'
+        const productNumber = match[2];
+        
+        if (!fichiersParProduit[productNumber]) {
+          fichiersParProduit[productNumber] = { photos: [], video: null };
+        }
+        
+        if (type === 'photos') {
+          fichiersParProduit[productNumber].photos.push(file);
+        } else if (type === 'video') {
+          fichiersParProduit[productNumber].video = file;
+        }
+      }
+    });
+
+    console.log('📊 Fichiers groupés par produit:', fichiersParProduit);
+
+    for (let i = 0; i < produitsData.length; i++) {
+      try {
+        const produitData = produitsData[i];
+        const productNumber = i + 1;
+        
+        if (!produitData.nom || !produitData.prix || !produitData.devise) {
+          erreurs.push(`Produit ${productNumber}: Nom, prix et devise sont obligatoires`);
+          continue;
+        }
+
+        const fichiersProduit = fichiersParProduit[productNumber] || { photos: [], video: null };
+        const photosFiles = fichiersProduit.photos || [];
+        const videoFile = fichiersProduit.video;
+
+        console.log(`📸 Produit ${productNumber} "${produitData.nom}": ${photosFiles.length} photos, ${videoFile ? '1 vidéo' : '0 vidéo'}`);
+
+        let imagesGallery = [];
+        let videoUrl = '';
+
+        // Traitement de la galerie de photos
+        if (photosFiles.length > 0) {
+          console.log(`🖼️ Traitement des ${photosFiles.length} photos pour produit ${productNumber}`);
+          
+          for (let j = 0; j < photosFiles.length; j++) {
+            const photoFile = photosFiles[j];
+            console.log(`📸 Photo ${j + 1}:`, photoFile.originalname);
+            
+            imagesGallery.push({
+              url: photoFile.path,
+              cloudinary_id: photoFile.public_id || `img-${Date.now()}-${productNumber}-${j}`,
+              ordre: j
+            });
+          }
+        } else {
+          console.log(`⚠️ Aucune photo trouvée pour le produit ${productNumber}`);
+        }
+
+        // Traitement de la vidéo
+        if (videoFile) {
+          try {
+            console.log(`🎥 Traitement vidéo pour produit ${productNumber}:`, videoFile.originalname);
+            const videoCompressed = await cloudinary.uploader.upload(videoFile.path, {
+              resource_type: 'video',
+              folder: 'produits/videos',
+              transformation: [
+                { width: 640, height: 360, crop: 'limit' },
+                { quality: 'auto' }
+              ]
+            });
+            videoUrl = videoCompressed.secure_url;
+            console.log(`✅ Vidéo uploadée pour le produit ${productNumber}`);
+          } catch (videoError) {
+            console.error(`❌ Erreur vidéo produit ${productNumber}:`, videoError);
+            erreurs.push(`Produit ${productNumber}: Erreur vidéo - ${videoError.message}`);
+          }
+        }
+
+        // Création du produit
+        const imagePrincipale = imagesGallery.length > 0 ? imagesGallery[0].url : '';
+        const cloudinaryIdPrincipal = imagesGallery.length > 0 ? imagesGallery[0].cloudinary_id : '';
+
+        const produit = new Produit({
+          nom: produitData.nom,
+          description: produitData.description || '',
+          prix: parseFloat(produitData.prix),
+          devise: produitData.devise || 'EUR',
+          image: imagePrincipale,
+          cloudinary_id: cloudinaryIdPrincipal,
+          imagesGallery: imagesGallery,
+          videoUrl: videoUrl,
+          categorie: produitData.categorie || '',
+          stock: parseInt(produitData.stock) || 0,
+          sku: produitData.sku || `SKU-${Date.now()}-${i}`,
+          boutique: boutique._id,
+          vendeur: req.session.user.id
+        });
+
+        await produit.save();
+        produitsCrees.push(produit);
+        console.log(`✅ Produit ${productNumber} créé: "${produitData.nom}" avec ${imagesGallery.length} photos`);
+
+      } catch (error) {
+        console.error(`❌ Erreur produit ${i+1}:`, error);
+        erreurs.push(`Produit ${i+1}: ${error.message}`);
+      }
+    }
+
+    const result = {
+      success: true,
+      message: `${produitsCrees.length} produit(s) créé(s) avec succès sur ${produitsData.length} tentatives`,
+      produitsCrees: produitsCrees.length,
+      erreurs: erreurs
+    };
+
+    console.log('📊 Résultat import final:', result);
+    res.json(result);
+
+  } catch (err) {
+    console.error('❌ Erreur import masse:', err);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Erreur lors de l\'import: ' + err.message 
+    });
+  }
+});
 // POST : amélioration image Cloudinary
 router.post('/ameliorer/:id', estVendeur, async (req, res) => {
   try {

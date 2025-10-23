@@ -211,38 +211,157 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      flex: 1;
     }
 
+    /* Styles pour les images des produits */
     .produit-image {
-      width: 50px;
-      height: 50px;
-      background: var(--bg-secondary);
-      border-radius: 6px;
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
+      background: var(--bg-secondary);
+      border: 2px solid var(--border);
+      position: relative;
+    }
+
+    .produit-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.2s ease;
+    }
+
+    .produit-image:hover img {
+      transform: scale(1.05);
+    }
+
+    .produit-image-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8f9fa;
+      color: #6c757d;
+      font-size: 1.2rem;
+    }
+
+    .produit-details {
+      flex: 1;
     }
 
     .produit-nom {
       font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--text-primary);
     }
 
     .produit-vendeur {
       color: var(--text-secondary);
       font-size: 0.85rem;
+      margin-bottom: 2px;
+    }
+
+    .produit-sku {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
     }
 
     .produit-prix {
       text-align: right;
+      min-width: 120px;
     }
 
     .produit-total {
       font-weight: 700;
+      font-size: 1rem;
     }
 
     .produit-unite {
       color: var(--text-secondary);
       font-size: 0.85rem;
+    }
+
+    /* Galerie d'images */
+    .galerie-principale {
+      position: relative;
+    }
+
+    .image-principale {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 2px solid var(--border);
+      transition: transform 0.2s ease;
+    }
+
+    .image-principale:hover {
+      transform: scale(1.05);
+    }
+
+    .miniatures {
+      display: flex;
+      gap: 2px;
+      margin-top: 4px;
+      justify-content: center;
+    }
+
+    .miniature {
+      width: 18px;
+      height: 18px;
+      object-fit: cover;
+      border-radius: 2px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+    }
+
+    .miniature-plus {
+      width: 18px;
+      height: 18px;
+      background: var(--bg-secondary);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+      color: var(--text-secondary);
+    }
+
+    /* Modal pour image agrandie */
+    .modal-image {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.9);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-image-content {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 8px;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 20px;
+      right: 35px;
+      color: white;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
     }
 
     /* Actions */
@@ -366,6 +485,10 @@
 
       .produit-prix {
         text-align: left;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
       }
     }
   </style>
@@ -478,24 +601,47 @@
               </div>
             </div>
 
-            <!-- Produits -->
+            <!-- Produits avec images -->
             <div class="produits-list">
               <h4 style="margin-bottom: 15px; color: var(--text-primary);">Produits commandés (<%= commande.produits.length %>)</h4>
               
               <% commande.produits.forEach((produit, pIndex) => { %>
                 <div class="produit-item">
                   <div class="produit-info">
-                    <div class="produit-image">🛍️</div>
-                    <div>
+                    <!-- Image du produit -->
+                    <div class="produit-image">
+                      <% if (produit.produitId && produit.produitId.image) { %>
+                        <img src="<%= produit.produitId.image %>" 
+                             alt="<%= produit.produitId.nom %>" 
+                             onclick="agrandirImage(this)"
+                             title="Cliquer pour agrandir">
+                      <% } else if (produit.produitId && produit.produitId.imagesGallery && produit.produitId.imagesGallery.length > 0) { %>
+                        <img src="<%= produit.produitId.imagesGallery[0].url %>" 
+                             alt="<%= produit.produitId.nom %>" 
+                             onclick="agrandirImage(this)"
+                             title="Cliquer pour agrandir">
+                      <% } else { %>
+                        <div class="produit-image-placeholder">
+                          🛍️
+                        </div>
+                      <% } %>
+                    </div>
+                    
+                    <div class="produit-details">
                       <div class="produit-nom">
                         <%= produit.produitId ? produit.produitId.nom : 'Produit non trouvé' %>
                       </div>
                       <div class="produit-vendeur">
-                        Quantité: <%= produit.quantite %>
+                        Quantité: <strong><%= produit.quantite %></strong>
                         <% if (produit.vendeurId) { %>
                           • Vendeur: <%= produit.vendeurId.nom %>
                         <% } %>
                       </div>
+                      <% if (produit.produitId && produit.produitId.sku) { %>
+                        <div class="produit-sku">
+                          SKU: <%= produit.produitId.sku %>
+                        </div>
+                      <% } %>
                     </div>
                   </div>
                   <div class="produit-prix">
@@ -555,6 +701,12 @@
     </div>
   </div>
 
+  <!-- Modal pour images agrandies -->
+  <div id="imageModal" class="modal-image">
+    <span class="close-modal" onclick="fermerModal()">&times;</span>
+    <img class="modal-image-content" id="modalImage">
+  </div>
+
   <script>
     // Fonction de mise à jour du statut
     async function mettreAJourStatut(commandeId) {
@@ -597,7 +749,28 @@
       }
     }
 
-    // Fonctions de filtrage (basiques)
+    // Fonctions pour les images
+    function agrandirImage(element) {
+      const modal = document.getElementById('imageModal');
+      const modalImg = document.getElementById('modalImage');
+      modal.style.display = 'flex';
+      modalImg.src = element.src;
+      modalImg.alt = element.alt;
+    }
+
+    function fermerModal() {
+      const modal = document.getElementById('imageModal');
+      modal.style.display = 'none';
+    }
+
+    // Fermer le modal en cliquant à l'extérieur
+    document.getElementById('imageModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        fermerModal();
+      }
+    });
+
+    // Fonctions de filtrage
     function filtrerCommandes() {
       const filtre = document.querySelector('.filter-select').value;
       const commandes = document.querySelectorAll('.commande-card');
@@ -621,6 +794,30 @@
       });
     }
 
+    function trierCommandes() {
+      const tri = document.querySelectorAll('.filter-select')[1].value;
+      const container = document.querySelector('.container');
+      const commandes = Array.from(document.querySelectorAll('.commande-card'));
+      
+      commandes.sort((a, b) => {
+        switch(tri) {
+          case 'date-desc':
+            return new Date(b.dataset.date) - new Date(a.dataset.date);
+          case 'date-asc':
+            return new Date(a.dataset.date) - new Date(b.dataset.date);
+          case 'total-desc':
+            return parseFloat(b.dataset.total) - parseFloat(a.dataset.total);
+          case 'total-asc':
+            return parseFloat(a.dataset.total) - parseFloat(b.dataset.total);
+          default:
+            return 0;
+        }
+      });
+      
+      // Réorganiser les commandes dans le DOM
+      commandes.forEach(commande => container.appendChild(commande));
+    }
+
     function afficherDetails(commandeId) {
       alert(`Détails de la commande ${commandeId} - Fonctionnalité à implémenter`);
     }
@@ -635,6 +832,18 @@
           mettreAJourStatut(commandeId);
         }
       }
+    });
+
+    // Fermer le modal avec la touche Échap
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        fermerModal();
+      }
+    });
+
+    // Initialisation
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('Page "Mes Commandes" chargée avec succès');
     });
   </script>
 </body>

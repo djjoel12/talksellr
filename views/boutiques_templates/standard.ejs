@@ -127,6 +127,31 @@
       background: var(--zara-white);
       color: var(--zara-black);
     }
+
+    /* Badge de notification WhatsApp-like */
+    .cart-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #ff4444;
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pulse 2s infinite;
+      box-shadow: 0 2px 10px rgba(255, 68, 68, 0.4);
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
     
     /* Header Premium */
     header {
@@ -401,21 +426,85 @@
       box-shadow: 0 20px 40px rgba(0,0,0,0.1);
     }
     
-    .produit-image-container {
+    /* Galerie de photos */
+    .produit-gallery {
       position: relative;
+      height: 450px;
       overflow: hidden;
     }
-    
-    .produit-image {
+
+    .gallery-main {
       width: 100%;
-      height: 450px;
+      height: 100%;
       object-fit: cover;
-      background: var(--zara-light-gray);
       transition: transform 0.6s ease;
     }
-    
-    .produit-card:hover .produit-image {
+
+    .produit-card:hover .gallery-main {
       transform: scale(1.05);
+    }
+
+    .gallery-thumbnails {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 10px;
+    }
+
+    .thumbnail {
+      width: 40px;
+      height: 40px;
+      border-radius: 4px;
+      border: 2px solid white;
+      cursor: pointer;
+      object-fit: cover;
+      transition: all 0.2s ease;
+    }
+
+    .thumbnail:hover {
+      transform: scale(1.1);
+      border-color: var(--zara-black);
+    }
+
+    .thumbnail.active {
+      border-color: var(--zara-black);
+      transform: scale(1.1);
+    }
+
+    .gallery-counter {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+    }
+
+    .gallery-btn {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      background: rgba(255,255,255,0.9);
+      color: var(--zara-black);
+      border: none;
+      padding: 8px 12px;
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .gallery-btn:hover {
+      background: var(--zara-black);
+      color: var(--zara-white);
     }
     
     .produit-badge {
@@ -503,6 +592,96 @@
     .btn-outline:hover {
       background: var(--zara-black);
       color: var(--zara-white);
+    }
+
+    /* Modal pour la galerie */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      position: relative;
+      margin: auto;
+      padding: 20px;
+      width: 90%;
+      max-width: 800px;
+      height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-image {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: white;
+      font-size: 2rem;
+      font-weight: bold;
+      cursor: pointer;
+      background: none;
+      border: none;
+      z-index: 10001;
+    }
+
+    .modal-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.2);
+      color: white;
+      border: none;
+      padding: 15px 20px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      border-radius: 50%;
+      z-index: 10001;
+      transition: background 0.3s ease;
+    }
+
+    .modal-prev {
+      left: 20px;
+    }
+
+    .modal-next {
+      right: 20px;
+    }
+
+    .modal-nav:hover {
+      background: rgba(255,255,255,0.4);
+    }
+
+    .modal-counter {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-size: 1.1rem;
+      background: rgba(0,0,0,0.5);
+      padding: 8px 16px;
+      border-radius: 20px;
     }
     
     /* Newsletter Section */
@@ -713,7 +892,7 @@
         gap: 2rem;
       }
       
-      .produit-image {
+      .produit-gallery {
         height: 400px;
       }
       
@@ -749,6 +928,22 @@
     </div>
   </div>
 
+  <!-- Modal pour la galerie complète -->
+  <div id="galleryModal" class="modal">
+    <button class="modal-close" onclick="closeGallery()">&times;</button>
+    
+    <button class="modal-nav modal-prev" onclick="changeModalImage(-1)">❮</button>
+    <button class="modal-nav modal-next" onclick="changeModalImage(1)">❯</button>
+    
+    <div class="modal-content">
+      <img id="modalImage" class="modal-image" src="" alt="">
+    </div>
+    
+    <div class="modal-counter">
+      <span id="modalCounter">1 / 1</span>
+    </div>
+  </div>
+
   <!-- Header -->
   <header>
     <div class="header-container">
@@ -779,10 +974,10 @@
           </a>
         <% } %>
         
-        <a href="/panier" class="icon-btn" style="position: relative;">
+        <a href="/panier" class="icon-btn" style="position: relative;" id="cartIcon">
           <i class="fas fa-shopping-bag"></i>
           <% if (typeof panierCount !== 'undefined' && panierCount > 0) { %>
-            <span class="cart-count"><%= panierCount %></span>
+            <span class="cart-badge" id="cartBadge"><%= panierCount %></span>
           <% } %>
         </a>
       </div>
@@ -813,14 +1008,48 @@
         <% if (produits && produits.length > 0) { %>
           <div class="produits-grid">
             <% produits.forEach((produit, index) => { %>
-              <div class="produit-card loading" style="animation-delay: <%= index * 0.1 %>s">
-                <div class="produit-image-container">
-                  <img src="<%= produit.image || '/images/placeholder.jpg' %>" 
-                       alt="<%= produit.nom %>" 
-                       class="produit-image"
-                       onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQ1MCIgdmlld0JveD0iMCAwIDQwMCA0NTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iNDUwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik0xNTAgMTc1SDI1MFYyMjVIMTUwVjE3NVoiIGZpbGw9IiNENkQ2RDYiLz4KPHN2Zz4K'">
+              <div class="produit-card loading" style="animation-delay: <%= index * 0.1 %>s" data-product-index="<%= index %>">
+                <!-- Galerie de photos -->
+                <div class="produit-gallery">
+                  <% if (produit.imagesGallery && produit.imagesGallery.length > 0) { %>
+                    <img src="<%= produit.imagesGallery[0].url %>" 
+                         alt="<%= produit.nom %>" 
+                         class="gallery-main"
+                         data-product-index="<%= index %>"
+                         data-current-image="0">
+                    
+                    <div class="gallery-counter">
+                      <span class="current-image">1</span> / <%= produit.imagesGallery.length %>
+                    </div>
+
+                    <% if (produit.imagesGallery.length > 1) { %>
+                      <div class="gallery-thumbnails">
+                        <% produit.imagesGallery.forEach((image, imgIndex) => { %>
+                          <img src="<%= image.url %>" 
+                               alt="Miniature <%= imgIndex + 1 %>"
+                               class="thumbnail <%= imgIndex === 0 ? 'active' : '' %>"
+                               data-product-index="<%= index %>"
+                               data-image-index="<%= imgIndex %>"
+                               onclick="changeMainImage(<%= index %>, <%= imgIndex %>)">
+                        <% }); %>
+                      </div>
+                    <% } %>
+
+                    <button class="gallery-btn" onclick="openGallery(<%= index %>)">
+                      🖼️ Voir galerie
+                    </button>
+
+                  <% } else if (produit.image) { %>
+                    <img src="<%= produit.image %>" alt="<%= produit.nom %>" class="gallery-main">
+                  <% } else { %>
+                    <div style="background: #f0f0f0; height: 100%; display: flex; align-items: center; justify-content: center; color: #999;">
+                      📷 Aucune image
+                    </div>
+                  <% } %>
+                  
                   <div class="produit-badge">NOUVEAU</div>
                 </div>
+
                 <div class="produit-content">
                   <div class="produit-category">COLLECTION EXCLUSIVE</div>
                   <h3 class="produit-name"><%= produit.nom %></h3>
@@ -924,6 +1153,114 @@
   </footer>
 
   <script>
+    // Stocker les données des produits globalement
+    const produitsData = <%- JSON.stringify(produits) %>;
+
+    // Variables globales pour la galerie
+    let currentGallery = null;
+    let currentImageIndex = 0;
+
+    // Fonction pour changer l'image principale
+    function changeMainImage(productIndex, imageIndex) {
+      console.log('Changement d\'image:', productIndex, imageIndex);
+      
+      const productCard = document.querySelector(`[data-product-index="${productIndex}"]`);
+      if (!productCard) {
+        console.error('Carte produit non trouvée');
+        return;
+      }
+      
+      const mainImage = productCard.querySelector('.gallery-main');
+      const thumbnails = productCard.querySelectorAll('.thumbnail');
+      const counter = productCard.querySelector('.current-image');
+      
+      if (!mainImage) {
+        console.error('Image principale non trouvée');
+        return;
+      }
+      
+      // Animation de fondu
+      mainImage.style.opacity = '0';
+      
+      setTimeout(() => {
+        // Mettre à jour l'image principale
+        const produit = produitsData[productIndex];
+        if (produit.imagesGallery && produit.imagesGallery[imageIndex]) {
+          mainImage.src = produit.imagesGallery[imageIndex].url;
+          mainImage.setAttribute('data-current-image', imageIndex);
+          
+          // Animation de fondu
+          mainImage.style.opacity = '1';
+          
+          // Mettre à jour les miniatures actives
+          thumbnails.forEach((thumb, index) => {
+            thumb.classList.toggle('active', index === imageIndex);
+          });
+          
+          // Mettre à jour le compteur
+          if (counter) {
+            counter.textContent = imageIndex + 1;
+          }
+        }
+      }, 150);
+    }
+
+    // Fonction pour ouvrir la galerie complète
+    function openGallery(productIndex) {
+      currentGallery = productIndex;
+      currentImageIndex = 0;
+      
+      const produit = produitsData[productIndex];
+      const modal = document.getElementById('galleryModal');
+      const modalImage = document.getElementById('modalImage');
+      const modalCounter = document.getElementById('modalCounter');
+      
+      if (produit.imagesGallery && produit.imagesGallery.length > 0) {
+        modalImage.src = produit.imagesGallery[0].url;
+        modalImage.alt = produit.nom;
+        modalCounter.textContent = `1 / ${produit.imagesGallery.length}`;
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    // Fonction pour fermer la galerie
+    function closeGallery() {
+      const modal = document.getElementById('galleryModal');
+      modal.style.display = 'none';
+      document.body.style.overflow = 'auto';
+      currentGallery = null;
+    }
+
+    // Fonction pour changer d'image dans le modal
+    function changeModalImage(direction) {
+      if (currentGallery === null) return;
+      
+      const produit = produitsData[currentGallery];
+      const images = produit.imagesGallery;
+      const modalImage = document.getElementById('modalImage');
+      const modalCounter = document.getElementById('modalCounter');
+      
+      currentImageIndex += direction;
+      
+      // Gérer le défilement circulaire
+      if (currentImageIndex < 0) {
+        currentImageIndex = images.length - 1;
+      } else if (currentImageIndex >= images.length) {
+        currentImageIndex = 0;
+      }
+      
+      // Animation de fondu
+      modalImage.style.opacity = '0';
+      
+      setTimeout(() => {
+        modalImage.src = images[currentImageIndex].url;
+        modalImage.alt = produit.nom;
+        modalCounter.textContent = `${currentImageIndex + 1} / ${images.length}`;
+        modalImage.style.opacity = '1';
+      }, 200);
+    }
+
     // Fonctions pour la notification panier
     function showNotification(productName, productPrice) {
       const notification = document.getElementById('cartNotification');
@@ -942,6 +1279,27 @@
       const notification = document.getElementById('cartNotification');
       notification.classList.remove('show');
     }
+
+    // Fonction pour mettre à jour le badge du panier
+    function updateCartBadge(count) {
+      const cartIcon = document.getElementById('cartIcon');
+      let badge = document.getElementById('cartBadge');
+      
+      if (!badge) {
+        badge = document.createElement('span');
+        badge.id = 'cartBadge';
+        badge.className = 'cart-badge';
+        cartIcon.appendChild(badge);
+      }
+      
+      badge.textContent = count;
+      
+      // Animation du badge (comme WhatsApp)
+      badge.style.animation = 'none';
+      setTimeout(() => {
+        badge.style.animation = 'pulse 2s infinite';
+      }, 10);
+    }
     
     // Gestion de l'ajout au panier avec AJAX
     document.addEventListener('DOMContentLoaded', function() {
@@ -954,6 +1312,11 @@
           const formData = new FormData(this);
           const productName = this.querySelector('input[name="produitNom"]').value;
           const productPrice = this.querySelector('input[name="produitPrix"]').value;
+          const submitBtn = this.querySelector('.add-to-cart-btn');
+          
+          // Désactiver le bouton pendant la requête
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'AJOUT EN COURS...';
           
           // Envoyer la requête AJAX
           fetch(this.action, {
@@ -969,18 +1332,18 @@
               // Afficher la notification
               showNotification(productName, productPrice);
               
-              // Mettre à jour le compteur du panier
-              const cartCount = document.querySelector('.cart-count');
-              if (cartCount) {
-                cartCount.textContent = data.panierCount;
-              } else {
-                // Créer le compteur s'il n'existe pas
-                const cartIcon = document.querySelector('.fa-shopping-bag').closest('.icon-btn');
-                const countSpan = document.createElement('span');
-                countSpan.className = 'cart-count';
-                countSpan.textContent = data.panierCount;
-                cartIcon.appendChild(countSpan);
-              }
+              // Mettre à jour le badge du panier avec effet WhatsApp
+              updateCartBadge(data.panierCount);
+              
+              // Effet de confirmation sur le bouton
+              submitBtn.textContent = '✓ AJOUTÉ !';
+              submitBtn.style.background = 'var(--success-color)';
+              
+              setTimeout(() => {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'AJOUTER AU PANIER';
+                submitBtn.style.background = '';
+              }, 2000);
             }
           })
           .catch(error => {
@@ -1030,6 +1393,27 @@
           this.parentElement.style.transform = 'scale(1)';
         });
       }
+
+      // Navigation au clavier pour la galerie
+      document.addEventListener('keydown', function(e) {
+        const modal = document.getElementById('galleryModal');
+        if (modal.style.display === 'block') {
+          if (e.key === 'Escape') {
+            closeGallery();
+          } else if (e.key === 'ArrowLeft') {
+            changeModalImage(-1);
+          } else if (e.key === 'ArrowRight') {
+            changeModalImage(1);
+          }
+        }
+      });
+
+      // Fermer la galerie en cliquant à l'extérieur
+      document.getElementById('galleryModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+          closeGallery();
+        }
+      });
     });
   </script>
 </body>

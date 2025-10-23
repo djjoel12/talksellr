@@ -3,26 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZARA | Mode Contemporaine</title>
+  <title>LuxeMarket - Excellence & Raffinement</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* Variables Zara - Palette sobre et élégante */
+    /* Variables de design luxueux */
     :root {
-      --zara-black: #000000;
-      --zara-white: #ffffff;
-      --zara-light-gray: #f5f5f5;
-      --zara-medium-gray: #e5e5e5;
-      --zara-dark-gray: #666666;
-      --zara-text: #1a1a1a;
-      --zara-border: #ddd;
-      --spacing-xs: 8px;
-      --spacing-sm: 16px;
-      --spacing-md: 24px;
-      --spacing-lg: 32px;
-      --spacing-xl: 48px;
+      --gold-primary: #D4AF37;
+      --gold-secondary: #FFD700;
+      --gold-light: #F7EF8A;
+      --dark-elegant: #1a1a1a;
+      --dark-rich: #2d2d2d;
+      --dark-charcoal: #3a3a3a;
+      --cream: #f8f5f0;
+      --white-pure: #ffffff;
+      --text-light: #e8e8e8;
+      --text-muted: #b0b0b0;
+      --border-gold: rgba(212, 175, 55, 0.3);
+      --shadow-luxe: 0 10px 40px rgba(0, 0, 0, 0.2);
+      --shadow-gold: 0 0 30px rgba(212, 175, 55, 0.3);
+      --transition-luxe: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --border-radius-luxe: 12px;
+      --spacing-xs: 12px;
+      --spacing-sm: 20px;
+      --spacing-md: 32px;
+      --spacing-lg: 48px;
+      --spacing-xl: 80px;
     }
 
-    /* Reset Zara */
+    /* Reset et styles de base luxueux */
     * {
       margin: 0;
       padding: 0;
@@ -30,12 +38,26 @@
     }
 
     body {
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      color: var(--zara-text);
-      background: var(--zara-white);
-      line-height: 1.5;
-      font-weight: 300;
+      font-family: 'Playfair Display', 'Times New Roman', serif;
+      color: var(--text-light);
+      background: linear-gradient(135deg, var(--dark-elegant) 0%, var(--dark-rich) 50%, var(--dark-charcoal) 100%);
+      line-height: 1.7;
       min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.02) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
     }
 
     a {
@@ -43,31 +65,47 @@
       color: inherit;
     }
 
-    /* Header Zara - Ultra minimaliste */
+    /* Header luxueux */
     header {
-      background: var(--zara-white);
-      border-bottom: 1px solid var(--zara-border);
+      background: rgba(26, 26, 26, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-gold);
       padding: var(--spacing-sm) 0;
       position: sticky;
       top: 0;
       z-index: 1000;
+      transition: var(--transition-luxe);
     }
 
     .header-container {
       max-width: 1400px;
       margin: 0 auto;
-      padding: 0 var(--spacing-sm);
+      padding: 0 var(--spacing-md);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
     .logo {
-      font-size: 28px;
-      font-weight: 300;
-      letter-spacing: 2px;
-      color: var(--zara-black);
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      background: linear-gradient(45deg, var(--gold-primary), var(--gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       text-transform: uppercase;
+      position: relative;
+    }
+
+    .logo::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
     }
 
     .nav-links {
@@ -76,16 +114,34 @@
     }
 
     .nav-links a {
-      font-weight: 300;
-      font-size: 13px;
+      font-weight: 500;
+      transition: var(--transition-luxe);
+      position: relative;
+      padding: var(--spacing-xs) var(--spacing-sm);
+      border-radius: var(--border-radius-luxe);
+      font-size: 0.9rem;
       letter-spacing: 1px;
       text-transform: uppercase;
-      transition: opacity 0.3s ease;
-      opacity: 0.8;
+    }
+
+    .nav-links a::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 1px;
+      background: var(--gold-primary);
+      transition: var(--transition-luxe);
+      transform: translateX(-50%);
+    }
+
+    .nav-links a:hover::before {
+      width: 80%;
     }
 
     .nav-links a:hover {
-      opacity: 1;
+      color: var(--gold-primary);
     }
 
     .header-actions {
@@ -96,122 +152,286 @@
 
     .search-bar {
       display: flex;
-      align-items: center;
-      position: relative;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 25px;
+      overflow: hidden;
+      padding: 10px 20px;
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-gold);
+      transition: var(--transition-luxe);
+    }
+
+    .search-bar:focus-within {
+      border-color: var(--gold-primary);
+      box-shadow: var(--shadow-gold);
     }
 
     .search-bar input {
       border: none;
       outline: none;
       background: transparent;
-      color: var(--zara-black);
-      padding: 8px 12px;
-      width: 180px;
-      font-size: 13px;
-      border-bottom: 1px solid transparent;
-      transition: border-color 0.3s ease;
-    }
-
-    .search-bar input:focus {
-      border-bottom-color: var(--zara-black);
+      color: var(--text-light);
+      padding: 0 12px;
+      width: 200px;
+      font-family: inherit;
     }
 
     .search-bar input::placeholder {
-      color: var(--zara-dark-gray);
-      font-weight: 300;
+      color: var(--text-muted);
+      font-style: italic;
     }
 
     .search-bar button {
       background: none;
       border: none;
       cursor: pointer;
-      color: var(--zara-black);
-      font-size: 14px;
+      color: var(--gold-primary);
+      transition: var(--transition-luxe);
+    }
+
+    .search-bar button:hover {
+      transform: scale(1.1);
     }
 
     .icon-btn {
-      background: none;
-      border: none;
-      color: var(--zara-black);
-      font-size: 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-gold);
+      color: var(--gold-primary);
+      font-size: 1.1rem;
       cursor: pointer;
-      transition: opacity 0.3s ease;
-      opacity: 0.8;
-      padding: 8px;
-    }
-
-    .icon-btn:hover {
-      opacity: 1;
-    }
-
-    .cart-count {
-      position: absolute;
-      top: -2px;
-      right: -2px;
-      background: var(--zara-black);
-      color: var(--zara-white);
+      transition: var(--transition-luxe);
+      position: relative;
+      width: 45px;
+      height: 45px;
       border-radius: 50%;
-      width: 16px;
-      height: 16px;
-      font-size: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 400;
+      backdrop-filter: blur(10px);
     }
 
-    /* Hero Section Zara - Typographie forte */
+    .icon-btn:hover {
+      background: var(--gold-primary);
+      color: var(--dark-elegant);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-gold);
+    }
+
+    /* Badge de notification luxueux */
+    .cart-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: linear-gradient(45deg, #ff4444, #ff6b6b);
+      color: var(--white-pure);
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pulse 2s infinite;
+      box-shadow: 0 2px 15px rgba(255, 68, 68, 0.4);
+      border: 2px solid var(--dark-elegant);
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    /* Hero Section luxueuse */
     .hero {
-      background: var(--zara-light-gray);
+      background: linear-gradient(135deg, var(--dark-elegant) 0%, var(--dark-charcoal) 100%);
+      color: var(--text-light);
       padding: var(--spacing-xl) 0;
       text-align: center;
       position: relative;
       overflow: hidden;
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" opacity="0.02"><defs><pattern id="luxe" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="%23D4AF37"/></pattern></defs><rect width="1000" height="1000" fill="url(%23luxe)"/></svg>');
     }
 
     .hero-content {
       max-width: 800px;
       margin: 0 auto;
-      padding: 0 var(--spacing-sm);
+      padding: 0 var(--spacing-md);
+      position: relative;
+      z-index: 1;
     }
 
     .hero h1 {
-      font-size: 48px;
-      font-weight: 300;
+      font-size: 4rem;
+      font-weight: 700;
       margin-bottom: var(--spacing-md);
+      background: linear-gradient(45deg, var(--gold-primary), var(--gold-light), var(--gold-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--zara-black);
+      line-height: 1.2;
     }
 
     .hero p {
-      font-size: 16px;
+      font-size: 1.4rem;
       margin-bottom: var(--spacing-lg);
+      opacity: 0.9;
       font-weight: 300;
       letter-spacing: 1px;
-      color: var(--zara-dark-gray);
+      line-height: 1.6;
     }
 
     .cta-button {
       display: inline-block;
-      background: var(--zara-black);
-      color: var(--zara-white);
-      padding: 16px 40px;
-      font-weight: 400;
-      font-size: 12px;
+      background: linear-gradient(45deg, var(--gold-primary), var(--gold-secondary));
+      color: var(--dark-elegant);
+      padding: 18px 45px;
+      font-weight: 600;
+      font-size: 1.1rem;
       text-transform: uppercase;
       letter-spacing: 2px;
-      transition: all 0.3s ease;
-      border: 1px solid var(--zara-black);
+      transition: var(--transition-luxe);
+      border: none;
       cursor: pointer;
+      border-radius: 50px;
+      box-shadow: var(--shadow-luxe);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .cta-button:hover::before {
+      left: 100%;
     }
 
     .cta-button:hover {
-      background: var(--zara-white);
-      color: var(--zara-black);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-gold);
     }
 
-    /* Sections */
+    /* Notification Panier Luxueuse */
+    .cart-notification {
+      position: fixed;
+      top: 120px;
+      right: 30px;
+      background: rgba(26, 26, 26, 0.95);
+      color: var(--text-light);
+      padding: var(--spacing-md);
+      border-radius: var(--border-radius-luxe);
+      box-shadow: var(--shadow-luxe);
+      border: 1px solid var(--border-gold);
+      z-index: 9999;
+      transform: translateX(400px);
+      opacity: 0;
+      transition: var(--transition-luxe);
+      max-width: 380px;
+      backdrop-filter: blur(20px);
+    }
+
+    .cart-notification.show {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    .notification-content {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+
+    .notification-icon {
+      font-size: 1.4rem;
+      color: var(--gold-primary);
+    }
+
+    .notification-text {
+      flex: 1;
+    }
+
+    .notification-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      color: var(--gold-primary);
+    }
+
+    .notification-message {
+      font-size: 0.85rem;
+      font-weight: 300;
+      letter-spacing: 0.5px;
+      opacity: 0.9;
+    }
+
+    .notification-actions {
+      display: flex;
+      gap: var(--spacing-xs);
+      margin-top: var(--spacing-sm);
+      padding-top: var(--spacing-sm);
+      border-top: 1px solid var(--border-gold);
+    }
+
+    .notification-btn {
+      padding: 10px 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: var(--transition-luxe);
+      border: 1px solid var(--border-gold);
+      flex: 1;
+      text-align: center;
+      border-radius: 25px;
+    }
+
+    .notification-btn-primary {
+      background: var(--gold-primary);
+      color: var(--dark-elegant);
+    }
+
+    .notification-btn-primary:hover {
+      background: transparent;
+      color: var(--gold-primary);
+    }
+
+    .notification-btn-outline {
+      background: transparent;
+      color: var(--gold-primary);
+    }
+
+    .notification-btn-outline:hover {
+      background: var(--gold-primary);
+      color: var(--dark-elegant);
+    }
+
+    /* Sections communes luxueuses */
     .section {
       padding: var(--spacing-xl) 0;
     }
@@ -222,19 +442,21 @@
     }
 
     .section-title {
-      font-size: 28px;
-      font-weight: 300;
+      font-size: 3rem;
+      font-weight: 700;
       margin-bottom: var(--spacing-sm);
+      background: linear-gradient(45deg, var(--gold-primary), var(--gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--zara-black);
     }
 
     .section-subtitle {
-      color: var(--zara-dark-gray);
+      color: var(--text-muted);
       max-width: 600px;
       margin: 0 auto;
-      font-size: 14px;
+      font-size: 1.2rem;
       font-weight: 300;
       letter-spacing: 1px;
     }
@@ -242,60 +464,165 @@
     .container {
       max-width: 1400px;
       margin: 0 auto;
-      padding: 0 var(--spacing-sm);
+      padding: 0 var(--spacing-md);
     }
 
-    /* Produits Grid Zara - Layout magazine */
+    /* Produits Section luxueuse */
     .produits-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: var(--spacing-lg);
       margin-top: var(--spacing-lg);
     }
 
     .produit-card {
-      background: var(--zara-white);
-      transition: opacity 0.3s ease;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: var(--border-radius-luxe);
+      overflow: hidden;
+      transition: var(--transition-luxe);
+      box-shadow: var(--shadow-luxe);
       position: relative;
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-gold);
     }
 
     .produit-card:hover {
-      opacity: 0.8;
+      transform: translateY(-12px);
+      box-shadow: var(--shadow-gold);
+      border-color: var(--gold-primary);
     }
 
-    .produit-image {
+    .produit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(45deg, var(--gold-primary), var(--gold-secondary));
+      z-index: 2;
+    }
+
+    /* Galerie de photos luxueuse */
+    .produit-gallery {
+      position: relative;
+      height: 280px;
+      overflow: hidden;
+    }
+
+    .gallery-main {
       width: 100%;
-      height: 450px;
+      height: 100%;
       object-fit: cover;
-      background: var(--zara-light-gray);
+      transition: var(--transition-luxe);
+    }
+
+    .produit-card:hover .gallery-main {
+      transform: scale(1.08);
+    }
+
+    .gallery-thumbnails {
+      position: absolute;
+      bottom: 15px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 15px;
+    }
+
+    .thumbnail {
+      width: 45px;
+      height: 45px;
+      border-radius: 6px;
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      cursor: pointer;
+      object-fit: cover;
+      transition: var(--transition-luxe);
+      backdrop-filter: blur(10px);
+    }
+
+    .thumbnail:hover {
+      transform: scale(1.15);
+      border-color: var(--gold-primary);
+    }
+
+    .thumbnail.active {
+      border-color: var(--gold-primary);
+      transform: scale(1.1);
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+    }
+
+    .gallery-counter {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(26, 26, 26, 0.8);
+      color: var(--gold-primary);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-gold);
+    }
+
+    .gallery-btn {
+      position: absolute;
+      bottom: 15px;
+      left: 15px;
+      background: rgba(26, 26, 26, 0.8);
+      color: var(--gold-primary);
+      border: 1px solid var(--border-gold);
+      padding: 8px 16px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: var(--transition-luxe);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    .gallery-btn:hover {
+      background: var(--gold-primary);
+      color: var(--dark-elegant);
     }
 
     .produit-content {
-      padding: var(--spacing-sm) 0;
+      padding: var(--spacing-md);
     }
 
     .produit-name {
-      font-weight: 400;
+      font-weight: 600;
       margin-bottom: var(--spacing-xs);
-      font-size: 14px;
-      color: var(--zara-black);
-      text-transform: uppercase;
+      font-size: 1.2rem;
+      color: var(--gold-primary);
       letter-spacing: 1px;
     }
 
     .produit-prix {
-      font-weight: 400;
-      color: var(--zara-black);
+      font-weight: 700;
+      color: var(--gold-secondary);
       margin-bottom: var(--spacing-xs);
-      font-size: 16px;
+      font-size: 1.5rem;
+      letter-spacing: 1px;
     }
 
     .produit-boutique {
-      color: var(--zara-dark-gray);
-      font-size: 12px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
       margin-bottom: var(--spacing-sm);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+    }
+
+    .produit-boutique::before {
+      content: '✨';
+      font-size: 1rem;
     }
 
     .produit-actions {
@@ -306,90 +633,167 @@
 
     .btn {
       display: inline-block;
-      padding: 12px 24px;
+      padding: 14px 24px;
       text-align: center;
-      font-weight: 400;
-      font-size: 11px;
+      font-weight: 600;
+      font-size: 0.9rem;
       cursor: pointer;
-      transition: all 0.3s ease;
-      border: 1px solid var(--zara-black);
+      transition: var(--transition-luxe);
+      border: none;
+      flex: 1;
+      border-radius: var(--border-radius-luxe);
       text-transform: uppercase;
       letter-spacing: 1px;
-      flex: 1;
+      position: relative;
+      overflow: hidden;
     }
 
     .btn-primary {
-      background: var(--zara-black);
-      color: var(--zara-white);
+      background: linear-gradient(45deg, var(--gold-primary), var(--gold-secondary));
+      color: var(--dark-elegant);
     }
 
     .btn-primary:hover {
-      background: var(--zara-white);
-      color: var(--zara-black);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-gold);
     }
 
     .btn-outline {
-      background: var(--zara-white);
-      color: var(--zara-black);
-      border: 1px solid var(--zara-black);
+      background: transparent;
+      color: var(--gold-primary);
+      border: 2px solid var(--gold-primary);
     }
 
     .btn-outline:hover {
-      background: var(--zara-black);
-      color: var(--zara-white);
+      background: var(--gold-primary);
+      color: var(--dark-elegant);
+      transform: translateY(-2px);
     }
 
-    /* État vide Zara */
-    .empty-state {
-      text-align: center;
-      padding: var(--spacing-xl);
-      background: var(--zara-white);
+    /* Modal pour la galerie luxueux */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      animation: fadeIn 0.4s ease;
     }
 
-    .empty-state i {
-      font-size: 48px;
-      color: var(--zara-dark-gray);
-      margin-bottom: var(--spacing-md);
-      opacity: 0.5;
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
-    .empty-state h3 {
-      color: var(--zara-black);
-      margin-bottom: var(--spacing-sm);
-      font-weight: 300;
-      text-transform: uppercase;
-      letter-spacing: 2px;
+    .modal-content {
+      position: relative;
+      margin: auto;
+      padding: 20px;
+      width: 95%;
+      max-width: 900px;
+      height: 95vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .empty-state p {
-      color: var(--zara-dark-gray);
-      margin-bottom: var(--spacing-lg);
-      font-weight: 300;
-      letter-spacing: 1px;
+    .modal-image {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: var(--border-radius-luxe);
+      transition: opacity 0.3s ease;
+      box-shadow: var(--shadow-luxe);
     }
 
-    /* Footer Zara - Minimaliste */
+    .modal-close {
+      position: absolute;
+      top: 30px;
+      right: 40px;
+      color: var(--gold-primary);
+      font-size: 2.5rem;
+      font-weight: bold;
+      cursor: pointer;
+      background: none;
+      border: none;
+      z-index: 10001;
+      transition: var(--transition-luxe);
+    }
+
+    .modal-close:hover {
+      transform: scale(1.2);
+      color: var(--gold-secondary);
+    }
+
+    .modal-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(212, 175, 55, 0.2);
+      color: var(--gold-primary);
+      border: 2px solid var(--gold-primary);
+      padding: 20px 25px;
+      font-size: 1.8rem;
+      cursor: pointer;
+      border-radius: 50%;
+      z-index: 10001;
+      transition: var(--transition-luxe);
+      backdrop-filter: blur(10px);
+    }
+
+    .modal-prev {
+      left: 30px;
+    }
+
+    .modal-next {
+      right: 30px;
+    }
+
+    .modal-nav:hover {
+      background: var(--gold-primary);
+      color: var(--dark-elegant);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .modal-counter {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--gold-primary);
+      font-size: 1.2rem;
+      background: rgba(26, 26, 26, 0.8);
+      padding: 12px 24px;
+      border-radius: 25px;
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-gold);
+    }
+
+    /* Footer luxueux */
     footer {
-      background: var(--zara-white);
-      border-top: 1px solid var(--zara-border);
-      padding: var(--spacing-xl) 0 var(--spacing-md);
+      background: linear-gradient(135deg, var(--dark-elegant) 0%, #000000 100%);
+      color: var(--text-light);
+      padding: var(--spacing-xl) 0 var(--spacing-lg);
       margin-top: var(--spacing-xl);
+      border-top: 1px solid var(--border-gold);
     }
 
     .footer-content {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: var(--spacing-lg);
       margin-bottom: var(--spacing-lg);
     }
 
     .footer-column h3 {
-      font-size: 13px;
+      font-size: 1.3rem;
       margin-bottom: var(--spacing-md);
-      font-weight: 400;
-      color: var(--zara-black);
-      text-transform: uppercase;
-      letter-spacing: 2px;
+      font-weight: 600;
+      color: var(--gold-primary);
+      letter-spacing: 1px;
     }
 
     .footer-links {
@@ -401,16 +805,17 @@
     }
 
     .footer-links a {
-      color: var(--zara-dark-gray);
-      transition: color 0.3s ease;
-      font-size: 12px;
-      font-weight: 300;
-      letter-spacing: 1px;
-      text-transform: uppercase;
+      color: var(--text-muted);
+      transition: var(--transition-luxe);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      font-size: 0.9rem;
     }
 
     .footer-links a:hover {
-      color: var(--zara-black);
+      color: var(--gold-primary);
+      transform: translateX(8px);
     }
 
     .social-links {
@@ -423,32 +828,33 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 36px;
-      height: 36px;
-      background: var(--zara-light-gray);
-      color: var(--zara-black);
-      border-radius: 0;
-      transition: all 0.3s ease;
-      font-size: 14px;
+      width: 45px;
+      height: 45px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--gold-primary);
+      border-radius: 50%;
+      transition: var(--transition-luxe);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-gold);
     }
 
     .social-link:hover {
-      background: var(--zara-black);
-      color: var(--zara-white);
+      background: var(--gold-primary);
+      color: var(--dark-elegant);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-gold);
     }
 
     .footer-bottom {
       text-align: center;
       padding-top: var(--spacing-md);
-      border-top: 1px solid var(--zara-border);
-      color: var(--zara-dark-gray);
-      font-size: 11px;
-      font-weight: 300;
+      border-top: 1px solid var(--border-gold);
+      color: var(--text-muted);
+      font-size: 0.9rem;
       letter-spacing: 1px;
-      text-transform: uppercase;
     }
 
-    /* Responsive Zara */
+    /* Responsive design luxueux */
     @media (max-width: 768px) {
       .header-container {
         flex-direction: column;
@@ -462,153 +868,198 @@
       }
 
       .hero h1 {
-        font-size: 32px;
+        font-size: 2.8rem;
       }
 
       .section-title {
-        font-size: 24px;
+        font-size: 2.2rem;
       }
 
       .produits-grid {
         grid-template-columns: 1fr;
       }
 
-      .produit-image {
-        height: 400px;
+      .produit-actions {
+        flex-direction: column;
+      }
+
+      .cart-notification {
+        right: 15px;
+        left: 15px;
+        max-width: none;
+      }
+
+      .modal-nav {
+        padding: 15px 20px;
+        font-size: 1.4rem;
+      }
+
+      .modal-prev {
+        left: 15px;
+      }
+
+      .modal-next {
+        right: 15px;
       }
     }
 
-    /* Animations Zara - Discrètes et élégantes */
-    @keyframes fadeIn {
+    /* Animations luxueuses */
+    @keyframes fadeInUp {
       from {
         opacity: 0;
+        transform: translateY(40px);
       }
       to {
         opacity: 1;
+        transform: translateY(0);
       }
     }
 
     .produit-card {
-      animation: fadeIn 0.6s ease-out;
+      animation: fadeInUp 0.8s ease-out;
     }
 
-    /* Messages flash Zara */
-    .flash-message {
-      position: fixed;
-      top: 100px;
-      right: 20px;
-      background: var(--zara-black);
-      color: var(--zara-white);
-      padding: 16px 20px;
-      font-size: 12px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      z-index: 1000;
-      animation: slideInRight 0.5s ease;
+    .produit-card:nth-child(odd) {
+      animation-delay: 0.1s;
     }
 
-    @keyframes slideInRight {
-      from {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    }
-
-    @keyframes slideOutRight {
-      from {
-        transform: translateX(0);
-        opacity: 1;
-      }
-      to {
-        transform: translateX(100%);
-        opacity: 0;
-      }
+    .produit-card:nth-child(even) {
+      animation-delay: 0.2s;
     }
   </style>
 </head>
 <body>
-  <!-- Header Zara -->
+  <!-- Notification Panier Luxueuse -->
+  <div id="cartNotification" class="cart-notification">
+    <div class="notification-content">
+      <div class="notification-icon">✨</div>
+      <div class="notification-text">
+        <div class="notification-title">PRODUIT AJOUTÉ</div>
+        <div class="notification-message" id="notificationMessage">Le produit a été ajouté à votre panier</div>
+      </div>
+    </div>
+    <div class="notification-actions">
+      <a href="/panier" class="notification-btn notification-btn-primary">VOIR LE PANIER</a>
+      <button onclick="hideNotification()" class="notification-btn notification-btn-outline">CONTINUER</button>
+    </div>
+  </div>
+
+  <!-- Modal pour la galerie complète -->
+  <div id="galleryModal" class="modal">
+    <button class="modal-close" onclick="closeGallery()">&times;</button>
+    
+    <button class="modal-nav modal-prev" onclick="changeModalImage(-1)">❮</button>
+    <button class="modal-nav modal-next" onclick="changeModalImage(1)">❯</button>
+    
+    <div class="modal-content">
+      <img id="modalImage" class="modal-image" src="" alt="">
+    </div>
+    
+    <div class="modal-counter">
+      <span id="modalCounter">1 / 1</span>
+    </div>
+  </div>
+
+  <!-- Header -->
   <header>
     <div class="header-container">
-      <div class="logo">ZARA</div>
+      <div class="logo">LuxeMarket</div>
       
       <nav class="nav-links">
-        <a href="#" onclick="goToSubdomain('<%= slug %>')">ACCUEIL</a>
-        <a href="#produits">PRODUITS</a>
-        <a href="/boutique/mon">MA BOUTIQUE</a>
+        <a href="#" class="btn" onclick="goToSubdomain('<%= slug %>')">Accueil</a>
+        <a href="#produits">Collection</a>
+        <a href="/boutique/mon">Espace Privé</a>
         <% if (typeof user !== 'undefined' && user) { %>
-          <a href="/vendeur/dashboard">DASHBOARD</a>
+          <a href="/vendeur/dashboard">Dashboard</a>
         <% } %>
       </nav>
       
       <div class="header-actions">
         <div class="search-bar">
-          <input type="text" placeholder="RECHERCHER">
+          <input type="text" placeholder="Rechercher un produit d'exception...">
           <button><i class="fas fa-search"></i></button>
         </div>
         
         <% if (typeof user !== 'undefined' && user) { %>
-          <a href="/vendeur/dashboard" class="icon-btn">
-            <i class="fas fa-user"></i>
+          <a href="/vendeur/dashboard" class="icon-btn" title="Mon espace privé">
+            <i class="fas fa-crown"></i>
           </a>
         <% } else { %>
-          <a href="/auth/login" class="icon-btn">
-            <i class="fas fa-user"></i>
+          <a href="/auth/login" class="icon-btn" title="Connexion">
+            <i class="fas fa-sign-in-alt"></i>
           </a>
         <% } %>
         
-        <a href="/panier" class="icon-btn" style="position: relative;">
-          <i class="fas fa-bag-shopping"></i>
+        <a href="/panier" class="icon-btn" title="Panier d'exception" id="cartIcon">
+          <i class="fas fa-shopping-bag"></i>
           <% if (typeof panierCount !== 'undefined' && panierCount > 0) { %>
-            <span class="cart-count"><%= panierCount %></span>
+            <span class="cart-badge" id="cartBadge"><%= panierCount %></span>
           <% } %>
         </a>
       </div>
     </div>
   </header>
 
-  <!-- Messages flash -->
-  <% if (typeof message !== 'undefined' && message) { %>
-    <div class="flash-message">
-      <span><%= message %></span>
-    </div>
-    <script>
-      setTimeout(() => {
-        const flashMessage = document.querySelector('.flash-message');
-        if (flashMessage) {
-          flashMessage.style.animation = 'slideOutRight 0.5s ease';
-          setTimeout(() => flashMessage.remove(), 500);
-        }
-      }, 3000);
-    </script>
-  <% } %>
-
-  <!-- Hero Section Zara -->
+  <!-- Hero Section -->
   <section class="hero">
     <div class="hero-content">
-      <h1>NOUVELLE COLLECTION</h1>
-      <p>Découvrez les dernières créations de nos vendeurs partenaires</p>
-      <a href="#produits" class="cta-button">VOIR LA COLLECTION</a>
+      <h1>Excellence & Raffinement</h1>
+      <p>Découvrez une collection exclusive de produits d'exception, soigneusement sélectionnés pour leur qualité et leur élégance</p>
+      <a href="#produits" class="cta-button">Découvrir la Collection</a>
     </div>
   </section>
 
-  <!-- Produits Section Zara -->
+  <!-- Produits Section -->
   <section class="section" id="produits">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title">PRODUITS</h2>
-        <p class="section-subtitle">Sélection des pièces les plus prisées</p>
+        <h2 class="section-title">Collection Exclusive</h2>
+        <p class="section-subtitle">Des pièces uniques et raffinées sélectionnées avec exigence</p>
       </div>
       
       <% if (typeof produits !== 'undefined' && produits.length > 0) { %>
         <div class="produits-grid">
-          <% produits.forEach(produit => { %>
-            <div class="produit-card">
-              <img src="<%= produit.image %>" alt="<%= produit.nom %>" class="produit-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQ1MCIgdmlld0JveD0iMCAwIDMwMCA0NTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iNDUwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik0xMjUgMTc1SDE3NVYyMjVIMTI1VjE3NVoiIGZpbGw9IiNENkQ2RDYiLz4KPHN2Zz4K'">
+          <% produits.forEach((produit, index) => { %>
+            <div class="produit-card" data-product-index="<%= index %>">
+              <!-- Galerie de photos luxueuse -->
+              <div class="produit-gallery">
+                <% if (produit.imagesGallery && produit.imagesGallery.length > 0) { %>
+                  <img src="<%= produit.imagesGallery[0].url %>" 
+                       alt="<%= produit.nom %>" 
+                       class="gallery-main"
+                       data-product-index="<%= index %>"
+                       data-current-image="0">
+                  
+                  <div class="gallery-counter">
+                    <span class="current-image">1</span> / <%= produit.imagesGallery.length %>
+                  </div>
+
+                  <% if (produit.imagesGallery.length > 1) { %>
+                    <div class="gallery-thumbnails">
+                      <% produit.imagesGallery.forEach((image, imgIndex) => { %>
+                        <img src="<%= image.url %>" 
+                             alt="Miniature <%= imgIndex + 1 %>"
+                             class="thumbnail <%= imgIndex === 0 ? 'active' : '' %>"
+                             data-product-index="<%= index %>"
+                             data-image-index="<%= imgIndex %>"
+                             onclick="changeMainImage(<%= index %>, <%= imgIndex %>)">
+                      <% }); %>
+                    </div>
+                  <% } %>
+
+                  <button class="gallery-btn" onclick="openGallery(<%= index %>)">
+                    <i class="fas fa-expand"></i> Galerie
+                  </button>
+
+                <% } else if (produit.image) { %>
+                  <img src="<%= produit.image %>" alt="<%= produit.nom %>" class="gallery-main">
+                <% } else { %>
+                  <div style="background: rgba(255,255,255,0.05); height: 100%; display: flex; align-items: center; justify-content: center; color: var(--text-muted); border: 2px dashed var(--border-gold);">
+                    <i class="fas fa-gem" style="font-size: 3rem;"></i>
+                  </div>
+                <% } %>
+              </div>
+
               <div class="produit-content">
                 <h3 class="produit-name"><%= produit.nom %></h3>
                 <p class="produit-prix"><%= produit.prix %> <%= produit.devise %></p>
@@ -616,19 +1067,26 @@
                   <% if (produit.boutique && produit.boutique.nom) { %>
                     <%= produit.boutique.nom %>
                   <% } else if (produit.vendeur && produit.vendeur.nom) { %>
-                    <%= produit.vendeur.nom %>
+                    Collection <%= produit.vendeur.nom %>
                   <% } else { %>
-                    BOUTIQUE
+                    Collection Privée
                   <% } %>
                 </p>
+                <% if (produit.description) { %>
+                  <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: var(--spacing-sm); font-style: italic;">
+                    <%= produit.description.length > 120 ? produit.description.substring(0, 120) + '...' : produit.description %>
+                  </p>
+                <% } %>
                 <div class="produit-actions">
-                  <form action="/panier/ajouter/<%= produit._id %>" method="POST" style="display: inline; flex: 1;">
-                    <button type="submit" class="btn btn-primary">
-                      AJOUTER AU PANIER
+                  <form action="/panier/ajouter/<%= produit._id %>" method="POST" style="display: inline; flex: 1;" class="add-to-cart-form">
+                    <input type="hidden" name="produitNom" value="<%= produit.nom %>">
+                    <input type="hidden" name="produitPrix" value="<%= produit.prix %>">
+                    <button type="submit" class="btn btn-primary add-to-cart-btn">
+                      <i class="fas fa-crown"></i> Ajouter
                     </button>
                   </form>
                   <a href="/boutique/produit/<%= produit._id %>" class="btn btn-outline">
-                    DÉTAILS
+                    <i class="fas fa-eye"></i> Détails
                   </a>
                 </div>
               </div>
@@ -636,21 +1094,21 @@
           <% }) %>
         </div>
       <% } else { %>
-        <div class="empty-state">
-          <i class="fas fa-shirt"></i>
-          <h3>AUCUN PRODUIT DISPONIBLE</h3>
-          <p>Revenez bientôt pour découvrir nos nouvelles collections</p>
+        <div class="empty-state" style="background: rgba(255,255,255,0.05); border-radius: var(--border-radius-luxe); padding: var(--spacing-xl); text-align: center; border: 1px solid var(--border-gold);">
+          <i class="fas fa-gem" style="font-size: 4rem; color: var(--gold-primary); margin-bottom: var(--spacing-md);"></i>
+          <h3 style="color: var(--gold-primary); margin-bottom: var(--spacing-sm);">Collection en Préparation</h3>
+          <p style="color: var(--text-muted); margin-bottom: var(--spacing-lg);">Notre collection exclusive sera bientôt dévoilée.</p>
           <% if (typeof user !== 'undefined' && user && user.role === 'vendeur') { %>
             <a href="/produits/ajouter" class="btn btn-primary">
-              AJOUTER UN PRODUIT
+              <i class="fas fa-plus"></i> Créer une Collection
             </a>
           <% } else if (typeof user !== 'undefined' && user) { %>
             <a href="/boutique/creer" class="btn btn-primary">
-              CRÉER MA BOUTIQUE
+              <i class="fas fa-store"></i> Devenir Collectionneur
             </a>
           <% } else { %>
             <a href="/auth/register" class="btn btn-primary">
-              DEVENIR VENDEUR
+              <i class="fas fa-user-plus"></i> Rejoindre l'Excellence
             </a>
           <% } %>
         </div>
@@ -658,87 +1116,245 @@
     </div>
   </section>
 
-  <!-- Footer Zara -->
+  <!-- Footer -->
   <footer>
     <div class="container">
       <div class="footer-content">
         <div class="footer-column">
-          <h3>ZARA</h3>
-          <p style="color: var(--zara-dark-gray); font-size: 12px; font-weight: 300; letter-spacing: 1px; line-height: 1.6;">
-            Plateforme de mode contemporaine pour vendeurs sélectionnés.
+          <h3>LuxeMarket</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: var(--spacing-md);">
+            Plateforme d'exception dédiée aux collectionneurs et amateurs de raffinement. 
+            Excellence garantie.
           </p>
           <div class="social-links">
             <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
             <a href="#" class="social-link"><i class="fab fa-pinterest"></i></a>
-            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
           </div>
         </div>
         
         <div class="footer-column">
-          <h3>CATÉGORIES</h3>
+          <h3>Navigation</h3>
           <ul class="footer-links">
-            <li><a href="#">FEMME</a></li>
-            <li><a href="#">HOMME</a></li>
-            <li><a href="#">ENFANT</a></li>
-            <li><a href="#">BEAUTÉ</a></li>
+            <li><a href="#"><i class="fas fa-home"></i> Accueil</a></li>
+            <li><a href="#produits"><i class="fas fa-gem"></i> Collection</a></li>
+            <li><a href="/boutique/mon"><i class="fas fa-user-shield"></i> Espace Privé</a></li>
+            <li><a href="/vendeur/dashboard"><i class="fas fa-crown"></i> Dashboard</a></li>
           </ul>
         </div>
         
         <div class="footer-column">
-          <h3>ASSISTANCE</h3>
+          <h3>Service Concierge</h3>
           <ul class="footer-links">
-            <li><a href="#">AIDE</a></li>
-            <li><a href="#">LIVRAISON</a></li>
-            <li><a href="#">RETOURS</a></li>
-            <li><a href="#">CONTACT</a></li>
+            <li><a href="#"><i class="fas fa-headset"></i> Service Personnalisé</a></li>
+            <li><a href="#"><i class="fas fa-shipping-fast"></i> Livraison Premium</a></li>
+            <li><a href="#"><i class="fas fa-undo"></i> Retours d'Exception</a></li>
+            <li><a href="#"><i class="fas fa-phone"></i> Contact Privilégié</a></li>
           </ul>
         </div>
         
         <div class="footer-column">
-          <h3>INFORMATIONS</h3>
+          <h3>L'Excellence</h3>
           <ul class="footer-links">
-            <li><a href="#">CONDITIONS</a></li>
-            <li><a href="#">CONFIDENTIALITÉ</a></li>
-            <li><a href="#">COOKIES</a></li>
-            <li><a href="#">ACCESSIBILITÉ</a></li>
+            <li><a href="#"><i class="fas fa-file-contract"></i> Charte Qualité</a></li>
+            <li><a href="#"><i class="fas fa-shield-alt"></i> Confidentialité</a></li>
+            <li><a href="#"><i class="fas fa-gavel"></i> Certification</a></li>
+            <li><a href="#"><i class="fas fa-award"></i> Nos Engagements</a></li>
           </ul>
         </div>
       </div>
       
       <div class="footer-bottom">
-        <p>&copy; 2024 ZARA. TOUS DROITS RÉSERVÉS</p>
+        <p>&copy; 2024 LuxeMarket. Excellence & Raffinement | Tous droits réservés</p>
       </div>
     </div>
   </footer>
 
   <script>
-    // Animation Zara - Discrète et élégante
-    document.addEventListener('DOMContentLoaded', function() {
-      // Effet de recherche
-      const searchInput = document.querySelector('.search-bar input');
-      if (searchInput) {
-        searchInput.addEventListener('focus', function() {
-          this.parentElement.style.borderBottom = '1px solid var(--zara-black)';
-        });
+    // Stocker les données des produits globalement
+    const produitsData = <%- JSON.stringify(produits) %>;
 
-        searchInput.addEventListener('blur', function() {
-          this.parentElement.style.borderBottom = '1px solid transparent';
-        });
-      }
+    // Variables globales pour la galerie
+    let currentGallery = null;
+    let currentImageIndex = 0;
 
-      // Animation au scroll pour les produits
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.style.animationDelay = '0.1s';
+    // Fonction pour changer l'image principale
+    function changeMainImage(productIndex, imageIndex) {
+      const productCard = document.querySelector(`[data-product-index="${productIndex}"]`);
+      if (!productCard) return;
+      
+      const mainImage = productCard.querySelector('.gallery-main');
+      const thumbnails = productCard.querySelectorAll('.thumbnail');
+      const counter = productCard.querySelector('.current-image');
+      
+      if (!mainImage) return;
+      
+      // Animation de fondu
+      mainImage.style.opacity = '0';
+      
+      setTimeout(() => {
+        const produit = produitsData[productIndex];
+        if (produit.imagesGallery && produit.imagesGallery[imageIndex]) {
+          mainImage.src = produit.imagesGallery[imageIndex].url;
+          mainImage.setAttribute('data-current-image', imageIndex);
+          
+          // Animation de fondu
+          mainImage.style.opacity = '1';
+          
+          // Mettre à jour les miniatures actives
+          thumbnails.forEach((thumb, index) => {
+            thumb.classList.toggle('active', index === imageIndex);
+          });
+          
+          // Mettre à jour le compteur
+          if (counter) {
+            counter.textContent = imageIndex + 1;
           }
-        });
-      }, { threshold: 0.1 });
+        }
+      }, 200);
+    }
 
-      document.querySelectorAll('.produit-card').forEach(card => {
-        observer.observe(card);
-      });
+    // Fonction pour ouvrir la galerie complète
+    function openGallery(productIndex) {
+      currentGallery = productIndex;
+      currentImageIndex = 0;
+      
+      const produit = produitsData[productIndex];
+      const modal = document.getElementById('galleryModal');
+      const modalImage = document.getElementById('modalImage');
+      const modalCounter = document.getElementById('modalCounter');
+      
+      if (produit.imagesGallery && produit.imagesGallery.length > 0) {
+        modalImage.src = produit.imagesGallery[0].url;
+        modalImage.alt = produit.nom;
+        modalCounter.textContent = `1 / ${produit.imagesGallery.length}`;
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    // Fonction pour fermer la galerie
+    function closeGallery() {
+      const modal = document.getElementById('galleryModal');
+      modal.style.display = 'none';
+      document.body.style.overflow = 'auto';
+      currentGallery = null;
+    }
+
+    // Fonction pour changer d'image dans le modal
+    function changeModalImage(direction) {
+      if (currentGallery === null) return;
+      
+      const produit = produitsData[currentGallery];
+      const images = produit.imagesGallery;
+      const modalImage = document.getElementById('modalImage');
+      const modalCounter = document.getElementById('modalCounter');
+      
+      currentImageIndex += direction;
+      
+      // Gérer le défilement circulaire
+      if (currentImageIndex < 0) {
+        currentImageIndex = images.length - 1;
+      } else if (currentImageIndex >= images.length) {
+        currentImageIndex = 0;
+      }
+      
+      // Animation de fondu
+      modalImage.style.opacity = '0';
+      
+      setTimeout(() => {
+        modalImage.src = images[currentImageIndex].url;
+        modalImage.alt = produit.nom;
+        modalCounter.textContent = `${currentImageIndex + 1} / ${images.length}`;
+        modalImage.style.opacity = '1';
+      }, 300);
+    }
+
+    // Fonctions pour la notification panier
+    function showNotification(productName, productPrice) {
+      const notification = document.getElementById('cartNotification');
+      const message = document.getElementById('notificationMessage');
+      
+      message.textContent = `${productName} - ${productPrice} a été ajouté à votre collection`;
+      notification.classList.add('show');
+      
+      // Masquer automatiquement après 5 secondes
+      setTimeout(() => {
+        hideNotification();
+      }, 5000);
+    }
+    
+    function hideNotification() {
+      const notification = document.getElementById('cartNotification');
+      notification.classList.remove('show');
+    }
+
+    // Fonction pour mettre à jour le badge du panier
+    function updateCartBadge(count) {
+      const cartIcon = document.getElementById('cartIcon');
+      let badge = document.getElementById('cartBadge');
+      
+      if (!badge) {
+        badge = document.createElement('span');
+        badge.id = 'cartBadge';
+        badge.className = 'cart-badge';
+        cartIcon.appendChild(badge);
+      }
+      
+      badge.textContent = count;
+      
+      // Animation du badge (effet luxueux)
+      badge.style.animation = 'none';
+      setTimeout(() => {
+        badge.style.animation = 'pulse 2s infinite';
+      }, 10);
+    }
+    
+    // Gestion de l'ajout au panier avec AJAX
+    document.addEventListener('DOMContentLoaded', function() {
+      const forms = document.querySelectorAll('.add-to-cart-form');
+      
+      forms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          const formData = new FormData(this);
+          const productName = this.querySelector('input[name="produitNom"]').value;
+          const productPrice = this.querySelector('input[name="produitPrix"]').value;
+          const submitBtn = this.querySelector('.add-to-cart-btn');
+          
+          // Désactiver le bouton pendant la requête
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> AJOUT...';
+          
+          // Envoyer la requête AJAX
+          fetch(this.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest'
+            }
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              // Afficher la notification
+              showNotification(productName, productPrice);
+              
+              // Mettre à jour le badge du panier
+              updateCartBadge(data.panierCount);
+              
+              // Effet de confirmation sur le bouton
+              submitBtn.innerHTML = '<i class="fas fa-check"></i> AJOUTÉ !';
+              submitBtn.style.background = 'linear-gradient(45deg, #27ae60, #2ecc71)';
+              
+              setTimeout(() => {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-crown"></i> Ajouter';
+                submitBtn.style.background = '';
+              }, 2000);
+
     });
   </script>
 </body>
