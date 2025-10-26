@@ -647,7 +647,7 @@
     <div class="header-container">
       <a href="/" class="logo">
         <i class="fas fa-store logo-icon"></i>
-        Marketplace
+        TalkSellr
       </a>
       
       <nav class="nav-main">
@@ -803,7 +803,7 @@
             
             <div class="info-item">
               <div class="info-label">URL publique</div>
-              <div class="info-value">/boutique/<%= boutique.slug %></div>
+              <div class="info-value">https://talksellr.onrender.com/boutique/<%= boutique.slug %></div>
             </div>
             
             <div class="info-item">
@@ -986,19 +986,20 @@
         
         <div id="shareBox" class="share-options">
           <div class="share-buttons">
-            <% const boutiqueURL = `https://mon-site-marketplace.onrender.com/boutique/${boutique.slug}`; %>
+            <% const boutiqueURL = `https://talksellr.onrender.com/boutique/${boutique.slug}`; %>
+            <% const message = `Découvrez ma boutique "${boutique.nom}" sur TalkSellr : ${boutiqueURL}`; %>
             
-            <a href="https://wa.me/?text=Découvrez cette boutique : <%= boutiqueURL %>" target="_blank" class="share-btn whatsapp">
+            <a href="https://wa.me/?text=<%= encodeURIComponent(message) %>" target="_blank" class="share-btn whatsapp">
               <i class="fab fa-whatsapp"></i>
               WhatsApp
             </a>
 
-            <a href="https://www.facebook.com/sharer/sharer.php?u=<%= boutiqueURL %>" target="_blank" class="share-btn facebook">
+            <a href="https://www.facebook.com/sharer/sharer.php?u=<%= encodeURIComponent(boutiqueURL) %>" target="_blank" class="share-btn facebook">
               <i class="fab fa-facebook-f"></i>
               Facebook
             </a>
 
-            <a href="mailto:?subject=Découvrez cette boutique&body=Voici le lien : <%= boutiqueURL %>" class="share-btn email">
+            <a href="mailto:?subject=Découvrez ma boutique <%= encodeURIComponent(boutique.nom) %>&body=<%= encodeURIComponent(message) %>" class="share-btn email">
               <i class="fas fa-envelope"></i>
               Email
             </a>
@@ -1024,7 +1025,7 @@
         <a href="/contact">Contact</a>
       </div>
       <div class="copyright">
-        © 2024 Marketplace. Tous droits réservés.
+        © 2024 TalkSellr. Tous droits réservés.
       </div>
     </div>
   </footer>

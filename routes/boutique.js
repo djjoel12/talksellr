@@ -249,22 +249,61 @@ router.get('/', async (req, res) => {
 });
 
 // Route : afficher un produit par ID
+// Route : afficher un produit par ID avec produits similaires
+// Route : afficher un produit par ID avec panier
 router.get('/produit/:id', async (req, res, next) => {
   try {
     const produit = await Produit.findById(req.params.id)
-   .populate('vendeur', 'nom email telephone')       // charge les champs nom et email du vendeur
-    .populate('boutique', 'nom slug adresse');    // charge les champs nom et adresse de la boutique
+      .populate('vendeur', 'nom email telephone')
+      .populate('boutique', 'nom slug adresse');
 
-
-    
     if (!produit) {
       return res.status(404).send('Produit non trouvé');
     }
-    console.log("Produit trouvé :", produit);
-    res.render('produit_detail', { produit }); // Assure-toi d’avoir une vue `produit_detail.ejs`
+
+    // Récupérer d'autres produits du même vendeur
+    const produitsVendeur = await Produit.find({
+      vendeur: produit.vendeur._id,
+      _id: { $ne: produit._id }
+    })
+    .limit(8)
+    .populate('boutique', 'nom slug');
+
+    // Récupérer les produits du panier avec leurs détails
+    const panier = req.session.panier || [];
+    let panierDetail = [];
+    let totalPanier = 0;
+
+    if (panier.length > 0) {
+      const produitsIds = panier.map(item => item.produitId);
+      const produitsPanier = await Produit.find({ _id: { $in: produitsIds } })
+        .populate('vendeur', 'nom telephone')
+        .populate('boutique', 'slug nom');
+
+      panierDetail = panier.map(item => {
+        const produitPanier = produitsPanier.find(p => p._id.toString() === item.produitId);
+        const sousTotal = produitPanier ? produitPanier.prix * item.quantite : 0;
+        totalPanier += sousTotal;
+        
+        return {
+          produit: produitPanier,
+          quantite: item.quantite,
+          sousTotal: sousTotal
+        };
+      });
+    }
+
+    console.log("📦 Panier détail:", panierDetail.length, "articles");
+
+    res.render('produit_detail', { 
+      produit,
+      produitsVendeur,
+      panier: panierDetail,
+      totalPanier: totalPanier,
+      session: req.session // Passer la session complète
+    });
   } catch (err) {
-     next(err); // passe l’erreur au middleware erreur
-    
+    next(err);
   }
 });
 // Dans routes/boutique.js (ou fichier routes principal)

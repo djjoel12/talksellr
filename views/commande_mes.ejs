@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mes Commandes</title>
   <style>
     :root {
@@ -167,7 +168,6 @@
     .statut-confirmee { background: #d1ecf1; color: #0c5460; }
     .statut-enpreparation { background: #ffeaa7; color: #8d6e00; }
     .statut-expediee { background: #cce7ff; color: #004085; }
-    .statut-encoursdelivraison { background: #e2e3ff; color: #383d41; }
     .statut-livree { background: #d4edda; color: #155724; }
     .statut-annulee { background: #f8d7da; color: #721c24; }
 
@@ -285,53 +285,6 @@
     .produit-unite {
       color: var(--text-secondary);
       font-size: 0.85rem;
-    }
-
-    /* Galerie d'images */
-    .galerie-principale {
-      position: relative;
-    }
-
-    .image-principale {
-      width: 60px;
-      height: 60px;
-      object-fit: cover;
-      border-radius: 8px;
-      cursor: pointer;
-      border: 2px solid var(--border);
-      transition: transform 0.2s ease;
-    }
-
-    .image-principale:hover {
-      transform: scale(1.05);
-    }
-
-    .miniatures {
-      display: flex;
-      gap: 2px;
-      margin-top: 4px;
-      justify-content: center;
-    }
-
-    .miniature {
-      width: 18px;
-      height: 18px;
-      object-fit: cover;
-      border-radius: 2px;
-      cursor: pointer;
-      border: 1px solid var(--border);
-    }
-
-    .miniature-plus {
-      width: 18px;
-      height: 18px;
-      background: var(--bg-secondary);
-      border-radius: 2px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.6rem;
-      color: var(--text-secondary);
     }
 
     /* Modal pour image agrandie */
@@ -511,15 +464,15 @@
         <div class="stat-label">Total Commandes</div>
       </div>
       <div class="stat-card">
-        <div class="stat-number"><%= commandes.filter(c => c.statut === 'En attente').length %></div>
+        <div class="stat-number"><%= commandes.filter(c => c.statut === 'en_attente').length %></div>
         <div class="stat-label">En Attente</div>
       </div>
       <div class="stat-card">
-        <div class="stat-number"><%= commandes.filter(c => c.statut === 'En cours de livraison').length %></div>
-        <div class="stat-label">En Livraison</div>
+        <div class="stat-number"><%= commandes.filter(c => c.statut === 'en_preparation').length %></div>
+        <div class="stat-label">En Préparation</div>
       </div>
       <div class="stat-card">
-        <div class="stat-number"><%= commandes.filter(c => c.statut === 'Livrée').length %></div>
+        <div class="stat-number"><%= commandes.filter(c => c.statut === 'livree').length %></div>
         <div class="stat-label">Livrées</div>
       </div>
     </div>
@@ -530,13 +483,12 @@
         <label>Statut:</label>
         <select class="filter-select" onchange="filtrerCommandes()">
           <option value="all">Tous les statuts</option>
-          <option value="En attente">En attente</option>
-          <option value="Confirmée">Confirmée</option>
-          <option value="En préparation">En préparation</option>
-          <option value="Expédiée">Expédiée</option>
-          <option value="En cours de livraison">En cours de livraison</option>
-          <option value="Livrée">Livrée</option>
-          <option value="Annulée">Annulée</option>
+          <option value="en_attente">En attente</option>
+          <option value="confirmee">Confirmée</option>
+          <option value="en_preparation">En préparation</option>
+          <option value="expediee">Expédiée</option>
+          <option value="livree">Livrée</option>
+          <option value="annulee">Annulée</option>
         </select>
       </div>
       
@@ -562,64 +514,88 @@
     <% } else { %>
       
       <% commandes.forEach((commande, index) => { %>
-        <div class="commande-card" data-commande-id="<%= commande._id %>" data-statut="<%= commande.statut %>" data-total="<%= commande.total %>">
+        <div class="commande-card" data-commande-id="<%= commande._id %>" data-statut="<%= commande.statut %>" data-total="<%= commande.total %>" data-date="<%= commande.dateCreation %>">
           <!-- En-tête de la commande -->
           <div class="commande-header">
             <div class="commande-info">
-              <div class="commande-id">Commande #<%= commande._id.toString().slice(-6).toUpperCase() %></div>
-              <div class="commande-date"><%= new Date(commande.date).toLocaleDateString('fr-FR') %></div>
+              <div class="commande-id">Commande #<%= commande.numeroCommande %></div>
+              <div class="commande-date"><%= new Date(commande.dateCreation).toLocaleDateString('fr-FR') %></div>
             </div>
-            <span class="statut statut-<%= commande.statut ? commande.statut.toLowerCase().replace(/ /g, '') : 'enattente' %>">
-              <%= commande.statut || 'En attente' %>
+            <span class="statut statut-<%= 
+              commande.statut === 'en_attente' ? 'enattente' :
+              commande.statut === 'confirmee' ? 'confirmee' :
+              commande.statut === 'en_preparation' ? 'enpreparation' :
+              commande.statut === 'expediee' ? 'expediee' :
+              commande.statut === 'livree' ? 'livree' :
+              commande.statut === 'annulee' ? 'annulee' : 'enattente'
+            %>">
+              <%= 
+                commande.statut === 'en_attente' ? 'En attente' :
+                commande.statut === 'confirmee' ? 'Confirmée' :
+                commande.statut === 'en_preparation' ? 'En préparation' :
+                commande.statut === 'expediee' ? 'Expédiée' :
+                commande.statut === 'livree' ? 'Livrée' :
+                commande.statut === 'annulee' ? 'Annulée' : 'En attente'
+              %>
             </span>
           </div>
 
           <!-- Corps de la commande -->
           <div class="commande-body">
-            <!-- Informations client -->
+            <!-- Informations client - CORRIGÉ -->
             <div class="client-info">
               <div class="client-detail">
                 <span>👤</span>
                 <div>
-                  <strong><%= commande.nom %></strong>
+                  <strong><%= commande.client.nom %></strong>
                   <div style="font-size: 0.85rem; color: var(--text-secondary);">Client</div>
                 </div>
               </div>
               <div class="client-detail">
                 <span>📞</span>
                 <div>
-                  <strong><%= commande.telephone %></strong>
+                  <strong><%= commande.client.telephone %></strong>
                   <div style="font-size: 0.85rem; color: var(--text-secondary);">Téléphone</div>
                 </div>
               </div>
               <div class="client-detail">
                 <span>📍</span>
                 <div>
-                  <strong><%= commande.adresse %></strong>
+                  <strong><%= commande.client.adresse %></strong>
                   <div style="font-size: 0.85rem; color: var(--text-secondary);">Adresse</div>
                 </div>
               </div>
             </div>
 
-            <!-- Produits avec images -->
+            <!-- Produits avec images - CORRIGÉ -->
             <div class="produits-list">
               <h4 style="margin-bottom: 15px; color: var(--text-primary);">Produits commandés (<%= commande.produits.length %>)</h4>
               
               <% commande.produits.forEach((produit, pIndex) => { %>
                 <div class="produit-item">
                   <div class="produit-info">
-                    <!-- Image du produit -->
+                    <!-- Image du produit - CORRIGÉ -->
                     <div class="produit-image">
-                      <% if (produit.produitId && produit.produitId.image) { %>
-                        <img src="<%= produit.produitId.image %>" 
-                             alt="<%= produit.produitId.nom %>" 
+                      <% 
+                        let imageUrl = '';
+                        if (produit.produitId && produit.produitId.image) {
+                          imageUrl = produit.produitId.image;
+                        } else if (produit.produitId && produit.produitId.imagesGallery && produit.produitId.imagesGallery.length > 0) {
+                          imageUrl = produit.produitId.imagesGallery[0].url;
+                        } else if (produit.image) {
+                          imageUrl = produit.image;
+                        }
+                      %>
+                      
+                      <% if (imageUrl) { %>
+                        <img src="<%= imageUrl %>" 
+                             alt="<%= produit.produitId ? produit.produitId.nom : produit.nom %>" 
                              onclick="agrandirImage(this)"
-                             title="Cliquer pour agrandir">
-                      <% } else if (produit.produitId && produit.produitId.imagesGallery && produit.produitId.imagesGallery.length > 0) { %>
-                        <img src="<%= produit.produitId.imagesGallery[0].url %>" 
-                             alt="<%= produit.produitId.nom %>" 
-                             onclick="agrandirImage(this)"
-                             title="Cliquer pour agrandir">
+                             title="Cliquer pour agrandir"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="produit-image-placeholder" style="display: none;">
+                          🛍️
+                        </div>
                       <% } else { %>
                         <div class="produit-image-placeholder">
                           🛍️
@@ -629,11 +605,11 @@
                     
                     <div class="produit-details">
                       <div class="produit-nom">
-                        <%= produit.produitId ? produit.produitId.nom : 'Produit non trouvé' %>
+                        <%= produit.produitId ? produit.produitId.nom : produit.nom %>
                       </div>
                       <div class="produit-vendeur">
                         Quantité: <strong><%= produit.quantite %></strong>
-                        <% if (produit.vendeurId) { %>
+                        <% if (produit.vendeurId && produit.vendeurId.nom) { %>
                           • Vendeur: <%= produit.vendeurId.nom %>
                         <% } %>
                       </div>
@@ -645,7 +621,7 @@
                     </div>
                   </div>
                   <div class="produit-prix">
-                    <div class="produit-total"><%= produit.prix * produit.quantite %> <%= produit.devise %></div>
+                    <div class="produit-total"><%= (produit.prix * produit.quantite).toFixed(2) %> <%= produit.devise %></div>
                     <div class="produit-unite"><%= produit.prix %> <%= produit.devise %>/unité</div>
                   </div>
                 </div>
@@ -654,21 +630,20 @@
 
             <!-- Total -->
             <div class="total-section">
-              Total: <span style="color: var(--text-primary);"><%= commande.total %> <%= commande.produits[0] && commande.produits[0].devise %></span>
+              Total: <span style="color: var(--text-primary);"><%= commande.total.toFixed(2) %> <%= commande.produits[0] && commande.produits[0].devise %></span>
             </div>
           </div>
 
-          <!-- Actions -->
+          <!-- Actions - CORRIGÉ -->
           <div class="commande-actions">
             <div class="action-group">
               <select class="statut-selector" id="statut-<%= commande._id %>">
-                <option value="En attente" <%= commande.statut === 'En attente' ? 'selected' : '' %>>En attente</option>
-                <option value="Confirmée" <%= commande.statut === 'Confirmée' ? 'selected' : '' %>>Confirmée</option>
-                <option value="En préparation" <%= commande.statut === 'En préparation' ? 'selected' : '' %>>En préparation</option>
-                <option value="Expédiée" <%= commande.statut === 'Expédiée' ? 'selected' : '' %>>Expédiée</option>
-                <option value="En cours de livraison" <%= commande.statut === 'En cours de livraison' ? 'selected' : '' %>>En cours de livraison</option>
-                <option value="Livrée" <%= commande.statut === 'Livrée' ? 'selected' : '' %>>Livrée</option>
-                <option value="Annulée" <%= commande.statut === 'Annulée' ? 'selected' : '' %>>Annulée</option>
+                <option value="En attente" <%= commande.statut === 'en_attente' ? 'selected' : '' %>>En attente</option>
+                <option value="Confirmée" <%= commande.statut === 'confirmee' ? 'selected' : '' %>>Confirmée</option>
+                <option value="En préparation" <%= commande.statut === 'en_preparation' ? 'selected' : '' %>>En préparation</option>
+                <option value="Expédiée" <%= commande.statut === 'expediee' ? 'selected' : '' %>>Expédiée</option>
+                <option value="Livrée" <%= commande.statut === 'livree' ? 'selected' : '' %>>Livrée</option>
+                <option value="Annulée" <%= commande.statut === 'annulee' ? 'selected' : '' %>>Annulée</option>
               </select>
               <button class="btn btn-primary" onclick="mettreAJourStatut('<%= commande._id %>')">
                 💾 Sauvegarder
@@ -677,8 +652,15 @@
             </div>
 
             <div class="action-group">
-              <% if (commande.telephone) { %>
-                <a href="https://wa.me/<%= commande.telephone.replace(/\D/g, '') %>?text=Bonjour <%= encodeURIComponent(commande.nom) %>, je suis <%= user.nom %>. Votre commande #<%= commande._id.toString().slice(-6) %> est maintenant '<%= commande.statut %>'." 
+              <% if (commande.client.telephone) { %>
+                <a href="https://wa.me/<%= commande.client.telephone.replace(/\D/g, '') %>?text=Bonjour <%= encodeURIComponent(commande.client.nom) %>, je suis <%= user.nom %>. Votre commande #<%= commande.numeroCommande %> est maintenant '<%= 
+                  commande.statut === 'en_attente' ? 'En attente' :
+                  commande.statut === 'confirmee' ? 'Confirmée' :
+                  commande.statut === 'en_preparation' ? 'En préparation' :
+                  commande.statut === 'expediee' ? 'Expédiée' :
+                  commande.statut === 'livree' ? 'Livrée' :
+                  commande.statut === 'annulee' ? 'Annulée' : 'En attente'
+                %>'." 
                    target="_blank" 
                    class="btn btn-whatsapp">
                   📱 WhatsApp
@@ -708,11 +690,26 @@
   </div>
 
   <script>
-    // Fonction de mise à jour du statut
+    // Fonction de mise à jour du statut - CORRIGÉE
     async function mettreAJourStatut(commandeId) {
       const selecteur = document.getElementById(`statut-${commandeId}`);
       const messageElement = document.getElementById(`message-${commandeId}`);
-      const nouveauStatut = selecteur.value;
+      let nouveauStatut = selecteur.value;
+      
+      // Mapping des statuts français vers codes
+      const statutsMap = {
+        'En attente': 'en_attente',
+        'Confirmée': 'confirmee',
+        'En préparation': 'en_preparation',
+        'Expédiée': 'expediee',
+        'Livrée': 'livree',
+        'Annulée': 'annulee'
+      };
+      
+      // Convertir le statut français en code
+      if (statutsMap[nouveauStatut]) {
+        nouveauStatut = statutsMap[nouveauStatut];
+      }
       
       messageElement.textContent = '⏳ Mise à jour...';
       messageElement.style.color = '#6c757d';
@@ -720,7 +717,10 @@
       try {
         const response = await fetch(`/commandes/${commandeId}/statut`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
           body: JSON.stringify({ statut: nouveauStatut })
         });
         
@@ -732,8 +732,17 @@
           
           // Mettre à jour le badge de statut
           const badgeStatut = document.querySelector(`[data-commande-id="${commandeId}"] .statut`);
-          badgeStatut.textContent = nouveauStatut;
-          badgeStatut.className = `statut statut-${nouveauStatut.toLowerCase().replace(/ /g, '')}`;
+          const statutTexte = {
+            'en_attente': 'En attente',
+            'confirmee': 'Confirmée',
+            'en_preparation': 'En préparation',
+            'expediee': 'Expédiée',
+            'livree': 'Livrée',
+            'annulee': 'Annulée'
+          }[nouveauStatut] || 'En attente';
+          
+          badgeStatut.textContent = statutTexte;
+          badgeStatut.className = `statut statut-${nouveauStatut}`;
           
           // Mettre à jour l'attribut data
           document.querySelector(`[data-commande-id="${commandeId}"]`).dataset.statut = nouveauStatut;

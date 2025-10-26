@@ -281,13 +281,17 @@
       font-weight: 400;
     }
     
-    /* Hero Section Premium */
+    /* Hero Section Premium avec Animations Spectaculaires */
     .hero {
       background: linear-gradient(135deg, var(--zara-light-gray) 0%, var(--zara-white) 100%);
       padding: 8rem 0 6rem;
       text-align: center;
       position: relative;
       overflow: hidden;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     
     .hero::before {
@@ -299,48 +303,141 @@
       bottom: 0;
       background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.02"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="black" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
     }
+
+    /* Particules animées en arrière-plan */
+    .hero-particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .particle {
+      position: absolute;
+      background: var(--zara-black);
+      border-radius: 50%;
+      opacity: 0.1;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
+
+    .particle:nth-child(1) { 
+      width: 4px; height: 4px; top: 20%; left: 10%; 
+      animation-delay: 0s; animation-duration: 8s;
+    }
+    .particle:nth-child(2) { 
+      width: 6px; height: 6px; top: 60%; left: 80%; 
+      animation-delay: 1s; animation-duration: 10s;
+    }
+    .particle:nth-child(3) { 
+      width: 3px; height: 3px; top: 80%; left: 20%; 
+      animation-delay: 2s; animation-duration: 7s;
+    }
+    .particle:nth-child(4) { 
+      width: 5px; height: 5px; top: 30%; left: 70%; 
+      animation-delay: 3s; animation-duration: 9s;
+    }
+    .particle:nth-child(5) { 
+      width: 4px; height: 4px; top: 70%; left: 40%; 
+      animation-delay: 4s; animation-duration: 6s;
+    }
     
     .hero-content {
       max-width: 800px;
       margin: 0 auto;
       padding: 0 2rem;
       position: relative;
-      z-index: 1;
+      z-index: 2;
     }
-    
+
+    /* Animation du titre principal */
     .hero h1 {
-      font-size: 3.5rem;
+      font-size: 4rem;
       font-weight: 300;
       margin-bottom: 1.5rem;
       letter-spacing: 4px;
       text-transform: uppercase;
       color: var(--zara-black);
+      opacity: 0;
+      transform: translateY(50px);
+      animation: titleReveal 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s forwards;
     }
-    
+
+    @keyframes titleReveal {
+      0% {
+        opacity: 0;
+        transform: translateY(50px) scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Animation du sous-titre */
     .hero p {
-      font-size: 1.1rem;
+      font-size: 1.3rem;
       margin-bottom: 3rem;
       font-weight: 300;
       letter-spacing: 1.5px;
       color: var(--zara-dark-gray);
       line-height: 1.8;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: subtitleReveal 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1s forwards;
+    }
+
+    @keyframes subtitleReveal {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
     
+    /* Animation du bouton CTA spectaculaire */
     .cta-button {
       display: inline-block;
       background: var(--zara-black);
       color: var(--zara-white);
-      padding: 1.2rem 3rem;
+      padding: 1.5rem 4rem;
       font-weight: 400;
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       text-transform: uppercase;
-      letter-spacing: 2.5px;
-      transition: all 0.3s ease;
-      border: 1px solid var(--zara-black);
+      letter-spacing: 3px;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      border: 2px solid var(--zara-black);
       cursor: pointer;
       text-decoration: none;
       position: relative;
       overflow: hidden;
+      opacity: 0;
+      transform: translateY(40px) scale(0.8);
+      animation: buttonReveal 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.5s forwards;
+    }
+
+    @keyframes buttonReveal {
+      0% {
+        opacity: 0;
+        transform: translateY(40px) scale(0.8);
+      }
+      70% {
+        transform: translateY(-10px) scale(1.05);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
     }
     
     .cta-button::before {
@@ -350,21 +447,107 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: var(--zara-white);
-      transition: left 0.3s ease;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.6s ease;
     }
     
     .cta-button:hover::before {
-      left: 0;
+      left: 100%;
+    }
+
+    .cta-button::after {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, var(--zara-black), var(--zara-dark-gray), var(--zara-black));
+      z-index: -1;
+      border-radius: inherit;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .cta-button:hover::after {
+      opacity: 1;
     }
     
     .cta-button span {
       position: relative;
       z-index: 1;
+      display: inline-block;
+      transition: transform 0.3s ease;
     }
     
     .cta-button:hover span {
-      color: var(--zara-black);
+      transform: translateY(-2px);
+      color: var(--zara-white);
+    }
+
+    .cta-button:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+      background: var(--zara-black);
+      color: var(--zara-white);
+    }
+
+    /* Effet de lueur au survol */
+    .cta-button:hover {
+      animation: glow 1.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from {
+        box-shadow: 0 0 10px rgba(0,0,0,0.2), 0 0 20px rgba(0,0,0,0.1);
+      }
+      to {
+        box-shadow: 0 0 15px rgba(0,0,0,0.3), 0 0 30px rgba(0,0,0,0.2);
+      }
+    }
+
+    /* Animation de flèche qui rebondit */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      animation: scrollIndicator 2s ease-in-out 2.5s forwards;
+    }
+
+    @keyframes scrollIndicator {
+      0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px);
+      }
+      50% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+
+    .scroll-arrow {
+      width: 30px;
+      height: 30px;
+      border-right: 2px solid var(--zara-black);
+      border-bottom: 2px solid var(--zara-black);
+      transform: rotate(45deg);
+      animation: bounce 2s infinite;
+      opacity: 0.7;
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: rotate(45deg) translateY(0);
+      }
+      50% {
+        transform: rotate(45deg) translateY(-10px);
+      }
     }
     
     /* Main Content */
@@ -411,6 +594,7 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 3rem;
+      margin-top: var(--spacing-lg);
     }
     
     .produit-card {
@@ -877,10 +1061,20 @@
       
       .hero {
         padding: 6rem 0 4rem;
+        min-height: 80vh;
       }
-      
+
       .hero h1 {
         font-size: 2.5rem;
+      }
+
+      .hero p {
+        font-size: 1.1rem;
+      }
+
+      .cta-button {
+        padding: 1.2rem 3rem;
+        font-size: 0.8rem;
       }
       
       .section-title {
@@ -986,14 +1180,28 @@
 
   <!-- Main Content -->
   <main>
-    <!-- Hero Section -->
+    <!-- Hero Section avec Animations -->
     <section class="hero" id="accueil">
+      <!-- Particules animées en arrière-plan -->
+      <div class="hero-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+      </div>
+      
       <div class="hero-content">
         <h1><%= boutique.nom %></h1>
         <p><%= boutique.description %></p>
         <a href="#produits" class="cta-button">
           <span>DÉCOUVRIR LA COLLECTION</span>
         </a>
+      </div>
+
+      <!-- Indicateur de défilement animé -->
+      <div class="scroll-indicator">
+        <div class="scroll-arrow"></div>
       </div>
     </section>
 
@@ -1354,7 +1562,7 @@
         });
       });
       
-      // Smooth scroll
+      // Smooth scroll pour les ancres
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
           e.preventDefault();
@@ -1414,6 +1622,18 @@
           closeGallery();
         }
       });
+
+      // Animation supplémentaire pour le bouton CTA au survol
+      const ctaButton = document.querySelector('.cta-button');
+      if (ctaButton) {
+        ctaButton.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateY(-5px) scale(1.02)';
+        });
+        
+        ctaButton.addEventListener('mouseleave', function() {
+          this.style.transform = 'translateY(0) scale(1)';
+        });
+      }
     });
   </script>
 </body>
