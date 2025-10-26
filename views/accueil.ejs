@@ -3,60 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Marketplace Pro - Votre destination shopping</title>
+  <title>ShopFrii - Libérez-vous des DM Instagram</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --primary: #ff6b35;
-      --primary-dark: #e55a2b;
-      --primary-light: #fff0eb;
-      --secondary: #1a1a1a;
-      --accent: #ff9e64;
+      --primary: #4A90E2;
+      --primary-dark: #357ABD;
+      --primary-light: #E8F2FF;
+      --secondary: #2C3E50;
+      --accent: #6C63FF;
       --light: #ffffff;
-      --dark: #000000;
-      --gray-light: #f5f5f5;
-      --gray: #666666;
-      --gray-dark: #333333;
-      --success: #27ae60;
+      --dark: #1A1A1A;
+      --gray-light: #F8FAFC;
+      --gray: #64748B;
+      --gray-dark: #334155;
+      --success: #10B981;
+      --warning: #F59E0B;
       --white: #ffffff;
       --black: #000000;
-      --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
       --transition: all 0.3s ease;
-      --border: 1px solid #e0e0e0;
+      --border: 1px solid #E2E8F0;
       --radius: 12px;
     }
-
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
       background-color: var(--light);
       color: var(--secondary);
       line-height: 1.6;
     }
-
     /* Header */
     .header {
       background: var(--white);
-      border-bottom: 2px solid var(--primary);
+      border-bottom: 1px solid var(--border);
       padding: 1.2rem 0;
       position: sticky;
       top: 0;
       z-index: 100;
       box-shadow: var(--shadow);
     }
-
     .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 1.5rem;
     }
-
     .header-content {
       display: flex;
       justify-content: space-between;
@@ -64,7 +60,6 @@
       flex-wrap: wrap;
       gap: 1rem;
     }
-
     .logo {
       display: flex;
       align-items: center;
@@ -76,9 +71,8 @@
       text-transform: uppercase;
       letter-spacing: -0.5px;
     }
-
     .logo-icon {
-      background: var(--primary);
+      background: linear-gradient(135deg, var(--primary), var(--accent));
       color: var(--white);
       width: 44px;
       height: 44px;
@@ -86,45 +80,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 8px rgba(255, 107, 53, 0.3);
+      box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
     }
-
     .nav {
       display: flex;
       align-items: center;
       gap: 1.5rem;
     }
-
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      color: var(--gray-dark);
-      font-weight: 600;
-      background: var(--gray-light);
-      padding: 0.5rem 1rem;
-      border-radius: 25px;
-    }
-
-    .user-avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: var(--primary);
-      color: var(--white);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-      border: 2px solid var(--white);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .auth-links {
-      display: flex;
-      gap: 1rem;
-    }
-
     .btn {
       padding: 0.7rem 1.5rem;
       border-radius: 25px;
@@ -138,54 +100,46 @@
       cursor: pointer;
       font-size: 0.9rem;
     }
-
     .btn-outline {
       background: transparent;
       border: 2px solid var(--primary);
       color: var(--primary);
     }
-
     .btn-outline:hover {
       background: var(--primary);
       color: var(--white);
       transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(255, 107, 53, 0.2);
+      box-shadow: 0 6px 12px rgba(74, 144, 226, 0.2);
     }
-
     .btn-primary {
-      background: var(--primary);
+      background: linear-gradient(135deg, var(--primary), var(--accent));
       color: var(--white);
-      box-shadow: 0 4px 8px rgba(255, 107, 53, 0.3);
+      box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
     }
-
     .btn-primary:hover {
-      background: var(--primary-dark);
+      background: linear-gradient(135deg, var(--primary-dark), var(--accent));
       transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(255, 107, 53, 0.4);
+      box-shadow: 0 6px 16px rgba(74, 144, 226, 0.4);
     }
-
     .btn-secondary {
       background: var(--secondary);
       color: var(--white);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 8px rgba(44, 62, 80, 0.2);
     }
-
     .btn-secondary:hover {
       background: var(--dark);
       transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 6px 16px rgba(44, 62, 80, 0.3);
     }
-
-    /* Search Section */
-    .search-section {
-      padding: 4rem 0;
+    /* Hero Section */
+    .hero {
+      padding: 6rem 0;
       background: linear-gradient(135deg, var(--white) 0%, var(--primary-light) 100%);
-      border-bottom: 1px solid var(--primary-light);
+      border-bottom: 1px solid var(--border);
       position: relative;
       overflow: hidden;
     }
-
-    .search-section::before {
+    .hero::before {
       content: '';
       position: absolute;
       top: 0;
@@ -193,143 +147,58 @@
       width: 300px;
       height: 300px;
       background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
-      opacity: 0.1;
+      opacity: 0.05;
       border-radius: 50%;
     }
-
-    .search-section h1 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      font-weight: 800;
-      color: var(--secondary);
-      text-align: center;
-      line-height: 1.2;
-    }
-
-    .search-section p {
-      font-size: 1.2rem;
-      margin-bottom: 2.5rem;
-      color: var(--gray-dark);
-      text-align: center;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-      font-weight: 500;
-    }
-
-    .search-form {
-      max-width: 700px;
+    .hero-content {
+      max-width: 800px;
       margin: 0 auto;
-      display: flex;
-      border-radius: 50px;
-      overflow: hidden;
-      box-shadow: var(--shadow-lg);
-      border: 2px solid var(--primary);
-      background: var(--white);
+      text-align: center;
       position: relative;
       z-index: 2;
     }
-
-    .search-input {
-      flex: 1;
-      padding: 1.2rem 2rem;
-      border: none;
-      font-size: 1.1rem;
-      outline: none;
-      background: var(--white);
-      color: var(--secondary);
-    }
-
-    .search-input::placeholder {
-      color: var(--gray);
-    }
-
-    .search-btn {
-      background: var(--primary);
-      color: var(--white);
-      border: none;
-      padding: 0 2rem;
-      cursor: pointer;
-      transition: var(--transition);
-      font-size: 1.1rem;
-    }
-
-    .search-btn:hover {
-      background: var(--primary-dark);
-    }
-
-    /* Dashboard Vendeur */
-    .dashboard {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 2rem;
-      margin: 3rem auto;
-      max-width: 900px;
-      box-shadow: var(--shadow);
-      border-top: 4px solid var(--primary);
-      position: relative;
-    }
-
-    .dashboard::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--primary), var(--accent));
-      border-radius: var(--radius) var(--radius) 0 0;
-    }
-
-    .dashboard h2 {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
+    .hero h1 {
+      font-size: 3.5rem;
       margin-bottom: 1.5rem;
+      font-weight: 800;
       color: var(--secondary);
-      font-size: 1.5rem;
-      font-weight: 700;
+      line-height: 1.2;
     }
-
-    .dashboard-links {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
+    .hero p {
+      font-size: 1.3rem;
+      margin-bottom: 2.5rem;
+      color: var(--gray-dark);
+      font-weight: 500;
     }
-
-    .dashboard-link {
-      background: var(--gray-light);
-      padding: 1.2rem 1.5rem;
-      border-radius: var(--radius);
-      text-decoration: none;
-      color: var(--secondary);
-      font-weight: 600;
+    .cta-section {
       display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+    .urgency-badge {
+      background: linear-gradient(135deg, var(--warning), #FBBF24);
+      color: white;
+      padding: 0.5rem 1.5rem;
+      border-radius: 25px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      display: inline-flex;
       align-items: center;
-      gap: 0.75rem;
-      transition: var(--transition);
-      border: 2px solid transparent;
+      gap: 0.5rem;
+      box-shadow: 0 4px 8px rgba(245, 158, 11, 0.3);
+      margin-bottom: 1rem;
     }
-
-    .dashboard-link:hover {
-      background: var(--primary);
-      color: var(--white);
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-lg);
-      border-color: var(--primary);
-    }
-
-    /* Products Section */
-    .products-section {
-      padding: 4rem 0;
+    /* Pain Points Section */
+    .pain-points {
+      padding: 5rem 0;
       background: var(--gray-light);
     }
-
     .section-header {
       margin-bottom: 3rem;
       text-align: center;
     }
-
     .section-header h2 {
       font-size: 2.5rem;
       color: var(--secondary);
@@ -338,7 +207,6 @@
       position: relative;
       display: inline-block;
     }
-
     .section-header h2::after {
       content: '';
       position: absolute;
@@ -347,205 +215,224 @@
       transform: translateX(-50%);
       width: 80px;
       height: 4px;
-      background: var(--primary);
+      background: linear-gradient(135deg, var(--primary), var(--accent));
       border-radius: 2px;
     }
-
     .section-header p {
       color: var(--gray-dark);
       font-size: 1.1rem;
       max-width: 600px;
       margin: 0 auto;
     }
-
-    .produits-grid {
+    .pain-points-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 2rem;
+      margin-top: 3rem;
     }
-
-    .produit-card {
+    .pain-point-card {
       background: var(--white);
       border-radius: var(--radius);
-      overflow: hidden;
+      padding: 2rem;
       box-shadow: var(--shadow);
+      border-top: 4px solid var(--primary);
       transition: var(--transition);
-      border: 1px solid #f0f0f0;
       position: relative;
     }
-
-    .produit-card:hover {
-      transform: translateY(-8px);
+    .pain-point-card:hover {
+      transform: translateY(-5px);
       box-shadow: var(--shadow-lg);
     }
-
-    .produit-badge {
-      position: absolute;
-      top: 1rem;
-      left: 1rem;
-      background: var(--primary);
-      color: var(--white);
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      z-index: 2;
-      box-shadow: 0 4px 8px rgba(255, 107, 53, 0.3);
-    }
-
-    .produit-image-container {
-      height: 220px;
-      overflow: hidden;
-      position: relative;
-      background: var(--gray-light);
-    }
-
-    .produit-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: var(--transition);
-    }
-
-    .produit-card:hover .produit-image {
-      transform: scale(1.08);
-    }
-
-    .produit-content {
-      padding: 1.5rem;
-    }
-
-    .vendeur-info {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-      font-size: 0.9rem;
-      color: var(--gray);
-    }
-
-    .vendeur-avatar {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
+    .pain-icon {
+      width: 60px;
+      height: 60px;
       background: var(--primary-light);
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.8rem;
-      color: var(--primary);
-      border: 1px solid var(--primary);
-    }
-
-    .produit-titre {
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin-bottom: 0.75rem;
-      color: var(--secondary);
-      line-height: 1.4;
-    }
-
-    .produit-prix {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: var(--primary);
       margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+      color: var(--primary);
     }
-
-    .produit-actions {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .pain-point-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      color: var(--secondary);
+      font-weight: 700;
     }
-
-    .produit-lien {
-      background: var(--primary);
-      color: var(--white);
-      padding: 0.75rem 1.5rem;
-      border-radius: 25px;
-      text-decoration: none;
+    .pain-point-card p {
+      color: var(--gray-dark);
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+    .solution {
+      background: var(--success);
+      color: white;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius);
       font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    /* Solution Section */
+    .solution-section {
+      padding: 5rem 0;
+      background: linear-gradient(135deg, var(--primary-light) 0%, var(--white) 100%);
+    }
+    .solution-content {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .solution-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+    .feature-card {
+      background: var(--white);
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      text-align: center;
       transition: var(--transition);
+    }
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+    .feature-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 2rem;
+      color: var(--white);
+    }
+    .feature-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: var(--secondary);
+      font-weight: 700;
+    }
+    .feature-card p {
+      color: var(--gray-dark);
+      line-height: 1.6;
+    }
+    /* Offer Section */
+    .offer-section {
+      padding: 5rem 0;
+      background: linear-gradient(135deg, var(--secondary), var(--dark));
+      color: var(--white);
+      text-align: center;
+    }
+    .offer-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .offer-badge {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      padding: 0.75rem 2rem;
+      border-radius: 25px;
+      font-weight: 700;
+      font-size: 1.1rem;
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
+    }
+    .offer-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin: 2.5rem 0;
+    }
+    .offer-feature {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .offer-feature i {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+    .offer-feature h4 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+    .offer-feature p {
       font-size: 0.9rem;
-      box-shadow: 0 4px 8px rgba(255, 107, 53, 0.3);
+      opacity: 0.9;
     }
-
-    .produit-lien:hover {
-      background: var(--primary-dark);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(255, 107, 53, 0.4);
+    .urgency-counter {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1rem 2rem;
+      border-radius: var(--radius);
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 2rem 0;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
-
-    .cart-icon {
-      background: var(--secondary);
-      width: 44px;
-      height: 44px;
+    .counter-number {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    /* Guarantee Section */
+    .guarantee-section {
+      padding: 4rem 0;
+      background: var(--white);
+      text-align: center;
+    }
+    .guarantee-card {
+      background: linear-gradient(135deg, var(--primary-light), var(--white));
+      padding: 3rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      max-width: 600px;
+      margin: 0 auto;
+      border: 2px solid var(--primary-light);
+    }
+    .guarantee-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 2rem;
       color: var(--white);
-      transition: var(--transition);
-      cursor: pointer;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
-
-    .cart-icon:hover {
-      background: var(--dark);
-      transform: translateY(-2px) scale(1.1);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
-    }
-
-    /* Empty State */
-    .empty-state {
-      text-align: center;
-      padding: 4rem 2rem;
-      background: var(--white);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      max-width: 500px;
-      margin: 0 auto;
-      border: 2px solid var(--primary-light);
-    }
-
-    .empty-icon {
-      font-size: 4rem;
-      color: var(--primary);
-      margin-bottom: 1.5rem;
-      opacity: 0.7;
-    }
-
-    .empty-state h3 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      color: var(--secondary);
-      font-weight: 700;
-    }
-
-    .empty-state p {
-      color: var(--gray-dark);
-      margin-bottom: 2rem;
-      font-size: 1.1rem;
-    }
-
     /* Footer */
     .footer {
       background: var(--secondary);
       color: var(--white);
       padding: 4rem 0 2rem;
-      margin-top: 0;
     }
-
     .footer-content {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 3rem;
       margin-bottom: 3rem;
     }
-
     .footer-column h3 {
       font-size: 1.3rem;
       margin-bottom: 1.5rem;
@@ -554,7 +441,6 @@
       position: relative;
       padding-bottom: 0.5rem;
     }
-
     .footer-column h3::after {
       content: '';
       position: absolute;
@@ -565,17 +451,14 @@
       background: var(--primary);
       border-radius: 2px;
     }
-
     .footer-links {
       list-style: none;
     }
-
     .footer-links li {
       margin-bottom: 0.75rem;
     }
-
     .footer-links a {
-      color: #cccccc;
+      color: #CBD5E1;
       text-decoration: none;
       transition: var(--transition);
       display: flex;
@@ -583,346 +466,327 @@
       gap: 0.5rem;
       font-size: 0.95rem;
     }
-
     .footer-links a:hover {
       color: var(--primary);
       transform: translateX(5px);
     }
-
     .footer-bottom {
       text-align: center;
       padding-top: 2rem;
       border-top: 1px solid var(--gray-dark);
-      color: #999999;
+      color: #94A3B8;
       font-size: 0.9rem;
     }
-
-    /* Stats */
-    .stats {
-      display: flex;
-      justify-content: center;
-      gap: 3rem;
-      margin: 3rem 0;
-      flex-wrap: wrap;
-    }
-
-    .stat-item {
-      text-align: center;
-      padding: 1.5rem;
-      background: var(--white);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      min-width: 150px;
-    }
-
-    .stat-number {
-      font-size: 2.5rem;
-      font-weight: 800;
-      color: var(--primary);
-      display: block;
-      line-height: 1;
-      margin-bottom: 0.5rem;
-    }
-
-    .stat-label {
-      font-size: 0.9rem;
-      color: var(--gray-dark);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
     /* Responsive */
     @media (max-width: 768px) {
       .header-content {
         flex-direction: column;
         text-align: center;
       }
-
       .nav {
         width: 100%;
         justify-content: center;
         flex-wrap: wrap;
       }
-
-      .search-section h1 {
-        font-size: 2.2rem;
+      .hero h1 {
+        font-size: 2.5rem;
       }
-
-      .produits-grid {
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 1.5rem;
+      .hero p {
+        font-size: 1.1rem;
       }
-
-      .dashboard-links {
+      .cta-section {
+        flex-direction: column;
+        align-items: center;
+      }
+      .pain-points-grid,
+      .solution-features,
+      .offer-features {
         grid-template-columns: 1fr;
       }
-
-      .stats {
-        gap: 1.5rem;
-      }
-
-      .stat-item {
-        min-width: 120px;
-        padding: 1rem;
-      }
-
-      .stat-number {
+      .section-header h2 {
         font-size: 2rem;
       }
     }
-
     @media (max-width: 480px) {
-      .produits-grid {
-        grid-template-columns: 1fr;
+      .hero h1 {
+        font-size: 2rem;
       }
-
-      .search-form {
-        flex-direction: column;
-        border-radius: var(--radius);
-      }
-
-      .search-input {
-        border-radius: var(--radius) var(--radius) 0 0;
-        padding: 1rem 1.5rem;
-      }
-
-      .search-btn {
-        border-radius: 0 0 var(--radius) var(--radius);
-        padding: 1rem;
-      }
-
-      .search-section h1 {
+      .section-header h2 {
         font-size: 1.8rem;
       }
-
-      .section-header h2 {
-        font-size: 2rem;
+      .pain-point-card,
+      .feature-card,
+      .guarantee-card {
+        padding: 1.5rem;
       }
     }
   </style>
 </head>
 <body>
-
   <!-- Header -->
   <header class="header">
     <div class="container">
       <div class="header-content">
         <a href="/" class="logo">
           <div class="logo-icon">
-            <i class="fas fa-store"></i>
+            <i class="fas fa-rocket"></i>
           </div>
-          <span>Marketplace Pro</span>
+          <span>ShopFrii</span>
         </a>
-
         <nav class="nav">
-          <% if (user) { %>
-            <div class="user-info">
-              <div class="user-avatar">
-                <i class="fas fa-user"></i>
-              </div>
-              <span><%= user.nom %> (<%= user.role %>)</span>
-            </div>
-            <a href="/auth/logout" class="btn btn-outline">
-              <i class="fas fa-sign-out-alt"></i> Déconnexion
-            </a>
-          <% } else { %>
-            <div class="auth-links">
-              <a href="/auth/login" class="btn btn-outline">
-                <i class="fas fa-sign-in-alt"></i> Connexion
-              </a>
-              <a href="/auth/register" class="btn btn-primary">
-                <i class="fas fa-user-plus"></i> Inscription
-              </a>
-            </div>
-          <% } %>
-          
-          <a href="/panier" class="btn btn-secondary">
-            <i class="fas fa-shopping-cart"></i> Panier
+          <a href="/auth/login" class="btn btn-outline">
+            <i class="fas fa-sign-in-alt"></i> Connexion
+          </a>
+          <a href="#offer" class="btn btn-primary">
+            <i class="fas fa-bolt"></i> Essai Gratuit
           </a>
         </nav>
       </div>
     </div>
   </header>
-
-  <!-- Search Section -->
-  <section class="search-section">
+  <!-- Hero Section -->
+  <section class="hero">
     <div class="container">
-      <h1>Découvrez l'excellence en ligne</h1>
-      <p>Des produits exceptionnels, des vendeurs de confiance, une expérience shopping unique</p>
-      
-      <form method="GET" action="/" role="search" aria-label="Recherche produits" class="search-form">
-        <input
-          type="text"
-          name="q"
-          placeholder="Rechercher un produit, une catégorie, une marque..."
-          value="<%= typeof q !== 'undefined' ? q : '' %>"
-          aria-label="Champ de recherche des produits"
-          class="search-input"
-          autocomplete="off"
-        />
-        <button type="submit" aria-label="Lancer la recherche" class="search-btn">
-          <i class="fas fa-search"></i>
-        </button>
-      </form>
-
-      <!-- Stats -->
-      <div class="stats">
-        <div class="stat-item">
-          <span class="stat-number">10K+</span>
-          <span class="stat-label">Produits</span>
+      <div class="hero-content">
+        <div class="urgency-badge">
+          <i class="fas fa-exclamation-circle"></i> OFFRE BÊTA EXCEPTIONNELLE
         </div>
-        <div class="stat-item">
-          <span class="stat-number">500+</span>
-          <span class="stat-label">Vendeurs</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-number">50K+</span>
-          <span class="stat-label">Clients</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-number">99%</span>
-          <span class="stat-label">Satisfaits</span>
+       
+        <h1>Épuisé(e) de passer votre vie sur les DM ?</h1>
+        <p><strong>Shopfrii automatise 80% de votre travail de vente</strong>, pour que vous puissiez enfin vous concentrer sur ce qui compte vraiment : développer votre business et retrouver votre vie.</p>
+       
+        <div class="cta-section">
+          <a href="#offer" class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1.1rem;">
+            <i class="fas fa-bolt"></i> JE VEUX REPRENDRE MA VIE EN MAIN
+          </a>
+          <a href="#solution" class="btn btn-outline" style="padding: 1rem 2rem; font-size: 1.1rem;">
+            <i class="fas fa-play-circle"></i> Voir la démo
+          </a>
         </div>
       </div>
     </div>
   </section>
-
-  <!-- Dashboard Vendeur -->
-  <% if (isVendeur) { %>
-    <div class="container">
-      <div class="dashboard">
-        <h2><i class="fas fa-chart-line"></i> Tableau de bord vendeur</h2>
-        <div class="dashboard-links">
-          <a href="/boutique/mon" class="dashboard-link">
-            <i class="fas fa-store"></i> Gérer ma boutique
-          </a>
-          <a href="/produits/ajouter" class="dashboard-link">
-            <i class="fas fa-plus-circle"></i> Ajouter un produit
-          </a>
-          <a href="/produits/mes" class="dashboard-link">
-            <i class="fas fa-box-open"></i> Mes produits
-          </a>
-          <a href="/commandes/mes-commandes" class="dashboard-link">
-            <i class="fas fa-shipping-fast"></i> Commandes
-          </a>
-        </div>
-      </div>
-    </div>
-  <% } %>
-
-  <!-- Products Section -->
-  <section class="products-section">
+  <!-- Pain Points Section -->
+  <section class="pain-points" id="problems">
     <div class="container">
       <div class="section-header">
-        <h2>Produits Populaires</h2>
-        <p>Découvrez notre sélection de produits les plus appréciés par notre communauté</p>
+        <h2>Les 5 frustrations qui vous empêchent de scaler</h2>
+        <p>Vous reconnaissez-vous dans l'une de ces situations ?</p>
       </div>
-
-      <% if (!produits || produits.length === 0) { %>
-        <div class="empty-state">
-          <div class="empty-icon">
-            <i class="fas fa-search"></i>
+      <div class="pain-points-grid">
+        <!-- Point 1 -->
+        <div class="pain-point-card">
+          <div class="pain-icon">
+            <i class="fas fa-comment-dots"></i>
           </div>
-          <h3>Aucun produit trouvé</h3>
-          <p>Essayez de modifier vos critères de recherche ou parcourir nos catégories</p>
-          <a href="/" class="btn btn-primary">
-            <i class="fas fa-home"></i> Retour à l'accueil
-          </a>
+          <h3>"C'EST DISPONIBLE ?" - LA MÊME QUESTION 50 FOIS/JOUR</h3>
+          <p>Finis les messages répétitifs qui vous prennent 2h par jour. Cette frustration constante qui vous empêche de vous concentrer sur votre croissance.</p>
+          <div class="solution">
+            <i class="fas fa-check-circle"></i>
+            <span>Vos clients voient directement les stocks et prix</span>
+          </div>
         </div>
-      <% } else { %>
-        <div class="produits-grid" role="list">
-          <% produits.forEach(p => { %>
-            <div
-              class="produit-card"
-              tabindex="0"
-              role="listitem"
-              aria-label="Produit <%= p.nom %> à <%= p.prix.toFixed(2) %> <%= p.devise %>"
-            >
-              <% if (Math.random() > 0.7) { %>
-                <div class="produit-badge">Nouveau</div>
-              <% } %>
-              
-              <div class="produit-image-container">
-                <% if (p.image) { %>
-                  <img src="<%= p.image %>" alt="Image de <%= p.nom %>" class="produit-image" />
-                <% } else { %>
-                  <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--gray);background:var(--primary-light);">
-                    <i class="fas fa-image fa-3x" style="color:var(--primary);opacity:0.5;"></i>
-                  </div>
-                <% } %>
-              </div>
-
-              <div class="produit-content">
-                <div class="vendeur-info">
-                  <div class="vendeur-avatar">
-                    <i class="fas fa-store"></i>
-                  </div>
-                  <span><%= p.vendeur ? p.vendeur.nom : 'Inconnu' %></span>
-                </div>
-
-                <div class="produit-titre"><%= p.nom %></div>
-                <div class="produit-prix"><%= p.prix.toFixed(2) %> <%= p.devise %></div>
-
-                <div class="produit-actions">
-                  <a href="/boutique/produit/<%= p._id %>" class="produit-lien" aria-label="Voir les détails de <%= p.nom %>">
-                    <i class="fas fa-eye"></i> Voir
-                  </a>
-                  <div class="cart-icon" aria-label="Ajouter au panier">
-                    <i class="fas fa-shopping-cart"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          <% }) %>
+        <!-- Point 2 -->
+        <div class="pain-point-card">
+          <div class="pain-icon">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <h3>VENTES PERDUES DANS LES MESSAGES NON LUS</h3>
+          <p>Combien de ventes avez-vous perdues dans l'oubli des DM ? Ces opportunités manquées qui grignotent votre chiffre d'affaires.</p>
+          <div class="solution">
+            <i class="fas fa-check-circle"></i>
+            <span>Boutique organisée = zéro vente perdue</span>
+          </div>
         </div>
-      <% } %>
+        <!-- Point 3 -->
+        <div class="pain-point-card">
+          <div class="pain-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <h3>LA JOURNÉE DE 25 HEURES</h3>
+          <p>Vendre sur Instagram = un deuxième travail à temps plein. Cette fatigue constante qui vous éloigne de votre famille et de vos passions.</p>
+          <div class="solution">
+            <i class="fas fa-check-circle"></i>
+            <span>Récupérez 15h par semaine pour votre vie</span>
+          </div>
+        </div>
+        <!-- Point 4 -->
+        <div class="pain-point-card">
+          <div class="pain-icon">
+            <i class="fas fa-tasks"></i>
+          </div>
+          <h3>LE STRESS DES COMMANDES EN VRAC</h3>
+          <p>La peur d'oublier une commande, de se tromper de taille... Ce stress permanent qui vous empêche de dormir sur vos deux oreilles.</p>
+          <div class="solution">
+            <i class="fas fa-check-circle"></i>
+            <span>Système de commandes automatisé et infaillible</span>
+          </div>
+        </div>
+        <!-- Point 5 -->
+        <div class="pain-point-card">
+          <div class="pain-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h3>LA CROISSANCE BLOQUÉE</h3>
+          <p>Impossible de scaler quand on passe sa vie à gérer les DM. Ce plafond de verre qui vous empêche d'atteindre votre plein potentiel.</p>
+          <div class="solution">
+            <i class="fas fa-check-circle"></i>
+            <span>Passez de 10 à 100 commandes/jour sans embaucher</span>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
-
+  <!-- Solution Section -->
+  <section class="solution-section" id="solution">
+    <div class="container">
+      <div class="solution-content">
+        <div class="section-header">
+          <h2>La solution ShopFrii</h2>
+          <p><strong>Notre promesse :</strong> Vous reprenez le contrôle de votre temps et multipliez vos ventes, ou on vous rembourse.</p>
+        </div>
+        <div class="solution-features">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-bolt"></i>
+            </div>
+            <h3>Boutique pro en 10 minutes</h3>
+            <p>Transformez votre compte Instagram en boutique professionnelle en quelques clics seulement</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-magic"></i>
+            </div>
+            <h3>Zéro compétence technique</h3>
+            <p>Interface intuitive conçue pour les vendeurs, pas pour les développeurs</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-euro-sign"></i>
+            </div>
+            <h3>Prix imbattable</h3>
+            <p>Moins cher qu'un repas au restaurant par mois. Investissement rapidement rentabilisé</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Offer Section -->
+  <section class="offer-section" id="offer">
+    <div class="container">
+      <div class="offer-content">
+        <div class="offer-badge">
+          <i class="fas fa-gift"></i> OFFRE BÊTA EXCEPTIONNELLE
+        </div>
+        <h2 style="color: white; margin-bottom: 1.5rem; font-size: 2.5rem;">Les 20 premiers vendeurs reçoivent :</h2>
+        <div class="offer-features">
+          <div class="offer-feature">
+            <i class="fas fa-crown"></i>
+            <h4>3 mois GRATUITS</h4>
+            <p>Profitez de tous les avantages sans engagement</p>
+          </div>
+          <div class="offer-feature">
+            <i class="fas fa-headset"></i>
+            <h4>Support personnel</h4>
+            <p>Un expert dédié à votre réussite</p>
+          </div>
+          <div class="offer-feature">
+            <i class="fas fa-lightbulb"></i>
+            <h4>Influence les features</h4>
+            <p>Participez au développement de ShopFrii</p>
+          </div>
+          <div class="offer-feature">
+            <i class="fas fa-star"></i>
+            <h4>Outils premium</h4>
+            <p>Accès aux fonctionnalités avancées</p>
+          </div>
+        </div>
+        <div class="urgency-counter">
+          <div class="counter-number">5</div>
+          <div>places restantes !</div>
+        </div>
+        <a href="/auth/register" class="btn btn-primary" style="padding: 1.2rem 3rem; font-size: 1.2rem;">
+          <i class="fas fa-bolt"></i> JE VEUX REPRENDRE MA VIE EN MAIN
+        </a>
+      </div>
+    </div>
+  </section>
+  <!-- Guarantee Section -->
+  <section class="guarantee-section">
+    <div class="container">
+      <div class="guarantee-card">
+        <div class="guarantee-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <h2 style="margin-bottom: 1rem;">Garantie "Zéro Risque"</h2>
+        <p style="font-size: 1.2rem; margin-bottom: 1.5rem; font-weight: 600;">
+          Essai 7 jours sans engagement :
+        </p>
+        <p style="font-size: 1.1rem; margin-bottom: 2rem;">
+          Si ShopFrii ne vous fait pas gagner au moins 1h par jour dès la première semaine, on vous offre 2 mois d'abonnement gratuit !
+        </p>
+        <a href="/auth/register" class="btn btn-primary" style="padding: 1rem 2.5rem; font-size: 1.1rem;">
+          <i class="fas fa-play-circle"></i> Essayer Gratuitement
+        </a>
+      </div>
+    </div>
+  </section>
+  <!-- Final Message -->
+  <section style="padding: 4rem 0; background: var(--primary-light); text-align: center;">
+    <div class="container">
+      <h2 style="font-size: 2rem; margin-bottom: 1.5rem; color: var(--secondary);">
+        Vous méritez mieux que de passer votre vie sur les DM.
+      </h2>
+      <p style="font-size: 1.3rem; margin-bottom: 2rem; color: var(--gray-dark); font-weight: 500;">
+        Votre business mérite mieux. Votre vie mérite mieux.
+      </p>
+      <p style="font-size: 1.5rem; font-weight: 700; color: var(--primary);">
+        Shopfri, c'est la liberté retrouvée.
+      </p>
+    </div>
+  </section>
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
       <div class="footer-content">
         <div class="footer-column">
-          <h3>Marketplace Pro</h3>
-          <p style="color: #cccccc; line-height: 1.6; margin-bottom: 1.5rem;">Votre marketplace premium pour des achats en ligne exceptionnels. Qualité, confiance et innovation.</p>
+          <h3>ShopFrii</h3>
+          <p style="color: #CBD5E1; line-height: 1.6; margin-bottom: 1.5rem;">La solution qui libère les vendeurs Instagram , tiktok,whatsapp de la tyrannie des DM. Reprenez le contrôle de votre temps et scalez votre business.</p>
           <div style="display: flex; gap: 1rem;">
-            <a href="#" style="color: #cccccc; font-size: 1.2rem;"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" style="color: #cccccc; font-size: 1.2rem;"><i class="fab fa-twitter"></i></a>
-            <a href="#" style="color: #cccccc; font-size: 1.2rem;"><i class="fab fa-instagram"></i></a>
-            <a href="#" style="color: #cccccc; font-size: 1.2rem;"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" style="color: #CBD5E1; font-size: 1.2rem;"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" style="color: #CBD5E1; font-size: 1.2rem;"><i class="fab fa-instagram"></i></a>
+            <a href="#" style="color: #CBD5E1; font-size: 1.2rem;"><i class="fab fa-tiktok"></i></a>
+            <a href="#" style="color: #CBD5E1; font-size: 1.2rem;"><i class="fab fa-youtube"></i></a>
           </div>
         </div>
-        
+       
         <div class="footer-column">
           <h3>Navigation</h3>
           <ul class="footer-links">
-            <li><a href="/"><i class="fas fa-chevron-right"></i> Accueil</a></li>
-            <li><a href="/produits"><i class="fas fa-chevron-right"></i> Tous les produits</a></li>
-            <li><a href="/categories"><i class="fas fa-chevron-right"></i> Catégories</a></li>
-            <li><a href="/vendeurs"><i class="fas fa-chevron-right"></i> Vendeurs</a></li>
-            <li><a href="/promotions"><i class="fas fa-chevron-right"></i> Promotions</a></li>
+            <li><a href="#"><i class="fas fa-chevron-right"></i> Accueil</a></li>
+            <li><a href="#problems"><i class="fas fa-chevron-right"></i> Les problèmes</a></li>
+            <li><a href="#solution"><i class="fas fa-chevron-right"></i> La solution</a></li>
+            <li><a href="#offer"><i class="fas fa-chevron-right"></i> Offre spéciale</a></li>
+            <li><a href="/contact"><i class="fas fa-chevron-right"></i> Contact</a></li>
           </ul>
         </div>
-        
+       
         <div class="footer-column">
-          <h3>Assistance</h3>
+          <h3>Légal</h3>
           <ul class="footer-links">
-            <li><a href="/aide"><i class="fas fa-chevron-right"></i> Centre d'aide</a></li>
-            <li><a href="/contact"><i class="fas fa-chevron-right"></i> Nous contacter</a></li>
-            <li><a href="/conditions"><i class="fas fa-chevron-right"></i> Conditions</a></li>
-            <li><a href="/confidentialite"><i class="fas fa-chevron-right"></i> Confidentialité</a></li>
-            <li><a href="/faq"><i class="fas fa-chevron-right"></i> FAQ</a></li>
+            <li><a href="#"><i class="fas fa-chevron-right"></i> Conditions d'utilisation</a></li>
+            <li><a href="#"><i class="fas fa-chevron-right"></i> Politique de confidentialité</a></li>
+            <li><a href="#"><i class="fas fa-chevron-right"></i> Mentions légales</a></li>
+            <li><a href="#"><i class="fas fa-chevron-right"></i> CGV</a></li>
+            <li><a href="#"><i class="fas fa-chevron-right"></i> Cookies</a></li>
           </ul>
         </div>
       </div>
-      
+     
       <div class="footer-bottom">
-        <p>&copy; 2023 Marketplace Pro. Tous droits réservés. | Conçu avec <i class="fas fa-heart" style="color: var(--primary);"></i> pour vous</p>
+        <p>&copy; 2025 ShopFrii. Tous droits réservés. | Conçu avec <i class="fas fa-heart" style="color: var(--primary);"></i> pour les vendeurs</p>
       </div>
     </div>
   </footer>
-
 </body>
 </html>
