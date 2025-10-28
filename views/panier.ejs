@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title> Panier et Mes Commandes</title>
+  <title>Panier et Mes Commandes</title>
   <style>
     .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
     
@@ -251,7 +251,20 @@
       <div class="empty-cart">
         <h2>Votre panier est vide</h2>
         <p>Découvrez nos produits et ajoutez-les à votre panier !</p>
-        <a href="<%= slug ? `/boutique/${slug}` : '/' %>" class="btn">← Retour à l'accueil</a>
+        
+        <% 
+        // DÉTERMINATION INTELLIGENTE DE L'URL DE RETOUR
+        let returnUrl = '/';
+        if (slug) {
+            returnUrl = `/boutique/${slug}`;
+        } else if (req.session.boutiqueActuelle) {
+            returnUrl = `/boutique/${req.session.boutiqueActuelle}`;
+        } else if (commandes.length > 0 && commandes[0].boutique && commandes[0].boutique.slug) {
+            returnUrl = `/boutique/${commandes[0].boutique.slug}`;
+        }
+        %>
+        
+        <a href="<%= returnUrl %>" class="btn">← Retour à l'accueil</a>
       </div>
     <% } else { %>
 
@@ -326,7 +339,19 @@
           </div>
 
           <div style="display: flex; gap: 10px;">
-            <a href="<%= slug ? `/boutique/${slug}` : '/' %>" class="btn">← Continuer mes achats</a>
+            <% 
+            // DÉTERMINATION INTELLIGENTE DE L'URL POUR CONTINUER LES ACHATS
+            let continueShoppingUrl = '/';
+            if (slug) {
+                continueShoppingUrl = `/boutique/${slug}`;
+            } else if (panier.length > 0 && panier[0].produit && panier[0].produit.boutique && panier[0].produit.boutique.slug) {
+                continueShoppingUrl = `/boutique/${panier[0].produit.boutique.slug}`;
+            } else if (req.session.boutiqueActuelle) {
+                continueShoppingUrl = `/boutique/${req.session.boutiqueActuelle}`;
+            }
+            %>
+            
+            <a href="<%= continueShoppingUrl %>" class="btn">← Continuer mes achats</a>
             <button type="submit" class="btn btn-success">✅ Valider ma commande</button>
           </div>
         </form>
@@ -358,6 +383,19 @@
           <h3>📭 Aucune commande trouvée</h3>
           <p>Vous n'avez pas encore passé de commande.</p>
           <p>Une fois vos commandes validées, elles apparaîtront ici avec leur suivi en temps réel.</p>
+          
+          <% 
+          let boutiqueCommandesUrl = '/';
+          if (slug) {
+              boutiqueCommandesUrl = `/boutique/${slug}`;
+          } else if (req.session.boutiqueActuelle) {
+              boutiqueCommandesUrl = `/boutique/${req.session.boutiqueActuelle}`;
+          }
+          %>
+          
+          <a href="<%= boutiqueCommandesUrl %>" class="btn" style="margin-top: 15px;">
+            Découvrir nos produits
+          </a>
         </div>
       <% } else { %>
         <div class="commandes-list">
@@ -470,8 +508,16 @@
               </div>
 
               <div class="commande-actions">
-               
-                <a href="/boutique/<%= commande.boutique.slug %>" class="btn btn-sm btn-outline">
+                <% 
+                let boutiqueUrl = '/';
+                if (commande.boutique && commande.boutique.slug) {
+                    boutiqueUrl = `/boutique/${commande.boutique.slug}`;
+                } else if (req.session.boutiqueActuelle) {
+                    boutiqueUrl = `/boutique/${req.session.boutiqueActuelle}`;
+                }
+                %>
+                
+                <a href="<%= boutiqueUrl %>" class="btn btn-sm btn-outline">
                   🏪 Voir la boutique
                 </a>
               </div>
@@ -480,7 +526,20 @@
         </div>
 
         <div style="text-align: center; margin-top: 20px;">
+          <% 
+          let allBoutiquesUrl = '/';
+          if (slug) {
+              allBoutiquesUrl = `/boutique/${slug}`;
+          } else if (req.session.boutiqueActuelle) {
+              allBoutiquesUrl = `/boutique/${req.session.boutiqueActuelle}`;
+          } else if (commandes.length > 0 && commandes[0].boutique && commandes[0].boutique.slug) {
+              allBoutiquesUrl = `/boutique/${commandes[0].boutique.slug}`;
+          }
+          %>
           
+          <a href="<%= allBoutiquesUrl %>" class="btn btn-primary">
+            🛍️ Voir tous nos produits
+          </a>
         </div>
       <% } %>
     </div>
