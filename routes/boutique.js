@@ -196,6 +196,7 @@ router.get('/vendeur/dashboard', estVendeur, async (req, res) => {
 });
 
 // Route publique boutique par slug
+// Route publique boutique par slug - VERSION CORRIGÉE
 router.get('/:slug', async (req, res) => {
   try {
     const boutique = await Boutique.findOne({ slug: req.params.slug });
@@ -205,31 +206,45 @@ router.get('/:slug', async (req, res) => {
 
     const produits = await Produit.find({ boutique: boutique._id });
 
-    // 🔥 DÉTECTION AUTOMATIQUE DU TEMPLATE
-    let templatePath;
-    let templateData = {
-      boutique, 
-      produits,
-      slug: boutique.slug,
-      user: req.user
-    };
-
-    // Cas 1: Boutique avec template personnalisé
-    if (boutique.template && boutique.template !== 'standard') {
-      templatePath = `boutiques_templates/${boutique.template}`;
-    }
-    // Cas 2: Template standard dans le dossier boutiques_templates
-    else if (boutique.template === 'standard') {
-      templatePath = 'boutiques_templates/standard';
-    }
-    // Cas 3: Ancien template boutique_publique (par défaut)
-    else {
-      templatePath = 'boutique_publique';
-    }
-
-    console.log('Template utilisé:', templatePath); // Debug
+    // 🔥 CORRECTION : TOUJOURS mettre à jour la boutique actuelle
+    // même sans ajouter de produit au panier
+    req.session.boutiqueActuelle = boutique.slug;
     
-    res.render(templatePath, templateData);
+    console.log('💾 Boutique visitée stockée en session:', {
+      slug: boutique.slug,
+      nom: boutique.nom,
+      action: 'simple visite'
+    });
+
+    // Sauvegarder immédiatement la session
+    req.session.save((err) => {
+      if (err) console.error('Erreur sauvegarde session:', err);
+      
+      // 🔥 DÉTECTION AUTOMATIQUE DU TEMPLATE
+      let templatePath;
+      let templateData = {
+        boutique, 
+        produits,
+        slug: boutique.slug,
+        user: req.session.user
+      };
+
+      // Cas 1: Boutique avec template personnalisé
+      if (boutique.template && boutique.template !== 'standard') {
+        templatePath = `boutiques_templates/${boutique.template}`;
+      }
+      // Cas 2: Template standard
+      else if (boutique.template === 'standard') {
+        templatePath = 'boutiques_templates/standard';
+      }
+      // Cas 3: Ancien template (par défaut)
+      else {
+        templatePath = 'boutique_publique';
+      }
+
+      console.log('Template utilisé:', templatePath);
+      res.render(templatePath, templateData);
+    });
 
   } catch (error) {
     console.error('Erreur serveur:', error);
