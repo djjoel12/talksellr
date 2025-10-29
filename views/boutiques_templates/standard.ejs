@@ -281,9 +281,9 @@
       font-weight: 400;
     }
     
-    /* Hero Section Premium avec Animations Spectaculaires */
+    /* Hero Section Premium avec Fond Noir et Animations Spectaculaires */
     .hero {
-      background: linear-gradient(135deg, var(--zara-light-gray) 0%, var(--zara-white) 100%);
+      background: #000000;
       padding: 8rem 0 6rem;
       text-align: center;
       position: relative;
@@ -292,106 +292,180 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      isolation: isolate;
     }
     
-    .hero::before {
-      content: '';
+    /* Effet de grille animée en arrière-plan */
+    .hero-grid {
       position: absolute;
       top: 0;
       left: 0;
-      right: 0;
-      bottom: 0;
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.02"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="black" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+      width: 100%;
+      height: 100%;
+      background: 
+        linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: gridMove 20s linear infinite;
+      opacity: 0.3;
+      z-index: 1;
     }
 
-    /* Particules animées en arrière-plan */
-    .hero-particles {
+    @keyframes gridMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(50px, 50px); }
+    }
+
+    /* Effet de particules cosmiques */
+    .cosmic-particles {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       pointer-events: none;
+      z-index: 2;
+    }
+
+    .cosmic-particle {
+      position: absolute;
+      background: radial-gradient(circle, #ffffff, transparent);
+      border-radius: 50%;
+      animation: cosmicFloat 8s ease-in-out infinite;
+    }
+
+    @keyframes cosmicFloat {
+      0%, 100% { 
+        transform: translate(0, 0) scale(1);
+        opacity: 0;
+      }
+      25% {
+        opacity: 0.6;
+      }
+      50% { 
+        transform: translate(100px, -50px) scale(1.5);
+        opacity: 0.3;
+      }
+      75% {
+        opacity: 0.8;
+      }
+    }
+
+    /* Étoiles scintillantes */
+    .stars {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       z-index: 1;
     }
 
-    .particle {
+    .star {
       position: absolute;
-      background: var(--zara-black);
+      background: white;
       border-radius: 50%;
-      opacity: 0.1;
-      animation: float 6s ease-in-out infinite;
+      animation: twinkle 3s ease-in-out infinite;
     }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-20px) rotate(180deg); }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.2); }
     }
 
-    .particle:nth-child(1) { 
-      width: 4px; height: 4px; top: 20%; left: 10%; 
-      animation-delay: 0s; animation-duration: 8s;
+    /* Effet de lumière mouvante */
+    .light-beam {
+      position: absolute;
+      top: -50%;
+      left: -25%;
+      width: 150%;
+      height: 200%;
+      background: linear-gradient(
+        45deg,
+        transparent 0%,
+        rgba(255,255,255,0.02) 25%,
+        rgba(255,255,255,0.05) 50%,
+        rgba(255,255,255,0.02) 75%,
+        transparent 100%
+      );
+      transform: rotate(45deg);
+      animation: beamSweep 15s ease-in-out infinite;
+      z-index: 1;
     }
-    .particle:nth-child(2) { 
-      width: 6px; height: 6px; top: 60%; left: 80%; 
-      animation-delay: 1s; animation-duration: 10s;
+
+    @keyframes beamSweep {
+      0%, 100% { transform: rotate(45deg) translateX(-100%); }
+      50% { transform: rotate(45deg) translateX(100%); }
     }
-    .particle:nth-child(3) { 
-      width: 3px; height: 3px; top: 80%; left: 20%; 
-      animation-delay: 2s; animation-duration: 7s;
-    }
-    .particle:nth-child(4) { 
-      width: 5px; height: 5px; top: 30%; left: 70%; 
-      animation-delay: 3s; animation-duration: 9s;
-    }
-    .particle:nth-child(5) { 
-      width: 4px; height: 4px; top: 70%; left: 40%; 
-      animation-delay: 4s; animation-duration: 6s;
-    }
-    
+
     .hero-content {
       max-width: 800px;
       margin: 0 auto;
       padding: 0 2rem;
       position: relative;
-      z-index: 2;
+      z-index: 3;
     }
 
-    /* Animation du titre principal */
+    /* Animation du titre principal sur fond noir */
     .hero h1 {
-      font-size: 4rem;
+      font-size: 4.5rem;
       font-weight: 300;
       margin-bottom: 1.5rem;
-      letter-spacing: 4px;
+      letter-spacing: 6px;
       text-transform: uppercase;
-      color: var(--zara-black);
+      color: #ffffff;
       opacity: 0;
       transform: translateY(50px);
-      animation: titleReveal 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s forwards;
+      animation: titleReveal 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s forwards;
+      text-shadow: 0 0 30px rgba(255,255,255,0.5);
+      position: relative;
+    }
+
+    .hero h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #ffffff, transparent);
+      animation: lineReveal 2s ease-in-out 1.5s forwards;
+      opacity: 0;
+    }
+
+    @keyframes lineReveal {
+      0% { opacity: 0; width: 0; }
+      100% { opacity: 1; width: 100px; }
     }
 
     @keyframes titleReveal {
       0% {
         opacity: 0;
         transform: translateY(50px) scale(0.9);
+        text-shadow: 0 0 0 rgba(255,255,255,0);
+      }
+      50% {
+        text-shadow: 0 0 50px rgba(255,255,255,0.8);
       }
       100% {
         opacity: 1;
         transform: translateY(0) scale(1);
+        text-shadow: 0 0 30px rgba(255,255,255,0.5);
       }
     }
 
-    /* Animation du sous-titre */
+    /* Animation de la description */
     .hero p {
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       margin-bottom: 3rem;
       font-weight: 300;
-      letter-spacing: 1.5px;
-      color: var(--zara-dark-gray);
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.8);
       line-height: 1.8;
       opacity: 0;
       transform: translateY(30px);
-      animation: subtitleReveal 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1s forwards;
+      animation: subtitleReveal 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1s forwards;
     }
 
     @keyframes subtitleReveal {
@@ -405,18 +479,18 @@
       }
     }
     
-    /* Animation du bouton CTA spectaculaire */
+    /* Animation du bouton CTA sur fond noir */
     .cta-button {
       display: inline-block;
-      background: var(--zara-black);
-      color: var(--zara-white);
+      background: transparent;
+      color: #ffffff;
       padding: 1.5rem 4rem;
       font-weight: 400;
       font-size: 0.9rem;
       text-transform: uppercase;
       letter-spacing: 3px;
       transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      border: 2px solid var(--zara-black);
+      border: 2px solid #ffffff;
       cursor: pointer;
       text-decoration: none;
       position: relative;
@@ -447,7 +521,7 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
       transition: left 0.6s ease;
     }
     
@@ -462,7 +536,7 @@
       left: -2px;
       right: -2px;
       bottom: -2px;
-      background: linear-gradient(45deg, var(--zara-black), var(--zara-dark-gray), var(--zara-black));
+      background: linear-gradient(45deg, #ffffff, #cccccc, #ffffff);
       z-index: -1;
       border-radius: inherit;
       opacity: 0;
@@ -482,31 +556,31 @@
     
     .cta-button:hover span {
       transform: translateY(-2px);
-      color: var(--zara-white);
+      color: #000000;
     }
 
     .cta-button:hover {
       transform: translateY(-5px);
-      box-shadow: 0 15px 30px rgba(0,0,0,0.3);
-      background: var(--zara-black);
-      color: var(--zara-white);
+      box-shadow: 0 15px 30px rgba(255,255,255,0.3);
+      background: #ffffff;
+      color: #000000;
     }
 
-    /* Effet de lueur au survol */
+    /* Effet de lueur blanche au survol */
     .cta-button:hover {
-      animation: glow 1.5s ease-in-out infinite alternate;
+      animation: whiteGlow 1.5s ease-in-out infinite alternate;
     }
 
-    @keyframes glow {
+    @keyframes whiteGlow {
       from {
-        box-shadow: 0 0 10px rgba(0,0,0,0.2), 0 0 20px rgba(0,0,0,0.1);
+        box-shadow: 0 0 10px rgba(255,255,255,0.2), 0 0 20px rgba(255,255,255,0.1);
       }
       to {
-        box-shadow: 0 0 15px rgba(0,0,0,0.3), 0 0 30px rgba(0,0,0,0.2);
+        box-shadow: 0 0 15px rgba(255,255,255,0.4), 0 0 30px rgba(255,255,255,0.2);
       }
     }
 
-    /* Animation de flèche qui rebondit */
+    /* Animation de flèche blanche qui rebondit */
     .scroll-indicator {
       position: absolute;
       bottom: 40px;
@@ -534,8 +608,8 @@
     .scroll-arrow {
       width: 30px;
       height: 30px;
-      border-right: 2px solid var(--zara-black);
-      border-bottom: 2px solid var(--zara-black);
+      border-right: 2px solid #ffffff;
+      border-bottom: 2px solid #ffffff;
       transform: rotate(45deg);
       animation: bounce 2s infinite;
       opacity: 0.7;
@@ -1065,7 +1139,8 @@
       }
 
       .hero h1 {
-        font-size: 2.5rem;
+        font-size: 2.8rem;
+        letter-spacing: 4px;
       }
 
       .hero p {
@@ -1180,16 +1255,19 @@
 
   <!-- Main Content -->
   <main>
-    <!-- Hero Section avec Animations -->
+    <!-- Hero Section avec Fond Noir et Animations Cosmiques -->
     <section class="hero" id="accueil">
-      <!-- Particules animées en arrière-plan -->
-      <div class="hero-particles">
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-      </div>
+      <!-- Grille animée en arrière-plan -->
+      <div class="hero-grid"></div>
+      
+      <!-- Étoiles scintillantes -->
+      <div class="stars" id="starsContainer"></div>
+      
+      <!-- Particules cosmiques -->
+      <div class="cosmic-particles" id="cosmicParticles"></div>
+      
+      <!-- Effet de lumière mouvante -->
+      <div class="light-beam"></div>
       
       <div class="hero-content">
         <h1><%= boutique.nom %></h1>
@@ -1368,6 +1446,70 @@
     let currentGallery = null;
     let currentImageIndex = 0;
 
+    // Fonction pour créer les étoiles scintillantes
+    function createStars() {
+      const starsContainer = document.getElementById('starsContainer');
+      const starCount = 150;
+      
+      for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        
+        // Position aléatoire
+        const left = Math.random() * 100;
+        const top = Math.random() * 100;
+        
+        // Taille aléatoire
+        const size = Math.random() * 3;
+        
+        // Délai d'animation aléatoire
+        const delay = Math.random() * 3;
+        
+        star.style.cssText = `
+          left: ${left}%;
+          top: ${top}%;
+          width: ${size}px;
+          height: ${size}px;
+          animation-delay: ${delay}s;
+        `;
+        
+        starsContainer.appendChild(star);
+      }
+    }
+
+    // Fonction pour créer les particules cosmiques
+    function createCosmicParticles() {
+      const particlesContainer = document.getElementById('cosmicParticles');
+      const particleCount = 20;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'cosmic-particle';
+        
+        // Position de départ aléatoire
+        const startX = Math.random() * 100;
+        const startY = Math.random() * 100;
+        
+        // Délai et durée d'animation aléatoires
+        const delay = Math.random() * 8;
+        const duration = 6 + Math.random() * 4;
+        
+        // Taille aléatoire
+        const size = 2 + Math.random() * 4;
+        
+        particle.style.cssText = `
+          left: ${startX}%;
+          top: ${startY}%;
+          width: ${size}px;
+          height: ${size}px;
+          animation-delay: ${delay}s;
+          animation-duration: ${duration}s;
+        `;
+        
+        particlesContainer.appendChild(particle);
+      }
+    }
+
     // Fonction pour changer l'image principale
     function changeMainImage(productIndex, imageIndex) {
       console.log('Changement d\'image:', productIndex, imageIndex);
@@ -1511,6 +1653,10 @@
     
     // Gestion de l'ajout au panier avec AJAX
     document.addEventListener('DOMContentLoaded', function() {
+      // Créer les animations de fond
+      createStars();
+      createCosmicParticles();
+      
       const forms = document.querySelectorAll('.add-to-cart-form');
       
       forms.forEach(form => {
@@ -1634,6 +1780,20 @@
           this.style.transform = 'translateY(0) scale(1)';
         });
       }
+
+      // Effet de parallaxe sur le défilement
+      window.addEventListener('scroll', function() {
+        const scrolled = window.pageYOffset;
+        const stars = document.querySelector('.stars');
+        const particles = document.querySelector('.cosmic-particles');
+        
+        if (stars) {
+          stars.style.transform = `translateY(${scrolled * 0.5}px)`;
+        }
+        if (particles) {
+          particles.style.transform = `translateY(${scrolled * 0.3}px)`;
+        }
+      });
     });
   </script>
 </body>
