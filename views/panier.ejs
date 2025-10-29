@@ -2,11 +2,11 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Panier et Mes Commandes</title>
+  <title>Panier</title>
   <style>
     .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
     
-    /* Styles existants pour le panier */
+    /* Styles pour le panier */
     .panier-item { 
       display: flex; 
       align-items: center; 
@@ -37,181 +37,9 @@
       display: inline-block;
     }
     .btn-danger { background: #dc3545; }
-    .btn-primary { background: #e60000; }
     .btn-success { background: #28a745; }
     .empty-cart { text-align: center; padding: 40px; }
     .commande-form { margin-top: 20px; padding: 20px; background: #f0f8ff; border-radius: 8px; }
-
-    /* Nouveaux styles pour les commandes */
-    .commandes-section {
-      margin-top: 50px;
-      padding-top: 30px;
-      border-top: 2px solid #eee;
-    }
-    .section-title {
-      font-size: 1.5em;
-      margin-bottom: 20px;
-      color: #333;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .commandes-list {
-      display: grid;
-      gap: 15px;
-    }
-    .commande-card {
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      padding: 20px;
-      background: white;
-      transition: all 0.3s ease;
-    }
-    .commande-card:hover {
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      transform: translateY(-2px);
-    }
-    .commande-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-    .commande-numero {
-      font-weight: bold;
-      color: #333;
-      font-size: 1.1em;
-    }
-    .commande-date {
-      color: #666;
-      font-size: 0.9em;
-    }
-    .commande-statut {
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 0.8em;
-      font-weight: bold;
-    }
-    .statut-en_attente { background: #fff3cd; color: #856404; }
-    .statut-confirmee { background: #d1ecf1; color: #0c5460; }
-    .statut-en_preparation { background: #d4edda; color: #155724; }
-    .statut-expediee { background: #cce7ff; color: #004085; }
-    .statut-livree { background: #d4edda; color: #155724; }
-    .statut-annulee { background: #f8d7da; color: #721c24; }
-    .commande-details {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      gap: 15px;
-      margin-bottom: 15px;
-    }
-    .commande-produits {
-      color: #666;
-      font-size: 0.9em;
-    }
-    .commande-total {
-      font-weight: bold;
-      color: #e60000;
-      text-align: right;
-    }
-    .commande-boutique {
-      color: #666;
-      font-size: 0.9em;
-    }
-    .commande-actions {
-      display: flex;
-      gap: 10px;
-      justify-content: flex-end;
-    }
-    .btn-sm {
-      padding: 6px 12px;
-      font-size: 0.8em;
-    }
-    .btn-outline {
-      background: transparent;
-      border: 1px solid #007bff;
-      color: #007bff;
-    }
-    .no-commandes {
-      text-align: center;
-      padding: 40px;
-      color: #666;
-      background: #f9f9f9;
-      border-radius: 8px;
-    }
-    .login-prompt {
-      background: #fff3cd;
-      border: 1px solid #ffeaa7;
-      padding: 20px;
-      border-radius: 8px;
-      text-align: center;
-      margin-top: 20px;
-    }
-
-    /* Nouveaux styles pour les produits dans les commandes */
-    .commande-produits-details {
-      margin-top: 15px;
-      border-top: 1px solid #eee;
-      padding-top: 15px;
-    }
-    .produit-commande-item {
-      display: flex;
-      align-items: center;
-      padding: 10px;
-      border-bottom: 1px solid #f5f5f5;
-      gap: 15px;
-    }
-    .produit-commande-item:last-child {
-      border-bottom: none;
-    }
-    .produit-commande-image {
-      width: 60px;
-      height: 60px;
-      object-fit: cover;
-      border-radius: 6px;
-      flex-shrink: 0;
-    }
-    .produit-commande-info {
-      flex: 1;
-    }
-    .produit-commande-nom {
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-    .produit-commande-details {
-      font-size: 0.85em;
-      color: #666;
-    }
-    .produit-commande-prix {
-      text-align: right;
-      min-width: 100px;
-    }
-    .produit-commande-sous-total {
-      font-weight: bold;
-      color: #e60000;
-    }
-    .produit-commande-quantite {
-      color: #666;
-      font-size: 0.8em;
-    }
-
-    /* Styles pour les informations client */
-    .client-info {
-      background: #f8f9fa;
-      padding: 15px;
-      border-radius: 6px;
-      margin-bottom: 15px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 10px;
-    }
-    .client-detail {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .client-detail strong {
-      color: #333;
-    }
 
     /* Modal pour images agrandies */
     .modal-image {
@@ -244,7 +72,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>🛒 Mon Panier et Mes Commandes</h1>
+    <h1>🛒 Mon Panier</h1>
 
     <!-- Section Panier -->
     <% if (panier.length === 0) { %>
@@ -259,8 +87,6 @@
             returnUrl = `/boutique/${slug}`;
         } else if (req.session.boutiqueActuelle) {
             returnUrl = `/boutique/${req.session.boutiqueActuelle}`;
-        } else if (commandes.length > 0 && commandes[0].boutique && commandes[0].boutique.slug) {
-            returnUrl = `/boutique/${commandes[0].boutique.slug}`;
         }
         %>
         
@@ -325,17 +151,17 @@
         <form action="/commandes/valider" method="POST">
           <div style="margin-bottom: 15px;">
             <label><strong>Nom complet :</strong></label><br>
-            <input type="text" name="nom" required style="width: 100%; padding: 10px; margin-top: 5px;">
+            <input type="text" name="nom" required style="width: 100%; padding: 10px; margin-top: 5px;" placeholder="Votre nom complet">
           </div>
           
           <div style="margin-bottom: 15px;">
             <label><strong>Téléphone (WhatsApp) :</strong></label><br>
-            <input type="text" name="telephone" required style="width: 100%; padding: 10px; margin-top: 5px;">
+            <input type="text" name="telephone" required style="width: 100%; padding: 10px; margin-top: 5px;" placeholder="Votre numéro WhatsApp">
           </div>
           
           <div style="margin-bottom: 20px;">
             <label><strong>Adresse de livraison :</strong></label><br>
-            <textarea name="adresse" required rows="3" style="width: 100%; padding: 10px; margin-top: 5px;"></textarea>
+            <textarea name="adresse" required rows="3" style="width: 100%; padding: 10px; margin-top: 5px;" placeholder="Votre adresse complète de livraison"></textarea>
           </div>
 
           <div style="display: flex; gap: 10px;">
@@ -359,190 +185,6 @@
 
     <% } %>
 
-    <!-- Section Commandes -->
-    <div class="commandes-section">
-      <h2 class="section-title">
-        <span>📦</span>
-        Mes Commandes
-        <% if (commandes && commandes.length > 0) { %>
-          <span style="background: #e60000; color: white; border-radius: 50%; padding: 2px 8px; font-size: 0.8em; margin-left: 10px;">
-            <%= commandes.length %>
-          </span>
-        <% } %>
-      </h2>
-
-      <% if (!user) { %>
-        <div class="login-prompt">
-          <h3>👤 Connectez-vous pour voir vos commandes</h3>
-          <p>Connectez-vous à votre compte pour suivre l'état de vos commandes et voir votre historique.</p>
-          <a href="/auth/login" class="btn btn-primary">Se connecter</a>
-          <a href="/auth/register" class="btn btn-outline">Créer un compte</a>
-        </div>
-      <% } else if (commandes.length === 0) { %>
-        <div class="no-commandes">
-          <h3>📭 Aucune commande trouvée</h3>
-          <p>Vous n'avez pas encore passé de commande.</p>
-          <p>Une fois vos commandes validées, elles apparaîtront ici avec leur suivi en temps réel.</p>
-          
-          <% 
-          let boutiqueCommandesUrl = '/';
-          if (slug) {
-              boutiqueCommandesUrl = `/boutique/${slug}`;
-          } else if (req.session.boutiqueActuelle) {
-              boutiqueCommandesUrl = `/boutique/${req.session.boutiqueActuelle}`;
-          }
-          %>
-          
-          <a href="<%= boutiqueCommandesUrl %>" class="btn" style="margin-top: 15px;">
-            Découvrir nos produits
-          </a>
-        </div>
-      <% } else { %>
-        <div class="commandes-list">
-          <% commandes.forEach(commande => { %>
-            <div class="commande-card">
-              <div class="commande-header">
-                <div>
-                  <div class="commande-numero">Commande #<%= commande.numeroCommande %></div>
-                  <div class="commande-date">
-                    Passée le <%= commande.dateCreation.toLocaleDateString('fr-FR') %>
-                  </div>
-                </div>
-                <div class="commande-statut statut-<%= commande.statut %>">
-                  <%= statuts[commande.statut] %>
-                </div>
-              </div>
-
-              <!-- Informations client -->
-              <div class="client-info">
-                <div class="client-detail">
-                  <span>👤</span>
-                  <div>
-                    <strong>Client:</strong> <%= commande.client.nom %>
-                  </div>
-                </div>
-                <div class="client-detail">
-                  <span>📞</span>
-                  <div>
-                    <strong>Téléphone:</strong> <%= commande.client.telephone %>
-                  </div>
-                </div>
-                <div class="client-detail">
-                  <span>📍</span>
-                  <div>
-                    <strong>Adresse:</strong> <%= commande.client.adresse %>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="commande-details">
-                <div class="commande-produits">
-                  <strong>Produits :</strong> 
-                  <%= commande.produits.length %> article(s)
-                </div>
-                <div class="commande-boutique">
-                  <strong>Boutique :</strong> 
-                  <%= commande.boutique.nom %>
-                </div>
-                <div class="commande-total">
-                  <%= commande.total.toFixed(2) %> <%= commande.produits[0] && commande.produits[0].devise %>
-                </div>
-              </div>
-
-              <!-- Détails des produits avec images -->
-              <div class="commande-produits-details">
-                <h4 style="margin-bottom: 10px; color: #333;">Détails des produits :</h4>
-                <% commande.produits.forEach(produit => { %>
-                  <div class="produit-commande-item">
-                    <!-- Image du produit -->
-                    <div>
-                      <% 
-                        let imageUrl = '';
-                        if (produit.produitId && produit.produitId.image) {
-                          imageUrl = produit.produitId.image;
-                        } else if (produit.produitId && produit.produitId.imagesGallery && produit.produitId.imagesGallery.length > 0) {
-                          imageUrl = produit.produitId.imagesGallery[0].url;
-                        } else if (produit.image) {
-                          imageUrl = produit.image;
-                        }
-                      %>
-                      
-                      <% if (imageUrl) { %>
-                        <img src="<%= imageUrl %>" 
-                             alt="<%= produit.produitId ? produit.produitId.nom : produit.nom %>" 
-                             class="produit-commande-image"
-                             onclick="agrandirImage(this)"
-                             title="Cliquer pour agrandir"
-                             style="cursor: pointer;">
-                      <% } else { %>
-                        <div style="width: 60px; height: 60px; background: #f5f5f5; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 0.8em;">
-                          🛍️
-                        </div>
-                      <% } %>
-                    </div>
-                    
-                    <div class="produit-commande-info">
-                      <div class="produit-commande-nom">
-                        <%= produit.produitId ? produit.produitId.nom : produit.nom %>
-                      </div>
-                      <div class="produit-commande-details">
-                        <span class="produit-commande-quantite">
-                          Quantité: <%= produit.quantite %>
-                        </span>
-                        <% if (produit.vendeurId && produit.vendeurId.nom) { %>
-                          • Vendeur: <%= produit.vendeurId.nom %>
-                        <% } %>
-                      </div>
-                    </div>
-                    
-                    <div class="produit-commande-prix">
-                      <div class="produit-commande-sous-total">
-                        <%= (produit.prix * produit.quantite).toFixed(2) %> <%= produit.devise %>
-                      </div>
-                      <div style="font-size: 0.8em; color: #666;">
-                        <%= produit.prix %> <%= produit.devise %>/unité
-                      </div>
-                    </div>
-                  </div>
-                <% }) %>
-              </div>
-
-              <div class="commande-actions">
-                <% 
-                let boutiqueUrl = '/';
-                if (commande.boutique && commande.boutique.slug) {
-                    boutiqueUrl = `/boutique/${commande.boutique.slug}`;
-                } else if (req.session.boutiqueActuelle) {
-                    boutiqueUrl = `/boutique/${req.session.boutiqueActuelle}`;
-                }
-                %>
-                
-                <a href="<%= boutiqueUrl %>" class="btn btn-sm btn-outline">
-                  🏪 Voir la boutique
-                </a>
-              </div>
-            </div>
-          <% }) %>
-        </div>
-
-        <div style="text-align: center; margin-top: 20px;">
-          <% 
-          let allBoutiquesUrl = '/';
-          if (slug) {
-              allBoutiquesUrl = `/boutique/${slug}`;
-          } else if (req.session.boutiqueActuelle) {
-              allBoutiquesUrl = `/boutique/${req.session.boutiqueActuelle}`;
-          } else if (commandes.length > 0 && commandes[0].boutique && commandes[0].boutique.slug) {
-              allBoutiquesUrl = `/boutique/${commandes[0].boutique.slug}`;
-          }
-          %>
-          
-          <a href="<%= allBoutiquesUrl %>" class="btn btn-primary">
-            🛍️ Voir tous nos produits
-          </a>
-        </div>
-      <% } %>
-    </div>
   </div>
 
   <!-- Modal pour images agrandies -->
@@ -579,22 +221,6 @@
         fermerModal();
       }
     });
-
-    // Animation pour les nouvelles commandes
-    document.addEventListener('DOMContentLoaded', function() {
-      const commandeCards = document.querySelectorAll('.commande-card');
-      commandeCards.forEach((card, index) => {
-        card.style.animationDelay = `${index * 0.1}s`;
-        card.style.animation = 'fadeInUp 0.5s ease-out';
-      });
-    });
-
-    // Auto-refresh pour les statuts de commande (toutes les 30 secondes)
-    setInterval(() => {
-      if (window.location.pathname === '/panier') {
-        window.location.reload();
-      }
-    }, 30000);
   </script>
 </body>
 </html>

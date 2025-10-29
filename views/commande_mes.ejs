@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mes Commandes</title>
   <style>
+    /* Gardez le même CSS que vous avez déjà */
     :root {
       --bg-primary: #ffffff;
       --bg-secondary: #f8f9fa;
@@ -38,7 +39,6 @@
       padding: 20px;
     }
 
-    /* Header */
     .page-header {
       display: flex;
       justify-content: space-between;
@@ -80,7 +80,6 @@
       font-size: 0.9rem;
     }
 
-    /* Filtres */
     .filters-bar {
       background: var(--bg-card);
       padding: 20px;
@@ -114,7 +113,6 @@
       min-width: 250px;
     }
 
-    /* Commandes */
     .commande-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
@@ -191,6 +189,17 @@
       gap: 8px;
     }
 
+    .client-type {
+      background: #e9ecef;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .client-type-invite { background: #fff3cd; color: #856404; }
+    .client-type-connecte { background: #d1ecf1; color: #0c5460; }
+
     .produits-list {
       margin: 20px 0;
     }
@@ -214,7 +223,6 @@
       flex: 1;
     }
 
-    /* Styles pour les images des produits */
     .produit-image {
       width: 60px;
       height: 60px;
@@ -287,37 +295,6 @@
       font-size: 0.85rem;
     }
 
-    /* Modal pour image agrandie */
-    .modal-image {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.9);
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-image-content {
-      max-width: 90%;
-      max-height: 90%;
-      border-radius: 8px;
-    }
-
-    .close-modal {
-      position: absolute;
-      top: 20px;
-      right: 35px;
-      color: white;
-      font-size: 40px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    /* Actions */
     .commande-actions {
       padding: 20px;
       background: var(--bg-secondary);
@@ -389,7 +366,6 @@
       border-top: 2px solid var(--border);
     }
 
-    /* États vides */
     .empty-state {
       text-align: center;
       padding: 60px 20px;
@@ -402,7 +378,6 @@
       opacity: 0.5;
     }
 
-    /* Responsive */
     @media (max-width: 768px) {
       .page-header {
         flex-direction: column;
@@ -454,6 +429,9 @@
       <div class="debug-info" style="background: #fff3cd; padding: 10px; border-radius: 6px; font-size: 0.9rem;">
         <strong>Debug:</strong> 
         <%= commandes.length %> commande(s) | Vendeur: <%= user.nom %>
+        <% if (boutique) { %>
+          | Boutique: <%= boutique.nom %>
+        <% } %>
       </div>
     </div>
 
@@ -472,8 +450,8 @@
         <div class="stat-label">En Préparation</div>
       </div>
       <div class="stat-card">
-        <div class="stat-number"><%= commandes.filter(c => c.statut === 'livree').length %></div>
-        <div class="stat-label">Livrées</div>
+        <div class="stat-number"><%= commandes.filter(c => c.client.id === null).length %></div>
+        <div class="stat-label">Clients Invités</div>
       </div>
     </div>
 
@@ -510,6 +488,11 @@
         <div class="empty-state-icon">📦</div>
         <h3 style="margin-bottom: 10px; color: var(--text-primary);">Aucune commande</h3>
         <p>Les commandes de vos produits apparaîtront ici.</p>
+        <div style="margin-top: 20px;">
+          <a href="/commandes/debug-vendeur" class="btn" style="background: #6c757d; color: white;">
+            🔍 Vérifier le débogage
+          </a>
+        </div>
       </div>
     <% } else { %>
       
@@ -520,6 +503,9 @@
             <div class="commande-info">
               <div class="commande-id">Commande #<%= commande.numeroCommande %></div>
               <div class="commande-date"><%= new Date(commande.dateCreation).toLocaleDateString('fr-FR') %></div>
+              <span class="client-type <%= commande.client.id ? 'client-type-connecte' : 'client-type-invite' %>">
+                <%= commande.client.id ? 'Client Connecté' : 'Client Invité' %>
+              </span>
             </div>
             <span class="statut statut-<%= 
               commande.statut === 'en_attente' ? 'enattente' :
@@ -548,7 +534,9 @@
                 <span>👤</span>
                 <div>
                   <strong><%= commande.client.nom %></strong>
-                  <div style="font-size: 0.85rem; color: var(--text-secondary);">Client</div>
+                  <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                    <%= commande.client.id ? 'Client enregistré' : 'Client invité' %>
+                  </div>
                 </div>
               </div>
               <div class="client-detail">
@@ -590,7 +578,6 @@
                       <% if (imageUrl) { %>
                         <img src="<%= imageUrl %>" 
                              alt="<%= produit.produitId ? produit.produitId.nom : produit.nom %>" 
-                             onclick="agrandirImage(this)"
                              title="Cliquer pour agrandir"
                              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="produit-image-placeholder" style="display: none;">
@@ -666,9 +653,9 @@
                   📱 WhatsApp
                 </a>
               <% } %>
-              <button class="btn" onclick="afficherDetails('<%= commande._id %>')">
-                📋 Détails
-              </button>
+              <a href="/commandes/debug-vendeur" class="btn" style="background: #6c757d; color: white;">
+                🔍 Debug
+              </a>
             </div>
           </div>
         </div>
@@ -681,12 +668,6 @@
         ← Retour au dashboard
       </a>
     </div>
-  </div>
-
-  <!-- Modal pour images agrandies -->
-  <div id="imageModal" class="modal-image">
-    <span class="close-modal" onclick="fermerModal()">&times;</span>
-    <img class="modal-image-content" id="modalImage">
   </div>
 
   <script>
@@ -758,27 +739,6 @@
       }
     }
 
-    // Fonctions pour les images
-    function agrandirImage(element) {
-      const modal = document.getElementById('imageModal');
-      const modalImg = document.getElementById('modalImage');
-      modal.style.display = 'flex';
-      modalImg.src = element.src;
-      modalImg.alt = element.alt;
-    }
-
-    function fermerModal() {
-      const modal = document.getElementById('imageModal');
-      modal.style.display = 'none';
-    }
-
-    // Fermer le modal en cliquant à l'extérieur
-    document.getElementById('imageModal').addEventListener('click', function(e) {
-      if (e.target === this) {
-        fermerModal();
-      }
-    });
-
     // Fonctions de filtrage
     function filtrerCommandes() {
       const filtre = document.querySelector('.filter-select').value;
@@ -827,10 +787,6 @@
       commandes.forEach(commande => container.appendChild(commande));
     }
 
-    function afficherDetails(commandeId) {
-      alert(`Détails de la commande ${commandeId} - Fonctionnalité à implémenter`);
-    }
-
     // Raccourci clavier pour sauvegarder (Ctrl + S)
     document.addEventListener('keydown', function(e) {
       if ((e.ctrlKey || e.metaKey) && e.key === 's') {
@@ -843,16 +799,10 @@
       }
     });
 
-    // Fermer le modal avec la touche Échap
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        fermerModal();
-      }
-    });
-
     // Initialisation
     document.addEventListener('DOMContentLoaded', function() {
       console.log('Page "Mes Commandes" chargée avec succès');
+      console.log('Commandes affichées:', <%= commandes.length %>);
     });
   </script>
 </body>

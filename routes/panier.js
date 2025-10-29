@@ -15,13 +15,14 @@ router.use((req, res, next) => {
 });
 
 // GET route pour afficher panier AVEC commandes
+// GET route pour afficher panier - VERSION SIMPLIFIÉE
 router.get('/', async (req, res) => {
   try {
     const panier = req.session.panier || [];
     const user = req.session.user;
 
-    console.log('=== DEBUG PANIER AVEC COMMANDES ===');
-    console.log('Utilisateur:', user ? user.id : 'Non connecté');
+    console.log('=== PANIER SIMPLIFIÉ ===');
+    console.log('Utilisateur:', user ? 'Connecté' : 'Non connecté');
     console.log('Boutique en session:', req.session.boutiqueActuelle);
 
     let slug = req.session.boutiqueActuelle || null;
@@ -33,46 +34,18 @@ router.get('/', async (req, res) => {
       if (boutiqueMatch) {
         slug = boutiqueMatch[1];
         req.session.boutiqueActuelle = slug;
-        console.log('📌 Slug trouvé depuis referer:', slug);
       }
     }
 
-    // Récupérer les commandes de l'utilisateur s'il est connecté
-    let commandes = [];
-    if (user && user.id) {
-      const Commande = require('../models/Commandes');
-      commandes = await Commande.find({ 
-        'client.id': user.id 
-      })
-      .sort({ dateCreation: -1 })
-      .limit(5)
-      .populate('boutique.id', 'nom slug');
-      
-      console.log(`📦 Commandes trouvées: ${commandes.length}`);
-    }
-
-    // Si panier vide, render avec les commandes
+    // Si panier vide
     if (panier.length === 0) {
-      console.log('🛒 Panier vide, slug utilisé:', slug);
-      
-      const renderData = { 
+      return res.render('panier', { 
         panier: [],
         total: 0,
         slug: slug,
         user: user,
-        commandes: commandes,
-        req: req,
-        statuts: {
-          'en_attente': 'En attente',
-          'confirmee': 'Confirmée',
-          'en_preparation': 'En préparation',
-          'expediee': 'Expédiée',
-          'livree': 'Livrée',
-          'annulee': 'Annulée'
-        }
-      };
-      
-      return res.render('panier', renderData);
+        req: req
+      });
     }
 
     // Récupérer les produits depuis la BDD
@@ -81,15 +54,12 @@ router.get('/', async (req, res) => {
       .populate('vendeur', 'nom telephone')
       .populate('boutique', 'slug nom');
 
-    console.log('📋 Produits trouvés dans panier:', produits.length);
-
     // Déterminer le slug final depuis les produits si pas déjà défini
     if (!slug && produits.length > 0) {
       const produitAvecBoutique = produits.find(p => p.boutique && p.boutique.slug);
       if (produitAvecBoutique) {
         slug = produitAvecBoutique.boutique.slug;
         req.session.boutiqueActuelle = slug;
-        console.log('📌 Slug défini depuis produits:', slug);
       }
     }
 
@@ -107,33 +77,19 @@ router.get('/', async (req, res) => {
       };
     });
 
-    const renderData = { 
+    res.render('panier', { 
       panier: panierDetail,
       total: total,
       slug: slug,
       user: user,
-      commandes: commandes,
-      req: req,
-      statuts: {
-        'en_attente': 'En attente',
-        'confirmee': 'Confirmée',
-        'en_preparation': 'En préparation',
-        'expediee': 'Expédiée',
-        'livree': 'Livrée',
-        'annulee': 'Annulée'
-      }
-    };
-
-    console.log('🎯 Données finales - Slug:', slug);
-    
-    res.render('panier', renderData);
+      req: req
+    });
     
   } catch (err) {
-    console.error('Erreur affichage panier avec commandes :', err);
+    console.error('Erreur affichage panier:', err);
     res.status(500).send('Erreur serveur lors de l\'affichage du panier');
   }
 });
-
 // POST route pour ajouter un produit au panier - VERSION ULTRA SIMPLIFIÉE
 router.post('/ajouter/:id', async (req, res) => {
   try {
