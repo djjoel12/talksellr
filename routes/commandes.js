@@ -273,27 +273,26 @@ router.get('/vendeur/:id', estVendeur, async (req, res) => {
 
 // ✅ Route : Page WhatsApp après commande
 // ✅ Route : Page WhatsApp après commande AVEC LIEN SAAS
+// Dans routes/commandes.js - MODIFIER la route WhatsApp
 router.get('/whatsapp/:numero', async (req, res) => {
   try {
     const commande = await Commande.findOne({ numeroCommande: req.params.numero })
       .populate('boutique.id', 'nom slug')
       .populate('client.id', 'nom email')
-      .populate('produits.produitId'); // IMPORTANT : peupler les produits
+      .populate('produits.produitId');
 
     if (!commande) {
       return res.status(404).send('Commande non trouvée');
     }
 
-    // ✅ CORRECTION : Récupérer le numéro du vendeur depuis le premier produit
-    let numeroWhatsApp = "22961720032"; // Valeur par défaut
+    // Récupérer le numéro du vendeur
+    let numeroWhatsApp = "22961720032";
     
     if (commande.produits.length > 0 && commande.produits[0].produitId) {
-      // Récupérer le vendeur du premier produit
       const premierProduit = await Produit.findById(commande.produits[0].produitId)
         .populate('vendeur', 'telephone');
       
       if (premierProduit && premierProduit.vendeur && premierProduit.vendeur.telephone) {
-        // Nettoyer le numéro (supprimer espaces, +, etc.)
         numeroWhatsApp = premierProduit.vendeur.telephone.replace(/\D/g, '');
         console.log('📞 Numéro vendeur récupéré:', numeroWhatsApp);
       }
@@ -301,17 +300,17 @@ router.get('/whatsapp/:numero', async (req, res) => {
 
     console.log('🔍 Numéro WhatsApp utilisé:', numeroWhatsApp);
     
-    // Construire le message WhatsApp
-   const messageWhatsApp = encodeURIComponent(
-  `🛍️ NOUVELLE COMMANDE !\n\n` +
-  `Une nouvelle commande vient d'être passée sur votre boutique.\n\n` +
-  `👤 Client: ${commande.client.nom}\n` +
-  `📞 Téléphone: ${commande.client.telephone}\n` +
-  `💰 Montant: ${commande.total.toFixed(2)} ${commande.produits[0]?.devise || 'EUR'}\n\n` +
-  `📋 Voir toutes vos commandes :\n` +
-  `https://talksellr.onrender.com/commandes/mes-commandes\n\n` + // ← LIEN VERS LA PAGE MES COMMANDES
-  `🎯 Merci de traiter rapidement !`
-);
+    // ✅ LIEN INTELLIGENT POUR TOUS LES CAS
+    const messageWhatsApp = encodeURIComponent(
+      `🛍️ NOUVELLE COMMANDE !\n\n` +
+      `Une nouvelle commande vient d'être passée sur votre boutique.\n\n` +
+      `👤 Client: ${commande.client.nom}\n` +
+      `📞 Téléphone: ${commande.client.telephone}\n` +
+      `💰 Montant: ${commande.total.toFixed(2)} ${commande.produits[0]?.devise || 'EUR'}\n\n` +
+      `📋 Gérer cette commande :\n` +
+      `https://talksellr.onrender.com/auth/login?redirect=commandes\n\n` +
+      `🎯 Merci de traiter rapidement !`
+    );
 
     res.render('whatsapp_confirm', {
       numeroWhatsApp: numeroWhatsApp,
@@ -327,7 +326,6 @@ router.get('/whatsapp/:numero', async (req, res) => {
     res.status(500).send('Erreur lors de la génération de la page WhatsApp');
   }
 });
-
 // ✅ Route GET panier (redirection)
 router.get('/valider', (req, res) => {
   res.redirect('/panier');
