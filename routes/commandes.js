@@ -272,34 +272,54 @@ router.get('/vendeur/:id', estVendeur, async (req, res) => {
 });
 
 // ✅ Route : Page WhatsApp après commande
+// ✅ Route : Page WhatsApp après commande AVEC LIEN SAAS
 router.get('/whatsapp/:numero', async (req, res) => {
   try {
-    const commande = await Commande.findOne({ numeroCommande: req.params.numero });
-    
+    const commande = await Commande.findOne({ numeroCommande: req.params.numero })
+      .populate('boutique.id', 'nom slug')
+      .populate('client.id', 'nom email')
+      .populate('produits.produitId'); // IMPORTANT : peupler les produits
+
     if (!commande) {
       return res.status(404).send('Commande non trouvée');
     }
 
-    // Récupérer le numéro WhatsApp du vendeur
-    const numeroWhatsApp = "22961720032";
+    // ✅ CORRECTION : Récupérer le numéro du vendeur depuis le premier produit
+    let numeroWhatsApp = "22961720032"; // Valeur par défaut
+    
+    if (commande.produits.length > 0 && commande.produits[0].produitId) {
+      // Récupérer le vendeur du premier produit
+      const premierProduit = await Produit.findById(commande.produits[0].produitId)
+        .populate('vendeur', 'telephone');
+      
+      if (premierProduit && premierProduit.vendeur && premierProduit.vendeur.telephone) {
+        // Nettoyer le numéro (supprimer espaces, +, etc.)
+        numeroWhatsApp = premierProduit.vendeur.telephone.replace(/\D/g, '');
+        console.log('📞 Numéro vendeur récupéré:', numeroWhatsApp);
+      }
+    }
+
+    console.log('🔍 Numéro WhatsApp utilisé:', numeroWhatsApp);
     
     // Construire le message WhatsApp
     const messageWhatsApp = encodeURIComponent(
-      `✅ NOUVELLE COMMANDE - ${commande.numeroCommande}\n\n` +
+      `🛍️ NOUVELLE COMMANDE !\n\n` +
+      `Une nouvelle commande vient d'être passée sur votre boutique.\n\n` +
       `👤 Client: ${commande.client.nom}\n` +
       `📞 Téléphone: ${commande.client.telephone}\n` +
-      `📍 Adresse: ${commande.client.adresse}\n` +
-      `💰 Total: ${commande.total.toFixed(2)} ${commande.produits[0]?.devise || 'EUR'}\n\n` +
-      `🛍️ Produits commandés:\n` +
-      commande.produits.map(p => `• ${p.nom} x${p.quantite} - ${(p.prix * p.quantite).toFixed(2)} ${p.devise}`).join('\n') +
-      `\n\n📦 Boutique: ${commande.boutique.nom}`
+      `💰 Montant: ${commande.total.toFixed(2)} ${commande.produits[0]?.devise || 'EUR'}\n\n` +
+      `📋 Voir les détails complets :\n` +
+      `🔗 ${req.protocol}://${req.get('host')}/commandes/vendeur/${commande._id}\n\n` +
+      `🎯 Merci de traiter cette commande rapidement !`
     );
 
-    // Rendre la page WhatsApp
     res.render('whatsapp_confirm', {
       numeroWhatsApp: numeroWhatsApp,
       messageWhatsApp: messageWhatsApp,
-      slug: commande.boutique.slug
+      slug: commande.boutique.slug,
+      commandeId: commande._id,
+      protocol: req.protocol,
+      host: req.get('host')
     });
 
   } catch (err) {
@@ -312,6 +332,7 @@ router.get('/whatsapp/:numero', async (req, res) => {
 router.get('/valider', (req, res) => {
   res.redirect('/panier');
 });
+// ✅ NOUVELLE ROUTE : Redirection lien court
 
 // ✅ Route de débogage détaillée
 router.get('/debug-vendeur', estVendeur, async (req, res) => {

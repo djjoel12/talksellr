@@ -19,6 +19,33 @@
       margin-bottom: 30px;
       letter-spacing: 1px;
     }
+
+    .info-box {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+      text-align: left;
+    }
+
+    .info-box h3 {
+      margin-top: 0;
+      color: #000;
+    }
+
+    .lien-saas {
+      background: #e8f5e8;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+      word-break: break-all;
+    }
+
+    .lien-saas a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: bold;
+    }
     
     .button-container {
       display: flex;
@@ -42,13 +69,14 @@
     }
     
     .btn-whatsapp {
-      background: #000000;
+      background: #25D366;
       color: #ffffff;
+      border-color: #25D366;
     }
     
     .btn-whatsapp:hover {
       background: #ffffff;
-      color: #000000;
+      color: #25D366;
     }
     
     .btn-accueil {
@@ -60,10 +88,35 @@
       background: #000000;
       color: #ffffff;
     }
+
+    .instructions {
+      font-size: 14px;
+      color: #666;
+      margin: 20px 0;
+    }
   </style>
 </head>
 <body>
   <h1>✅ Commande prête à être envoyée !</h1>
+
+  <div class="info-box">
+    <h3>📋 Récapitulatif de la commande :</h3>
+    <p>Le vendeur recevra un message WhatsApp avec un lien direct vers les détails complets de la commande dans votre SaaS.</p>
+    
+    <div class="lien-saas">
+      <strong>Lien de la commande :</strong><br>
+      <a href="/commandes/vendeur/<%= commandeId %>" target="_blank">
+          Voir les détails de la commande
+      </a>
+    </div>
+  </div>
+
+  <div class="instructions">
+    💡 <strong>Le vendeur pourra :</strong><br>
+    • Voir tous les produits avec photos<br>
+    • Contacter le client directement<br>
+    • Gérer le statut de la commande
+  </div>
   
   <div class="button-container">
     <a href="https://wa.me/<%= numeroWhatsApp.replace(/\D/g, '') %>?text=<%= messageWhatsApp %>" 
@@ -77,5 +130,12 @@
       🏠 Retour à l'accueil
     </a>
   </div>
+
+  <script>
+    // Notification de confirmation
+    setTimeout(() => {
+      alert('💡 Le vendeur recevra un lien vers la commande complète avec toutes les photos des produits !');
+    }, 1000);
+  </script>
 </body>
 </html>
