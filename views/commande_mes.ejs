@@ -3,18 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= produit.nom %> - <%= boutique.nom %></title>
+  <title>Mes Commandes • Tableau de Bord</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --lv-dark: #000000;
-      --lv-gold: #C9A96E;
-      --lv-beige: #F5F5F0;
-      --lv-white: #FFFFFF;
-      --lv-light-gray: #F8F8F8;
-      --lv-text: #1A1A1A;
-      --lv-border: #DDDDDD;
-      --transition-luxe: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-light: #dbeafe;
+      --secondary: #64748b;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --error: #ef4444;
+      --background: #f8fafc;
+      --surface: #ffffff;
+      --text-primary: #1e293b;
+      --text-secondary: #64748b;
+      --text-tertiary: #94a3b8;
+      --border: #e2e8f0;
+      --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --radius: 8px;
+      --radius-lg: 12px;
     }
 
     * {
@@ -24,1077 +33,1098 @@
     }
 
     body {
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      color: var(--lv-text);
-      background: var(--lv-white);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--background);
+      color: var(--text-primary);
       line-height: 1.5;
-      font-weight: 300;
-      min-height: 100vh;
+      font-weight: 400;
     }
 
-    .container { 
-      max-width: 1400px; 
-      margin: 0 auto; 
-      padding: 2rem; 
-      position: relative; 
-    }
-
-    /* Header Louis Vuitton */
-    header {
-      background: var(--lv-white);
-      border-bottom: 1px solid var(--lv-border);
-      padding: 1.5rem 0;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      backdrop-filter: blur(20px);
-    }
-   
-    .header-container {
+    .container {
       max-width: 1400px;
       margin: 0 auto;
-      padding: 0 2rem;
+      padding: 24px;
+    }
+
+    /* Header */
+    .dashboard-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-    }
-   
-    .logo {
-      font-size: 1.4rem;
-      font-weight: 300;
-      letter-spacing: 3px;
-      color: var(--lv-dark);
-      text-transform: uppercase;
-      text-decoration: none;
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
     }
 
-    .nav-links {
+    .header-left {
       display: flex;
-      gap: 3rem;
+      align-items: center;
+      gap: 16px;
     }
 
-    .nav-links a {
-      font-size: 0.8rem;
-      font-weight: 300;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--lv-dark);
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-secondary);
       text-decoration: none;
-      transition: color 0.3s ease;
+      font-weight: 500;
+      transition: all 0.2s ease;
     }
 
-    .nav-links a:hover {
-      color: var(--lv-gold);
+    .back-btn:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .page-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .page-title i {
+      color: var(--primary);
     }
 
     .header-actions {
       display: flex;
-      gap: 1.5rem;
+      gap: 12px;
     }
 
-    .icon-btn {
-      background: none;
-      border: none;
-      color: var(--lv-dark);
-      font-size: 1.1rem;
-      cursor: pointer;
-      transition: color 0.3s ease;
-      position: relative;
-    }
-
-    .icon-btn:hover {
-      color: var(--lv-gold);
-    }
-
-    .cart-badge {
-      position: absolute;
-      top: -5px;
-      right: -5px;
-      background: var(--lv-gold);
-      color: var(--lv-dark);
-      border-radius: 50%;
-      width: 16px;
-      height: 16px;
-      font-size: 0.6rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* Détail Produit LV */
-    .produit-detail { 
-      display: grid; 
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem; 
-      margin: 4rem 0; 
-      align-items: start;
-    }
-
-    /* Galerie Produit */
-    .produit-gallery {
-      position: relative;
-    }
-
-    .gallery-main {
-      width: 100%;
-      height: 600px;
-      object-fit: cover;
-      border-radius: 0;
-      margin-bottom: 1rem;
-    }
-
-    .gallery-thumbnails {
-      display: flex;
-      gap: 0.5rem;
-      overflow-x: auto;
-      padding: 1rem 0;
-    }
-
-    .thumbnail {
-      width: 80px;
-      height: 80px;
-      object-fit: cover;
-      cursor: pointer;
-      border: 1px solid var(--lv-border);
-      transition: all 0.3s ease;
-      opacity: 0.7;
-    }
-
-    .thumbnail:hover,
-    .thumbnail.active {
-      opacity: 1;
-      border-color: var(--lv-gold);
-    }
-
-    .gallery-badge {
-      position: absolute;
-      top: 1rem;
-      left: 1rem;
-      background: var(--lv-gold);
-      color: var(--lv-dark);
-      padding: 0.5rem 1rem;
-      font-size: 0.7rem;
-      font-weight: 500;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-
-    /* Informations Produit */
-    .produit-info { 
-      padding: 2rem 0;
-    }
-
-    .produit-category {
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: var(--lv-gold);
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      margin-bottom: 1rem;
-    }
-
-    .produit-nom { 
-      font-size: 2.5rem; 
-      font-weight: 300;
-      letter-spacing: 2px;
-      margin-bottom: 1.5rem; 
-      line-height: 1.2;
-      text-transform: uppercase;
-    }
-
-    .produit-prix { 
-      font-size: 1.8rem; 
-      color: var(--lv-dark); 
-      margin-bottom: 2rem; 
-      font-weight: 300;
-      letter-spacing: 1px;
-    }
-
-    .produit-description { 
-      margin-bottom: 2rem; 
-      line-height: 1.6;
-      font-weight: 300;
-      letter-spacing: 0.5px;
-      color: var(--lv-text);
-      opacity: 0.8;
-    }
-
-    /* Sélecteur Quantité LV */
-    .quantite-selector { 
-      margin: 2rem 0; 
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .quantite-label {
-      font-size: 0.9rem;
-      font-weight: 500;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--lv-dark);
-    }
-
-    .quantite-controls {
-      display: flex;
-      align-items: center;
-      border: 1px solid var(--lv-border);
-    }
-
-    .quantite-btn {
-      background: var(--lv-white);
-      border: none;
-      padding: 0.8rem 1rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      color: var(--lv-dark);
-      font-size: 1rem;
-    }
-
-    .quantite-btn:hover {
-      background: var(--lv-gold);
-      color: var(--lv-dark);
-    }
-
-    .quantite-input {
-      width: 60px;
-      text-align: center;
-      border: none;
-      padding: 0.8rem;
-      font-size: 1rem;
-      background: var(--lv-white);
-      -moz-appearance: textfield;
-    }
-
-    .quantite-input::-webkit-outer-spin-button,
-    .quantite-input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-
-    /* Boutons LV */
-    .btn { 
+    .btn {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      gap: 0.8rem;
-      padding: 1.2rem 2.5rem; 
-      background: var(--lv-dark); 
-      color: var(--lv-white); 
-      text-decoration: none; 
-      border-radius: 0;
-      border: 2px solid var(--lv-dark);
+      gap: 8px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 14px;
       cursor: pointer;
-      font-size: 0.8rem;
-      font-weight: 500;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      transition: all 0.3s var(--transition-luxe);
-      position: relative;
-      overflow: hidden;
+      transition: all 0.2s ease;
+      text-decoration: none;
     }
 
-    .btn-primary { 
-      background: var(--lv-dark); 
-      color: var(--lv-white);
+    .btn-primary {
+      background: var(--primary);
+      color: white;
     }
 
-    .btn-primary:hover { 
-      background: var(--lv-gold); 
-      border-color: var(--lv-gold);
-      color: var(--lv-dark);
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--background);
+      border-color: var(--text-tertiary);
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      padding: 24px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
       transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
     }
 
-    .btn-outline {
-      background: transparent;
-      color: var(--lv-dark);
-      border: 2px solid var(--lv-dark);
-    }
-
-    .btn-outline:hover {
-      background: var(--lv-dark);
-      color: var(--lv-white);
-      transform: translateY(-2px);
-    }
-
-    .btn-whatsapp {
-      background: #25D366;
-      border-color: #25D366;
-      color: var(--lv-white);
-    }
-
-    .btn-whatsapp:hover {
-      background: #128C7E;
-      border-color: #128C7E;
-      transform: translateY(-2px);
-    }
-
-    .action-buttons {
+    .stat-header {
       display: flex;
-      gap: 1rem;
-      margin: 2rem 0;
+      justify-content: between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .stat-icon.blue { background: var(--primary-light); color: var(--primary); }
+    .stat-icon.green { background: #d1fae5; color: var(--success); }
+    .stat-icon.orange { background: #fef3c7; color: var(--warning); }
+    .stat-icon.purple { background: #e9d5ff; color: #8b5cf6; }
+
+    .stat-content {
+      flex: 1;
+    }
+
+    .stat-number {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--text-primary);
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .stat-trend {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 20px;
+      background: var(--success);
+      color: white;
+    }
+
+    /* Filters Bar */
+    .filters-bar {
+      background: var(--surface);
+      padding: 20px;
+      border-radius: var(--radius-lg);
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      gap: 16px;
+      align-items: center;
       flex-wrap: wrap;
     }
 
-    /* Informations Stock */
-    .stock-info {
-      padding: 1rem;
-      border: 1px solid var(--lv-border);
-      margin-bottom: 2rem;
-      background: var(--lv-beige);
-    }
-
-    .stock-status {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-weight: 500;
-    }
-
-    .stock-available {
-      color: #28a745;
-    }
-
-    .stock-low {
-      color: var(--lv-gold);
-    }
-
-    .stock-out {
-      color: #dc3545;
-    }
-
-    /* Informations Vendeur */
-    .vendeur-info { 
-      background: var(--lv-beige); 
-      padding: 2rem; 
-      border-radius: 0;
-      margin-bottom: 2rem; 
-      border-left: 3px solid var(--lv-gold);
-    }
-
-    .vendeur-name {
-      font-size: 1.2rem;
-      font-weight: 500;
-      margin-bottom: 0.5rem;
-      color: var(--lv-dark);
-    }
-
-    .vendeur-boutique {
-      font-size: 1rem;
-      color: var(--lv-gold);
-      margin-bottom: 1rem;
-      font-weight: 300;
-      letter-spacing: 1px;
-    }
-
-    .vendeur-contact {
-      font-size: 0.9rem;
-      color: var(--lv-text);
-      opacity: 0.8;
-    }
-
-    /* Produits Similaires LV */
-    .produits-similaires { 
-      margin-top: 6rem; 
-      padding-top: 4rem; 
-      border-top: 1px solid var(--lv-border); 
-    }
-
-    .section-title {
-      text-align: center; 
-      margin-bottom: 3rem; 
-      font-size: 2rem;
-      font-weight: 300;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--lv-dark);
+    .search-box {
       position: relative;
+      flex: 1;
+      min-width: 300px;
     }
 
-    .section-title::after {
-      content: '';
+    .search-box input {
+      width: 100%;
+      padding: 12px 16px 12px 44px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--background);
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+
+    .search-icon {
       position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60px;
-      height: 1px;
-      background: var(--lv-gold);
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-tertiary);
     }
 
-    .produits-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-      margin-top: 2rem;
-    }
-
-    .produit-card {
-      background: var(--lv-white);
-      border: 1px solid var(--lv-border);
-      transition: all 0.4s var(--transition-luxe);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .produit-card:hover {
-      transform: translateY(-8px);
-      border-color: var(--lv-gold);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-    }
-
-    .produit-card-image {
-      height: 250px; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center;
-      overflow: hidden;
-      background: var(--lv-beige);
-    }
-
-    .produit-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover; 
-      transition: transform 0.6s var(--transition-luxe);
-    }
-
-    .produit-card:hover img {
-      transform: scale(1.05);
-    }
-
-    .produit-card-content {
-      padding: 1.5rem;
-    }
-
-    .produit-card h3 {
-      font-size: 1rem; 
-      margin: 0 0 0.5rem 0; 
-      color: var(--lv-dark); 
-      font-weight: 400;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      line-height: 1.3;
-    }
-
-    .produit-card-prix {
-      font-size: 1.1rem;
-      font-weight: 300;
-      color: var(--lv-dark);
-      margin: 0.5rem 0;
-      letter-spacing: 1px;
-    }
-
-    .produit-card-boutique {
-      font-size: 0.8rem;
-      color: var(--lv-gold);
-      margin-bottom: 1rem;
-      font-weight: 300;
-      letter-spacing: 0.5px;
-    }
-
-    .produit-card-actions {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .btn-card {
-      flex: 1;
-      padding: 0.8rem 1rem;
-      font-size: 0.7rem;
-      text-align: center;
-    }
-
-    .placeholder-image {
-      width: 100%;
-      height: 100%;
-      background: var(--lv-beige);
+    .filter-group {
       display: flex;
       align-items: center;
-      justify-content: center;
-      color: var(--lv-dark);
-      opacity: 0.5;
-      font-size: 0.8rem;
-      letter-spacing: 1px;
+      gap: 8px;
     }
 
-    /* Panier Latéral LV */
-    .panier-lateral {
-      position: fixed;
-      top: 0;
-      right: -400px;
-      width: 380px;
-      height: 100vh;
-      background: var(--lv-white);
-      border-left: 1px solid var(--lv-border);
-      box-shadow: -5px 0 30px rgba(0,0,0,0.1);
-      z-index: 1001;
-      transition: right 0.4s var(--transition-luxe);
-      display: flex;
-      flex-direction: column;
+    .filter-label {
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 500;
     }
 
-    .panier-lateral.open {
-      right: 0;
-    }
-
-    .panier-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 2rem;
-      border-bottom: 1px solid var(--lv-border);
-      background: var(--lv-dark);
-      color: var(--lv-white);
-    }
-
-    .panier-title {
-      font-size: 1.2rem;
-      font-weight: 300;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-
-    .btn-close-panier {
-      background: none;
-      border: none;
-      color: var(--lv-white);
-      font-size: 1.5rem;
+    .filter-select {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text-primary);
+      font-size: 14px;
+      min-width: 140px;
       cursor: pointer;
-      padding: 0.5rem;
-      transition: color 0.3s ease;
     }
 
-    .btn-close-panier:hover {
-      color: var(--lv-gold);
+    .filter-select:focus {
+      outline: none;
+      border-color: var(--primary);
     }
 
-    .panier-content {
-      flex: 1;
-      overflow-y: auto;
-      padding: 2rem;
+    /* Orders Grid */
+    .orders-grid {
+      display: grid;
+      gap: 20px;
     }
 
-    .panier-item {
-      display: flex;
-      align-items: center;
-      padding: 1rem 0;
-      border-bottom: 1px solid var(--lv-border);
-      gap: 1rem;
-    }
-
-    .panier-item-image {
-      width: 60px;
-      height: 60px;
-      object-fit: cover;
-      flex-shrink: 0;
-    }
-
-    .panier-item-info {
-      flex: 1;
-    }
-
-    .panier-item-nom {
-      font-size: 0.9rem;
-      font-weight: 400;
-      margin-bottom: 0.3rem;
-      color: var(--lv-dark);
-    }
-
-    .panier-item-details {
-      font-size: 0.8rem;
-      color: var(--lv-text);
-      opacity: 0.7;
-    }
-
-    .panier-item-prix {
-      color: var(--lv-dark);
-      font-weight: 500;
-    }
-
-    .panier-footer {
-      padding: 2rem;
-      border-top: 1px solid var(--lv-border);
-      background: var(--lv-beige);
-    }
-
-    .panier-total {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-      font-size: 1.1rem;
-      font-weight: 500;
-    }
-
-    .panier-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-    }
-
-    .btn-panier {
-      width: 100%;
-      text-align: center;
-    }
-
-    .empty-panier {
-      text-align: center;
-      padding: 3rem 2rem;
-      color: var(--lv-text);
-      opacity: 0.6;
-    }
-
-    .empty-panier i {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      opacity: 0.3;
-    }
-
-    /* Overlay */
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 1000;
-      opacity: 0;
-      visibility: hidden;
+    .order-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow);
       transition: all 0.3s ease;
     }
 
-    .overlay.active {
-      opacity: 1;
-      visibility: visible;
+    .order-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .order-header {
+      padding: 20px 24px;
+      background: var(--background);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .order-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .order-id {
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--text-primary);
+    }
+
+    .order-date {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    .customer-badge {
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .customer-badge.registered { background: #d1fae5; color: #065f46; }
+    .customer-badge.guest { background: #fef3c7; color: #92400e; }
+
+    .status-badge {
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .status-pending { background: #fef3c7; color: #92400e; }
+    .status-confirmed { background: #dbeafe; color: #1e40af; }
+    .status-processing { background: #fef3c7; color: #92400e; }
+    .status-shipped { background: #d1fae5; color: #065f46; }
+    .status-delivered { background: #dcfce7; color: #166534; }
+    .status-cancelled { background: #fee2e2; color: #991b1b; }
+
+    .order-body {
+      padding: 24px;
+    }
+
+    .customer-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+      padding: 16px;
+      background: var(--background);
+      border-radius: var(--radius);
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .info-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .info-content {
+      flex: 1;
+    }
+
+    .info-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 2px;
+    }
+
+    .info-value {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .products-section {
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .products-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .product-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px;
+      background: var(--background);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+
+    .product-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex: 1;
+    }
+
+    .product-image {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-image-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--background);
+      color: var(--text-tertiary);
+      font-size: 20px;
+    }
+
+    .product-details {
+      flex: 1;
+    }
+
+    .product-name {
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--text-primary);
+    }
+
+    .product-meta {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .product-price {
+      text-align: right;
+      min-width: 120px;
+    }
+
+    .product-total {
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .product-unit {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .order-total {
+      text-align: right;
+      font-size: 18px;
+      font-weight: 700;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 2px solid var(--border);
+      color: var(--text-primary);
+    }
+
+    .order-actions {
+      padding: 20px 24px;
+      background: var(--background);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .action-group {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .status-selector {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text-primary);
+      min-width: 160px;
+      font-size: 14px;
+    }
+
+    .save-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: var(--radius);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .save-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .message {
+      font-size: 14px;
+      margin-left: 12px;
+      font-weight: 500;
+    }
+
+    .message.success { color: var(--success); }
+    .message.error { color: var(--error); }
+    .message.loading { color: var(--text-secondary); }
+
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .icon-btn:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .icon-btn.whatsapp:hover {
+      background: #25D366;
+      border-color: #25D366;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 80px 20px;
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .empty-state-icon {
+      font-size: 64px;
+      margin-bottom: 24px;
+      opacity: 0.5;
+      color: var(--text-tertiary);
+    }
+
+    .empty-state h3 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+
+    .empty-state p {
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     /* Responsive */
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
       .container {
-        padding: 1rem;
+        padding: 16px;
       }
-
-      .produit-detail { 
-        grid-template-columns: 1fr; 
-        gap: 2rem;
-      }
-
-      .gallery-main {
-        height: 400px;
-      }
-
-      .produit-nom {
-        font-size: 2rem;
-      }
-
-      .action-buttons {
+      
+      .dashboard-header {
         flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
       }
-
-      .btn {
+      
+      .header-actions {
         width: 100%;
-        justify-content: center;
+        justify-content: flex-end;
       }
+    }
 
-      .produits-grid {
+    @media (max-width: 768px) {
+      .filters-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .search-box {
+        min-width: auto;
+      }
+      
+      .order-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+      }
+      
+      .order-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .action-group {
+        justify-content: space-between;
+      }
+      
+      .product-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      
+      .product-price {
+        text-align: left;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .stats-grid {
         grid-template-columns: 1fr;
       }
-
-      .panier-lateral {
-        width: 100%;
-        right: -100%;
+      
+      .customer-info {
+        grid-template-columns: 1fr;
       }
-
-      .nav-links {
-        display: none;
+      
+      .action-buttons {
+        width: 100%;
+        justify-content: space-between;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Header -->
-  <header>
-    <div class="header-container">
-      <a href="/" class="logo"><%= boutique.nom %></a>
-      
-      <nav class="nav-links">
-        <a href="/">ACCUEIL</a>
-        <a href="#produits-similaires">PRODUITS SIMILAIRES</a>
-        <a href="/boutique/<%= produit.boutique.slug %>">BOUTIQUE</a>
-        <a href="/contact">CONTACT</a>
-      </nav>
-      
-      <div class="header-actions">
-        <button class="icon-btn">
-          <i class="fas fa-search"></i>
-        </button>
-        <button class="icon-btn" onclick="togglePanier()" style="position: relative;">
-          <i class="fas fa-shopping-bag"></i>
-          <% if (panier && panier.length > 0) { %>
-            <span class="cart-badge"><%= panier.reduce((total, item) => total + item.quantite, 0) %></span>
-          <% } %>
-        </button>
-        <button class="icon-btn">
-          <i class="fas fa-user"></i>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Overlay -->
-  <div class="overlay" id="overlay" onclick="togglePanier()"></div>
-
-  <!-- Panier Latéral -->
-  <div class="panier-lateral" id="panierLateral">
-    <div class="panier-header">
-      <h3 class="panier-title">MON PANIER</h3>
-      <button class="btn-close-panier" onclick="togglePanier()">×</button>
-    </div>
-    
-    <div class="panier-content">
-      <% if (!panier || panier.length === 0) { %>
-        <div class="empty-panier">
-          <i class="fas fa-shopping-bag"></i>
-          <p>Votre panier est vide</p>
-          <p style="font-size: 0.9em; margin-top: 0.5rem; opacity: 0.6;">Ajoutez des produits pour les voir ici</p>
-        </div>
-      <% } else { %>
-        <% 
-        let totalArticles = 0;
-        panier.forEach((item, index) => { 
-          totalArticles += item.quantite;
-        %>
-          <div class="panier-item">
-            <% if (item.produit && item.produit.image) { %>
-              <img src="<%= item.produit.image %>" alt="<%= item.produit.nom %>" class="panier-item-image">
-            <% } else { %>
-              <div class="placeholder-image" style="width: 60px; height: 60px; font-size: 0.6em;">
-                IMG
-              </div>
-            <% } %>
-            
-            <div class="panier-item-info">
-              <div class="panier-item-nom">
-                <%= item.produit ? item.produit.nom.substring(0, 30) + (item.produit.nom.length > 30 ? '...' : '') : 'Produit' %>
-              </div>
-              <div class="panier-item-details">
-                <%= item.quantite %> × 
-                <span class="panier-item-prix">
-                  <%= item.produit ? item.produit.prix : '0' %> <%= item.produit ? item.produit.devise : 'EUR' %>
-                </span>
-              </div>
-            </div>
-            
-            <form action="/panier/supprimer/<%= item.produit ? item.produit._id : '' %>" method="POST" style="margin: 0;">
-              <button type="submit" style="background: none; border: none; color: #dc3545; cursor: pointer; padding: 5px;" title="Supprimer">
-                <i class="fas fa-trash"></i>
-              </button>
-            </form>
-          </div>
-        <% }) %>
-      <% } %>
-    </div>
-    
-    <% if (panier && panier.length > 0) { %>
-      <div class="panier-footer">
-        <div class="panier-total">
-          <span>Total:</span>
-          <strong><%= totalPanier.toFixed(2) %> <%= panier[0] && panier[0].produit ? panier[0].produit.devise : 'EUR' %></strong>
-        </div>
-        <div style="text-align: center; font-size: 0.8em; color: var(--lv-text); opacity: 0.7; margin-bottom: 1rem;">
-          <%= totalArticles %> article(s)
-        </div>
-        <div class="panier-actions">
-          <a href="/panier" class="btn btn-outline btn-panier">Voir le panier complet</a>
-          <a href="/commandes/valider" class="btn btn-primary btn-panier">Passer la commande</a>
-        </div>
-      </div>
-    <% } %>
-  </div>
-
   <div class="container">
-    <!-- Détails du produit principal -->
-    <div class="produit-detail">
-      <div class="produit-gallery">
-        <!-- Image principale -->
-        <img src="<%= produit.image %>" alt="<%= produit.nom %>" class="gallery-main" id="mainImage">
-        
-        <!-- Badge -->
-        <div class="gallery-badge">NOUVEAU</div>
-
-        <!-- Vidéo du produit -->
-        <% if (produit.videoUrl) { %>
-          <div style="margin-top: 2rem;">
-            <video controls width="100%" style="border: 1px solid var(--lv-border);">
-              <source src="<%= produit.videoUrl %>" type="video/mp4">
-              Votre navigateur ne supporte pas la vidéo.
-            </video>
-          </div>
-        <% } %>
+    <!-- Header -->
+    <div class="dashboard-header">
+      <div class="header-left">
+        <a href="/vendeur/dashboard" class="back-btn">
+          <i class="fas fa-arrow-left"></i>
+          Retour au Dashboard
+        </a>
+        <h1 class="page-title">
+          <i class="fas fa-shopping-bag"></i>
+          Mes Commandes
+        </h1>
       </div>
-      
-      <div class="produit-info">
-        <div class="produit-category">COLLECTION EXCLUSIVE</div>
-        <h1 class="produit-nom"><%= produit.nom %></h1>
-        <div class="produit-prix"><%= produit.prix %> <%= produit.devise %></div>
-        
-        <!-- Informations stock -->
-        <div class="stock-info">
-          <div class="stock-status">
-            <strong>Disponibilité :</strong> 
-            <% if (produit.stock > 10) { %>
-              <span class="stock-available">✓ En stock</span>
-            <% } else if (produit.stock > 0) { %>
-              <span class="stock-low">⚠ Stock limité (<%= produit.stock %> restants)</span>
-            <% } else { %>
-              <span class="stock-out">✗ Rupture de stock</span>
-            <% } %>
+      <div class="header-actions">
+        <button class="btn btn-secondary">
+          <i class="fas fa-download"></i>
+          Exporter
+        </button>
+        <button class="btn btn-primary">
+          <i class="fas fa-sync"></i>
+          Actualiser
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon blue">
+            <i class="fas fa-shopping-bag"></i>
           </div>
-          <% if (produit.sku) { %>
-            <div style="margin-top: 0.5rem; font-size: 0.9em; color: var(--lv-text); opacity: 0.7;">
-              Référence: <%= produit.sku %>
-            </div>
-          <% } %>
+          <div class="stat-content">
+            <div class="stat-number"><%= commandes.length %></div>
+            <div class="stat-label">Commandes Total</div>
+          </div>
         </div>
-        
-        <div class="produit-description">
-          <%= produit.description %>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon orange">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-number"><%= commandes.filter(c => c.statut === 'en_attente').length %></div>
+            <div class="stat-label">En Attente</div>
+          </div>
         </div>
-
-        <!-- Formulaire d'ajout au panier -->
-        <form action="/panier/ajouter/<%= produit._id %>" method="POST" id="form-ajout-panier">
-          <div class="quantite-selector">
-            <span class="quantite-label">Quantité:</span>
-            <div class="quantite-controls">
-              <button type="button" class="quantite-btn" onclick="changeQuantity(-1)">-</button>
-              <input type="number" name="quantite" id="quantite" value="1" min="1" max="<%= produit.stock || 10 %>" class="quantite-input">
-              <button type="button" class="quantite-btn" onclick="changeQuantity(1)">+</button>
-            </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon green">
+            <i class="fas fa-cog"></i>
           </div>
-          
-          <div class="action-buttons">
-            <button type="submit" class="btn btn-primary" 
-                    <%= produit.stock === 0 ? 'disabled style="background: #ccc; border-color: #ccc;"' : '' %>>
-              <i class="fas fa-shopping-bag"></i>
-              <%= produit.stock === 0 ? 'RUPTURE DE STOCK' : 'AJOUTER AU PANIER' %>
-            </button>
-
-            <!-- Lien direct WhatsApp -->
-            <% if (produit.vendeur.telephone) { %>
-              <a href="https://wa.me/<%= produit.vendeur.telephone.replace(/\D/g, '') %>?text=Bonjour! Je suis intéressé par le produit: <%= encodeURIComponent(produit.nom) %> (<%= encodeURIComponent(produit.prix + ' ' + produit.devise) %>)" 
-                 target="_blank" 
-                 class="btn btn-whatsapp">
-                <i class="fab fa-whatsapp"></i>
-                CONTACTER
-              </a>
-            <% } %>
+          <div class="stat-content">
+            <div class="stat-number"><%= commandes.filter(c => c.statut === 'en_preparation').length %></div>
+            <div class="stat-label">En Préparation</div>
           </div>
-        </form>
-
-        <!-- Informations vendeur -->
-        <div class="vendeur-info">
-          <div class="vendeur-name"><%= produit.vendeur.nom %></div>
-          <div class="vendeur-boutique"><%= produit.boutique.nom %></div>
-          <% if (produit.vendeur.telephone) { %>
-            <div class="vendeur-contact">
-              <i class="fas fa-phone"></i> <%= produit.vendeur.telephone %>
-            </div>
-          <% } %>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon purple">
+            <i class="fas fa-user-clock"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-number"><%= commandes.filter(c => c.client.id === null).length %></div>
+            <div class="stat-label">Clients Invités</div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Section : Autres produits du vendeur -->
-    <% if (typeof produitsVendeur !== 'undefined' && produitsVendeur.length > 0) { %>
-      <div class="produits-similaires" id="produits-similaires">
-        <h2 class="section-title">
-          AUTRES PRODUITS DE <%= produit.vendeur.nom.toUpperCase() %>
-        </h2>
-        
-        <div class="produits-grid">
-          <% produitsVendeur.forEach(produitSimilaire => { %>
-            <div class="produit-card">
-              <a href="/boutique/produit/<%= produitSimilaire._id %>" style="text-decoration: none; color: inherit;">
-                <div class="produit-card-image">
-                  <% if (produitSimilaire.image) { %>
-                    <img src="<%= produitSimilaire.image %>" 
-                         alt="<%= produitSimilaire.nom %>">
-                  <% } else { %>
-                    <div class="placeholder-image">
-                      <i class="fas fa-image"></i>
-                    </div>
-                  <% } %>
-                </div>
-                
-                <div class="produit-card-content">
-                  <h3><%= produitSimilaire.nom %></h3>
-                  
-                  <div class="produit-card-prix">
-                    <%= produitSimilaire.prix %> <%= produitSimilaire.devise %>
-                  </div>
-                  
-                  <% if (produitSimilaire.boutique && produitSimilaire.boutique.nom) { %>
-                    <div class="produit-card-boutique">
-                      <%= produitSimilaire.boutique.nom %>
-                    </div>
-                  <% } %>
-                  
-                  <div class="produit-card-actions">
-                    <a href="/boutique/produit/<%= produitSimilaire._id %>" class="btn btn-outline btn-card">
-                      VOIR
-                    </a>
-                    <form action="/panier/ajouter/<%= produitSimilaire._id %>" method="POST" style="flex: 1;">
-                      <input type="hidden" name="quantite" value="1">
-                      <button type="submit" class="btn btn-primary btn-card">
-                        <i class="fas fa-shopping-bag"></i>
-                      </button>
-                    </form>
-                  </div>
-                </div>
-              </a>
-            </div>
-          <% }); %>
+    <!-- Filters Bar -->
+    <div class="filters-bar">
+      <div class="search-box">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" placeholder="Rechercher commandes, clients, produits..." onkeyup="rechercherCommandes()">
+      </div>
+      
+      <div class="filter-group">
+        <span class="filter-label">Statut:</span>
+        <select class="filter-select" onchange="filtrerCommandes()">
+          <option value="all">Tous les statuts</option>
+          <option value="en_attente">En attente</option>
+          <option value="confirmee">Confirmée</option>
+          <option value="en_preparation">En préparation</option>
+          <option value="expediee">Expédiée</option>
+          <option value="livree">Livrée</option>
+          <option value="annulee">Annulée</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <span class="filter-label">Trier par:</span>
+        <select class="filter-select" onchange="trierCommandes()">
+          <option value="date-desc">Plus récentes</option>
+          <option value="date-asc">Plus anciennes</option>
+          <option value="total-desc">Montant (↓)</option>
+          <option value="total-asc">Montant (↑)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Orders List -->
+    <% if (commandes.length === 0) { %>
+      <div class="empty-state">
+        <div class="empty-state-icon">
+          <i class="fas fa-shopping-bag"></i>
         </div>
-        
-        <!-- Lien vers toute la boutique -->
-        <div style="text-align: center; margin-top: 3rem;">
-          <a href="/boutique/<%= produit.boutique.slug %>" class="btn btn-outline">
-            <i class="fas fa-store"></i>
-            VISITER LA BOUTIQUE <%= produit.boutique.nom.toUpperCase() %>
-          </a>
-        </div>
+        <h3>Aucune Commande</h3>
+        <p>Lorsque les clients achètent vos produits, leurs commandes apparaîtront ici.</p>
+        <button class="btn btn-primary">
+          <i class="fas fa-sync"></i>
+          Vérifier les Nouvelles Commandes
+        </button>
       </div>
     <% } else { %>
-      <!-- Message si aucun autre produit du vendeur -->
-      <div class="produits-similaires">
-        <h2 class="section-title">
-          DÉCOUVREZ NOTRE UNIVERS
-        </h2>
-        <div style="text-align: center; color: var(--lv-text); opacity: 0.6; padding: 3rem;">
-          <p>Ce vendeur n'a pas d'autres produits pour le moment.</p>
-          <a href="/boutique/<%= produit.boutique.slug %>" class="btn btn-outline" style="margin-top: 1.5rem;">
-            <i class="fas fa-store"></i>
-            DÉCOUVRIR LA BOUTIQUE
-          </a>
-        </div>
+      <div class="orders-grid">
+        <% commandes.forEach((commande, index) => { %>
+          <div class="order-card" data-commande-id="<%= commande._id %>" data-statut="<%= commande.statut %>" data-total="<%= commande.total %>" data-date="<%= commande.dateCreation %>">
+            
+            <!-- Order Header -->
+            <div class="order-header">
+              <div class="order-info">
+                <div class="order-id">Commande #<%= commande.numeroCommande %></div>
+                <div class="order-date"><%= new Date(commande.dateCreation).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) %></div>
+                <span class="customer-badge <%= commande.client.id ? 'registered' : 'guest' %>">
+                  <%= commande.client.id ? 'Client Enregistré' : 'Client Invité' %>
+                </span>
+              </div>
+              <span class="status-badge status-<%= 
+                commande.statut === 'en_attente' ? 'pending' :
+                commande.statut === 'confirmee' ? 'confirmed' :
+                commande.statut === 'en_preparation' ? 'processing' :
+                commande.statut === 'expediee' ? 'shipped' :
+                commande.statut === 'livree' ? 'delivered' :
+                commande.statut === 'annulee' ? 'cancelled' : 'pending'
+              %>">
+                <%= 
+                  commande.statut === 'en_attente' ? 'En Attente' :
+                  commande.statut === 'confirmee' ? 'Confirmée' :
+                  commande.statut === 'en_preparation' ? 'En Préparation' :
+                  commande.statut === 'expediee' ? 'Expédiée' :
+                  commande.statut === 'livree' ? 'Livrée' :
+                  commande.statut === 'annulee' ? 'Annulée' : 'En Attente'
+                %>
+              </span>
+            </div>
+
+            <!-- Order Body -->
+            <div class="order-body">
+              <!-- Customer Info -->
+              <div class="customer-info">
+                <div class="info-item">
+                  <div class="info-icon">
+                    <i class="fas fa-user"></i>
+                  </div>
+                  <div class="info-content">
+                    <div class="info-label">Client</div>
+                    <div class="info-value"><%= commande.client.nom %></div>
+                  </div>
+                </div>
+                <div class="info-item">
+                  <div class="info-icon">
+                    <i class="fas fa-phone"></i>
+                  </div>
+                  <div class="info-content">
+                    <div class="info-label">Téléphone</div>
+                    <div class="info-value"><%= commande.client.telephone %></div>
+                  </div>
+                </div>
+                <div class="info-item">
+                  <div class="info-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                  </div>
+                  <div class="info-content">
+                    <div class="info-label">Adresse</div>
+                    <div class="info-value"><%= commande.client.adresse %></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Products -->
+              <div class="products-section">
+                <h3 class="section-title">
+                  <i class="fas fa-box"></i>
+                  Produits Commandés (<%= commande.produits.length %>)
+                </h3>
+                <div class="products-grid">
+                  <% commande.produits.forEach((produit, pIndex) => { %>
+                    <div class="product-item">
+                      <div class="product-info">
+                        <div class="product-image">
+                          <% 
+                            let imageUrl = '';
+                            if (produit.produitId && produit.produitId.image) {
+                              imageUrl = produit.produitId.image;
+                            } else if (produit.produitId && produit.produitId.imagesGallery && produit.produitId.imagesGallery.length > 0) {
+                              imageUrl = produit.produitId.imagesGallery[0].url;
+                            } else if (produit.image) {
+                              imageUrl = produit.image;
+                            }
+                          %>
+                          
+                          <% if (imageUrl) { %>
+                            <img src="<%= imageUrl %>" 
+                                 alt="<%= produit.produitId ? produit.produitId.nom : produit.nom %>"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="product-image-placeholder" style="display: none;">
+                              <i class="fas fa-box"></i>
+                            </div>
+                          <% } else { %>
+                            <div class="product-image-placeholder">
+                              <i class="fas fa-box"></i>
+                            </div>
+                          <% } %>
+                        </div>
+                        
+                        <div class="product-details">
+                          <div class="product-name">
+                            <%= produit.produitId ? produit.produitId.nom : produit.nom %>
+                          </div>
+                          <div class="product-meta">
+                            <span>Quantité: <strong><%= produit.quantite %></strong></span>
+                            <% if (produit.vendeurId && produit.vendeurId.nom) { %>
+                              <span>• Vendeur: <%= produit.vendeurId.nom %></span>
+                            <% } %>
+                            <% if (produit.produitId && produit.produitId.sku) { %>
+                              <span>• SKU: <%= produit.produitId.sku %></span>
+                            <% } %>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="product-price">
+                        <div class="product-total"><%= (produit.prix * produit.quantite).toFixed(2) %> <%= produit.devise %></div>
+                        <div class="product-unit"><%= produit.prix %> <%= produit.devise %>/unité</div>
+                      </div>
+                    </div>
+                  <% }) %>
+                </div>
+              </div>
+
+              <!-- Order Total -->
+              <div class="order-total">
+                Total: <span style="color: var(--primary);"><%= commande.total.toFixed(2) %> <%= commande.produits[0] && commande.produits[0].devise %></span>
+              </div>
+            </div>
+
+            <!-- Order Actions -->
+            <div class="order-actions">
+              <div class="action-group">
+                <select class="status-selector" id="statut-<%= commande._id %>">
+                  <option value="En attente" <%= commande.statut === 'en_attente' ? 'selected' : '' %>>En attente</option>
+                  <option value="Confirmée" <%= commande.statut === 'confirmee' ? 'selected' : '' %>>Confirmée</option>
+                  <option value="En préparation" <%= commande.statut === 'en_preparation' ? 'selected' : '' %>>En préparation</option>
+                  <option value="Expédiée" <%= commande.statut === 'expediee' ? 'selected' : '' %>>Expédiée</option>
+                  <option value="Livrée" <%= commande.statut === 'livree' ? 'selected' : '' %>>Livrée</option>
+                  <option value="Annulée" <%= commande.statut === 'annulee' ? 'selected' : '' %>>Annulée</option>
+                </select>
+                <button class="save-btn" onclick="mettreAJourStatut('<%= commande._id %>')">
+                  <i class="fas fa-save"></i>
+                  Sauvegarder
+                </button>
+                <span id="message-<%= commande._id %>" class="message"></span>
+              </div>
+
+              <div class="action-buttons">
+                <% if (commande.client.telephone) { %>
+                  <a href="https://wa.me/<%= commande.client.telephone.replace(/\D/g, '') %>?text=Bonjour <%= encodeURIComponent(commande.client.nom) %>, je suis <%= user.nom %>. Votre commande #<%= commande.numeroCommande %> est actuellement '<%= 
+                    commande.statut === 'en_attente' ? 'En attente' :
+                    commande.statut === 'confirmee' ? 'Confirmée' :
+                    commande.statut === 'en_preparation' ? 'En préparation' :
+                    commande.statut === 'expediee' ? 'Expédiée' :
+                    commande.statut === 'livree' ? 'Livrée' :
+                    commande.statut === 'annulee' ? 'Annulée' : 'En attente'
+                  %>'." 
+                     target="_blank" 
+                     class="icon-btn whatsapp"
+                     title="Contacter via WhatsApp">
+                    <i class="fab fa-whatsapp"></i>
+                  </a>
+                <% } %>
+                <a href="/commandes/debug-vendeur" class="icon-btn" title="Informations de débogage">
+                  <i class="fas fa-bug"></i>
+                </a>
+                <button class="icon-btn" title="Imprimer la commande">
+                  <i class="fas fa-print"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        <% }) %>
       </div>
     <% } %>
   </div>
 
   <script>
-    // Gestion de la quantité
-    function changeQuantity(change) {
-      const input = document.getElementById('quantite');
-      let value = parseInt(input.value) + change;
-      const max = parseInt(input.max) || 10;
-      const min = parseInt(input.min) || 1;
+    // Fonction de mise à jour du statut
+    async function mettreAJourStatut(commandeId) {
+      const selecteur = document.getElementById(`statut-${commandeId}`);
+      const messageElement = document.getElementById(`message-${commandeId}`);
+      let nouveauStatut = selecteur.value;
       
-      if (value < min) value = min;
-      if (value > max) value = max;
+      // Mapping des statuts français vers codes
+      const statutsMap = {
+        'En attente': 'en_attente',
+        'Confirmée': 'confirmee',
+        'En préparation': 'en_preparation',
+        'Expédiée': 'expediee',
+        'Livrée': 'livree',
+        'Annulée': 'annulee'
+      };
       
-      input.value = value;
-    }
-
-    // Gestion du panier latéral
-    function togglePanier() {
-      const panier = document.getElementById('panierLateral');
-      const overlay = document.getElementById('overlay');
+      // Convertir le statut français en code
+      if (statutsMap[nouveauStatut]) {
+        nouveauStatut = statutsMap[nouveauStatut];
+      }
       
-      panier.classList.toggle('open');
-      overlay.classList.toggle('active');
+      messageElement.textContent = 'Mise à jour...';
+      messageElement.className = 'message loading';
       
-      // Empêcher le défilement du body quand le panier est ouvert
-      document.body.style.overflow = panier.classList.contains('open') ? 'hidden' : '';
-    }
-
-    // Notification d'ajout au panier
-    function showAddToCartNotification() {
-      const notification = document.createElement('div');
-      notification.style.cssText = `
-        position: fixed;
-        top: 100px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: var(--lv-gold);
-        color: var(--lv-dark);
-        padding: 1rem 2rem;
-        border-radius: 0;
-        z-index: 1002;
-        font-weight: 500;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        font-size: 0.8rem;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-      `;
-      notification.innerHTML = '<i class="fas fa-check" style="margin-right: 0.5rem;"></i> Produit ajouté au panier !';
-      document.body.appendChild(notification);
-      
-      setTimeout(() => {
-        notification.style.transition = 'all 0.3s ease';
-        notification.style.opacity = '0';
-        notification.style.transform = 'translateX(-50%) translateY(-20px)';
-        setTimeout(() => notification.remove(), 300);
-      }, 2000);
-    }
-
-    // Recharger la page après ajout au panier
-    document.addEventListener('DOMContentLoaded', function() {
-      const forms = document.querySelectorAll('form[action*="/panier/ajouter/"]');
-      forms.forEach(form => {
-        form.addEventListener('submit', function(e) {
-          e.preventDefault();
-          
-          // Soumettre le formulaire
-          fetch(this.action, {
-            method: 'POST',
-            body: new FormData(this)
-          })
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              showAddToCartNotification();
-              // Mettre à jour le badge du panier
-              const badge = document.querySelector('.cart-badge');
-              if (badge) {
-                badge.textContent = parseInt(badge.textContent) + 1;
-              } else {
-                const newBadge = document.createElement('span');
-                newBadge.className = 'cart-badge';
-                newBadge.textContent = '1';
-                document.querySelector('.icon-btn .fa-shopping-bag').parentNode.appendChild(newBadge);
-              }
-            }
-          })
-          .catch(error => {
-            console.error('Erreur:', error);
-            // Fallback: soumettre normalement
-            this.submit();
-          });
+      try {
+        const response = await fetch(`/commandes/${commandeId}/statut`, {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({ statut: nouveauStatut })
         });
-      });
-
-      // Désactiver le formulaire si rupture de stock
-      <% if (produit.stock === 0) { %>
-        const form = document.getElementById('form-ajout-panier');
-        const quantiteInput = document.getElementById('quantite');
-        if (form && quantiteInput) {
-          quantiteInput.disabled = true;
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          messageElement.textContent = 'Statut mis à jour';
+          messageElement.className = 'message success';
+          
+          // Mettre à jour le badge de statut
+          const badgeStatut = document.querySelector(`[data-commande-id="${commandeId}"] .status-badge`);
+          const statutTexte = {
+            'en_attente': 'En Attente',
+            'confirmee': 'Confirmée',
+            'en_preparation': 'En Préparation',
+            'expediee': 'Expédiée',
+            'livree': 'Livrée',
+            'annulee': 'Annulée'
+          }[nouveauStatut] || 'En Attente';
+          
+          badgeStatut.textContent = statutTexte;
+          badgeStatut.className = `status-badge status-${nouveauStatut}`;
+          
+          // Mettre à jour l'attribut data
+          document.querySelector(`[data-commande-id="${commandeId}"]`).dataset.statut = nouveauStatut;
+          
+          setTimeout(() => messageElement.textContent = '', 3000);
+        } else {
+          throw new Error(result.error);
         }
-      <% } %>
-    });
+      } catch (error) {
+        messageElement.textContent = 'Erreur: ' + error.message;
+        messageElement.className = 'message error';
+        setTimeout(() => messageElement.textContent = '', 5000);
+      }
+    }
 
-    // Fermer le panier avec la touche Échap
+    // Fonctions de filtrage
+    function filtrerCommandes() {
+      const filtre = document.querySelectorAll('.filter-select')[0].value;
+      const commandes = document.querySelectorAll('.order-card');
+      
+      commandes.forEach(commande => {
+        if (filtre === 'all' || commande.dataset.statut === filtre) {
+          commande.style.display = 'block';
+        } else {
+          commande.style.display = 'none';
+        }
+      });
+    }
+
+    function rechercherCommandes() {
+      const recherche = document.querySelector('.search-box input').value.toLowerCase();
+      const commandes = document.querySelectorAll('.order-card');
+      
+      commandes.forEach(commande => {
+        const texte = commande.textContent.toLowerCase();
+        commande.style.display = texte.includes(recherche) ? 'block' : 'none';
+      });
+    }
+
+    function trierCommandes() {
+      const tri = document.querySelectorAll('.filter-select')[1].value;
+      const container = document.querySelector('.orders-grid');
+      const commandes = Array.from(document.querySelectorAll('.order-card'));
+      
+      commandes.sort((a, b) => {
+        switch(tri) {
+          case 'date-desc':
+            return new Date(b.dataset.date) - new Date(a.dataset.date);
+          case 'date-asc':
+            return new Date(a.dataset.date) - new Date(b.dataset.date);
+          case 'total-desc':
+            return parseFloat(b.dataset.total) - parseFloat(a.dataset.total);
+          case 'total-asc':
+            return parseFloat(a.dataset.total) - parseFloat(b.dataset.total);
+          default:
+            return 0;
+        }
+      });
+      
+      // Réorganiser les commandes dans le DOM
+      commandes.forEach(commande => container.appendChild(commande));
+    }
+
+    // Raccourci clavier (Ctrl + S)
     document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        const panier = document.getElementById('panierLateral');
-        if (panier.classList.contains('open')) {
-          togglePanier();
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        const commandeActive = document.querySelector('.order-card:hover');
+        if (commandeActive) {
+          const commandeId = commandeActive.dataset.commandeId;
+          mettreAJourStatut(commandeId);
         }
       }
+    });
+
+    // Initialisation
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('Tableau de bord des commandes chargé avec succès');
+      console.log('Commandes affichées:', <%= commandes.length %>);
     });
   </script>
 </body>
