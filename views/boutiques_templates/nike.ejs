@@ -37,7 +37,7 @@
     header {
       background: var(--lv-white);
       border-bottom: 1px solid var(--lv-border);
-      padding: 1.5rem 0;
+      padding: 1rem 0;
       position: fixed;
       top: 0;
       left: 0;
@@ -49,30 +49,31 @@
     .header-container {
       max-width: 1400px;
       margin: 0 auto;
-      padding: 0 2rem;
+      padding: 0 1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
    
     .logo {
-      font-size: 1.4rem;
+      font-size: 1.2rem;
       font-weight: 300;
-      letter-spacing: 3px;
+      letter-spacing: 2px;
       color: var(--lv-dark);
       text-transform: uppercase;
       text-decoration: none;
+      z-index: 1001;
     }
 
     .nav-links {
       display: flex;
-      gap: 3rem;
+      gap: 2rem;
     }
 
     .nav-links a {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 300;
-      letter-spacing: 1.5px;
+      letter-spacing: 1.2px;
       text-transform: uppercase;
       color: var(--lv-dark);
       text-decoration: none;
@@ -85,7 +86,8 @@
 
     .header-actions {
       display: flex;
-      gap: 1.5rem;
+      gap: 1rem;
+      align-items: center;
     }
 
     .icon-btn {
@@ -96,6 +98,12 @@
       cursor: pointer;
       transition: color 0.3s ease;
       position: relative;
+      padding: 0.5rem;
+      min-width: 44px;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .icon-btn:hover {
@@ -104,18 +112,31 @@
 
     .cart-badge {
       position: absolute;
-      top: -5px;
-      right: -5px;
+      top: 2px;
+      right: 2px;
       background: var(--lv-gold);
       color: var(--lv-dark);
       border-radius: 50%;
-      width: 16px;
-      height: 16px;
-      font-size: 0.6rem;
+      width: 18px;
+      height: 18px;
+      font-size: 0.7rem;
       font-weight: 600;
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--lv-dark);
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      min-width: 44px;
+      min-height: 44px;
+      z-index: 1001;
     }
 
     /* Hero Section Éditoriale LV */
@@ -127,44 +148,50 @@
       background: linear-gradient(135deg, var(--lv-dark) 0%, #1a1a1a 100%);
       position: relative;
       overflow: hidden;
+      margin-top: 60px;
     }
 
     .hero-content {
       text-align: center;
       color: var(--lv-white);
       z-index: 2;
-      max-width: 800px;
-      padding: 0 2rem;
+      max-width: 90%;
+      padding: 0 1rem;
     }
 
     .hero-title {
-      font-size: 4rem;
+      font-size: clamp(2rem, 8vw, 4rem);
       font-weight: 300;
-      letter-spacing: 6px;
+      letter-spacing: 3px;
       text-transform: uppercase;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       line-height: 1.1;
     }
 
     .hero-subtitle {
-      font-size: 1.2rem;
+      font-size: clamp(0.9rem, 3vw, 1.2rem);
       font-weight: 300;
-      letter-spacing: 2px;
-      margin-bottom: 3rem;
+      letter-spacing: 1.5px;
+      margin-bottom: 2.5rem;
       opacity: 0.8;
       line-height: 1.6;
+      padding: 0 1rem;
     }
 
     .hero-cta {
       display: inline-block;
-      padding: 1.5rem 4rem;
+      padding: clamp(1rem, 3vw, 1.5rem) clamp(2rem, 6vw, 4rem);
       border: 2px solid var(--lv-gold);
       color: var(--lv-white);
       text-decoration: none;
       text-transform: uppercase;
-      letter-spacing: 2px;
-      font-size: 0.9rem;
+      letter-spacing: 1.5px;
+      font-size: clamp(0.8rem, 2vw, 0.9rem);
       transition: all 0.3s ease;
+      min-height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .hero-cta:hover {
@@ -174,45 +201,46 @@
 
     /* Collection Horizontale LV */
     .collection-horizontal {
-      padding: 8rem 0;
+      padding: 4rem 0;
       background: var(--lv-beige);
       position: relative;
     }
 
     .collection-header {
       text-align: center;
-      margin-bottom: 4rem;
-      padding: 0 2rem;
+      margin-bottom: 3rem;
+      padding: 0 1rem;
     }
 
     .collection-title {
-      font-size: 2.5rem;
+      font-size: clamp(1.8rem, 5vw, 2.5rem);
       font-weight: 300;
-      letter-spacing: 4px;
+      letter-spacing: 2px;
       text-transform: uppercase;
       margin-bottom: 1rem;
       color: var(--lv-dark);
     }
 
     .collection-subtitle {
-      font-size: 1rem;
+      font-size: clamp(0.9rem, 2vw, 1rem);
       font-weight: 300;
-      letter-spacing: 1.5px;
+      letter-spacing: 1.2px;
       color: var(--lv-text);
       opacity: 0.7;
-      max-width: 600px;
+      max-width: 90%;
       margin: 0 auto;
+      line-height: 1.5;
     }
 
     /* Barre de défilement horizontale */
     .scroll-container {
       position: relative;
-      padding: 0 2rem;
+      padding: 0 1rem;
     }
 
     .scroll-indicator {
       position: absolute;
-      right: 2rem;
+      right: 1rem;
       top: 50%;
       transform: translateY(-50%);
       display: flex;
@@ -254,11 +282,12 @@
     .horizontal-scroll {
       display: flex;
       overflow-x: auto;
-      gap: 2rem;
-      padding: 2rem 0;
+      gap: 1.5rem;
+      padding: 1.5rem 0;
       scrollbar-width: none;
       -ms-overflow-style: none;
       scroll-behavior: smooth;
+      scroll-padding: 0 1rem;
     }
 
     .horizontal-scroll::-webkit-scrollbar {
@@ -266,21 +295,23 @@
     }
 
     .product-card-horizontal {
-      min-width: 400px;
+      min-width: min(85vw, 300px);
       background: var(--lv-white);
       position: relative;
       transition: transform 0.3s ease;
       cursor: pointer;
       flex-shrink: 0;
+      border-radius: 4px;
+      overflow: hidden;
     }
 
     .product-card-horizontal:hover {
-      transform: translateY(-10px);
+      transform: translateY(-5px);
     }
 
     .product-image {
       width: 100%;
-      height: 500px;
+      height: min(60vh, 400px);
       object-fit: cover;
     }
 
@@ -291,7 +322,7 @@
       right: 0;
       background: linear-gradient(transparent, rgba(0,0,0,0.9));
       color: var(--lv-white);
-      padding: 2rem;
+      padding: 1.5rem;
       opacity: 0;
       transition: opacity 0.3s ease;
     }
@@ -301,23 +332,24 @@
     }
 
     .product-name {
-      font-size: 1.2rem;
+      font-size: 1rem;
       font-weight: 300;
-      letter-spacing: 2px;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
       margin-bottom: 0.5rem;
+      line-height: 1.3;
     }
 
     .product-price {
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 300;
       letter-spacing: 1px;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
     }
 
     .product-actions {
       display: flex;
-      gap: 1rem;
+      gap: 0.8rem;
       opacity: 0;
       transform: translateY(10px);
       transition: all 0.3s ease 0.1s;
@@ -329,18 +361,22 @@
     }
 
     .product-btn {
-      padding: 0.8rem 1.5rem;
+      padding: 0.8rem 1rem;
       border: 1px solid var(--lv-white);
       background: transparent;
       color: var(--lv-white);
       text-transform: uppercase;
-      letter-spacing: 1.5px;
+      letter-spacing: 1.2px;
       font-size: 0.7rem;
       cursor: pointer;
       transition: all 0.3s ease;
       text-decoration: none;
       flex: 1;
       text-align: center;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .product-btn-primary {
@@ -361,17 +397,17 @@
 
     /* Lookbook Section avec Produits */
     .lookbook-section {
-      padding: 8rem 0;
+      padding: 4rem 0;
       background: var(--lv-white);
     }
 
     .lookbook-grid {
       display: grid;
       grid-template-columns: 2fr 1fr;
-      gap: 2rem;
+      gap: 1.5rem;
       max-width: 1400px;
       margin: 0 auto;
-      padding: 0 2rem;
+      padding: 0 1rem;
     }
 
     .lookbook-main {
@@ -380,7 +416,7 @@
 
     .lookbook-main-product {
       width: 100%;
-      height: 800px;
+      height: min(80vh, 600px);
       object-fit: cover;
       cursor: pointer;
       transition: transform 0.3s ease;
@@ -393,12 +429,12 @@
     .lookbook-side {
       display: flex;
       flex-direction: column;
-      gap: 2rem;
+      gap: 1.5rem;
     }
 
     .lookbook-side-product {
       width: 100%;
-      height: 390px;
+      height: calc((min(80vh, 600px) - 1.5rem) / 2);
       object-fit: cover;
       cursor: pointer;
       transition: transform 0.3s ease;
@@ -410,39 +446,45 @@
 
     .lookbook-content {
       position: absolute;
-      bottom: 4rem;
-      left: 4rem;
+      bottom: 2rem;
+      left: 2rem;
       color: var(--lv-white);
-      max-width: 400px;
+      max-width: 90%;
+      padding: 0 1rem;
     }
 
     .lookbook-title {
-      font-size: 2rem;
+      font-size: clamp(1.5rem, 4vw, 2rem);
       font-weight: 300;
-      letter-spacing: 3px;
+      letter-spacing: 2px;
       text-transform: uppercase;
       margin-bottom: 1rem;
+      line-height: 1.2;
     }
 
     .lookbook-description {
-      font-size: 1rem;
+      font-size: clamp(0.9rem, 2vw, 1rem);
       font-weight: 300;
-      letter-spacing: 1.5px;
-      line-height: 1.6;
-      margin-bottom: 2rem;
+      letter-spacing: 1.2px;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
       opacity: 0.9;
     }
 
     .lookbook-cta {
       display: inline-block;
-      padding: 1rem 2rem;
+      padding: 0.8rem 1.5rem;
       border: 1px solid var(--lv-white);
       color: var(--lv-white);
       text-decoration: none;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
-      font-size: 0.8rem;
+      letter-spacing: 1.2px;
+      font-size: 0.75rem;
       transition: all 0.3s ease;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .lookbook-cta:hover {
@@ -452,22 +494,22 @@
 
     /* Produits Éditoriaux */
     .editorial-products {
-      padding: 8rem 0;
+      padding: 4rem 0;
       background: var(--lv-beige);
     }
 
     .editorial-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 4rem;
+      gap: 2rem;
       max-width: 1400px;
       margin: 0 auto;
-      padding: 0 2rem;
+      padding: 0 1rem;
     }
 
     .editorial-image {
       width: 100%;
-      height: 600px;
+      height: min(70vh, 500px);
       object-fit: cover;
       cursor: pointer;
       transition: transform 0.3s ease;
@@ -481,33 +523,34 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 2rem;
+      padding: 1.5rem;
     }
 
     .editorial-product-name {
-      font-size: 2rem;
+      font-size: clamp(1.5rem, 4vw, 2rem);
       font-weight: 300;
-      letter-spacing: 3px;
+      letter-spacing: 2px;
       text-transform: uppercase;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
       color: var(--lv-dark);
+      line-height: 1.2;
     }
 
     .editorial-product-description {
-      font-size: 1rem;
+      font-size: clamp(0.9rem, 2vw, 1rem);
       font-weight: 300;
-      letter-spacing: 1.5px;
-      line-height: 1.6;
-      margin-bottom: 2rem;
+      letter-spacing: 1.2px;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
       color: var(--lv-text);
       opacity: 0.8;
     }
 
     .editorial-product-price {
-      font-size: 1.3rem;
+      font-size: clamp(1.1rem, 3vw, 1.3rem);
       font-weight: 300;
-      letter-spacing: 2px;
-      margin-bottom: 2rem;
+      letter-spacing: 1.5px;
+      margin-bottom: 1.5rem;
       color: var(--lv-dark);
     }
 
@@ -517,18 +560,23 @@
     }
 
     .editorial-btn {
-      padding: 1.2rem 2.5rem;
+      padding: 1rem 2rem;
       border: 1px solid var(--lv-dark);
       background: transparent;
       color: var(--lv-dark);
       text-transform: uppercase;
-      letter-spacing: 2px;
-      font-size: 0.8rem;
+      letter-spacing: 1.5px;
+      font-size: 0.75rem;
       cursor: pointer;
       transition: all 0.3s ease;
       text-decoration: none;
       display: inline-block;
       text-align: center;
+      min-height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
     }
 
     .editorial-btn-primary {
@@ -551,25 +599,25 @@
     footer {
       background: var(--lv-dark);
       color: var(--lv-white);
-      padding: 6rem 0 3rem;
+      padding: 4rem 0 2rem;
     }
 
     .footer-content {
       max-width: 1400px;
       margin: 0 auto;
-      padding: 0 2rem;
+      padding: 0 1rem;
       display: grid;
       grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 4rem;
+      gap: 3rem;
     }
 
     .footer-column h3 {
-      font-size: 0.9rem;
-      margin-bottom: 2rem;
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
       font-weight: 500;
       color: var(--lv-gold);
       text-transform: uppercase;
-      letter-spacing: 2.5px;
+      letter-spacing: 2px;
     }
    
     .footer-links {
@@ -577,15 +625,15 @@
     }
    
     .footer-links li {
-      margin-bottom: 1rem;
+      margin-bottom: 0.8rem;
     }
    
     .footer-links a {
       color: rgba(255,255,255,0.7);
       transition: all 0.3s ease;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 300;
-      letter-spacing: 1.2px;
+      letter-spacing: 1px;
       text-transform: uppercase;
       text-decoration: none;
     }
@@ -596,8 +644,8 @@
    
     .social-links {
       display: flex;
-      gap: 1rem;
-      margin-top: 2rem;
+      gap: 0.8rem;
+      margin-top: 1.5rem;
     }
    
     .social-link {
@@ -621,25 +669,26 @@
    
     .footer-bottom {
       text-align: center;
-      padding-top: 4rem;
+      padding-top: 3rem;
       border-top: 1px solid rgba(255,255,255,0.1);
       color: rgba(255,255,255,0.5);
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 300;
-      letter-spacing: 1.5px;
+      letter-spacing: 1.2px;
       text-transform: uppercase;
       line-height: 1.5;
       max-width: 1400px;
       margin: 0 auto;
-      padding-left: 2rem;
-      padding-right: 2rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
     }
 
     /* Notification Panier */
     .cart-notification {
       position: fixed;
       top: 80px;
-      right: 20px;
+      right: 1rem;
+      left: 1rem;
       background: var(--lv-dark);
       color: var(--lv-gold);
       padding: 1.2rem;
@@ -649,7 +698,8 @@
       transform: translateX(400px);
       opacity: 0;
       transition: all 0.5s var(--transition-luxe);
-      max-width: 350px;
+      max-width: 400px;
+      margin: 0 auto;
     }
 
     .cart-notification.show {
@@ -673,20 +723,21 @@
     }
 
     .notification-title {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 500;
-      letter-spacing: 2px;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
       margin-bottom: 0.3rem;
       color: var(--lv-gold);
     }
 
     .notification-message {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 300;
       letter-spacing: 1px;
       opacity: 0.9;
       color: var(--lv-white);
+      line-height: 1.4;
     }
 
     /* Animation pour le badge */
@@ -700,61 +751,191 @@
       animation: pulse 0.5s ease-in-out;
     }
 
-    /* Responsive */
+    /* ========== RESPONSIVE CORRECTIONS ========== */
+
+    /* Tablette */
+    @media (max-width: 1024px) {
+      .header-container {
+        padding: 0 1.5rem;
+      }
+
+      .nav-links {
+        gap: 1.5rem;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+      }
+
+      .editorial-grid {
+        gap: 1.5rem;
+      }
+    }
+
+    /* Mobile */
     @media (max-width: 768px) {
       .header-container {
         padding: 0 1rem;
       }
 
+      /* Navigation mobile */
       .nav-links {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: var(--lv-white);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: 1000;
+      }
+
+      .nav-links.active {
+        transform: translateX(0);
+      }
+
+      .nav-links a {
+        font-size: 1.1rem;
+        padding: 1rem 2rem;
+      }
+
+      .menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Hero adjustments */
+      .hero-editorial {
+        margin-top: 70px;
+        height: calc(100vh - 70px);
+      }
+
+      .hero-content {
+        max-width: 95%;
+      }
+
+      /* Collection horizontale */
+      .scroll-indicator {
         display: none;
       }
 
-      .hero-title {
-        font-size: 2.5rem;
-        letter-spacing: 4px;
+      .product-card-horizontal {
+        min-width: 280px;
       }
 
-      .hero-subtitle {
-        font-size: 1rem;
-      }
-
+      /* Lookbook devient vertical */
       .lookbook-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
       }
 
-      .editorial-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
+      .lookbook-side {
+        flex-direction: row;
+        gap: 1rem;
       }
 
-      .footer-content {
-        grid-template-columns: 1fr;
-        gap: 3rem;
-      }
-
-      .product-card-horizontal {
-        min-width: 300px;
+      .lookbook-side-product {
+        height: 200px;
       }
 
       .lookbook-content {
         position: relative;
         bottom: auto;
         left: auto;
-        padding: 2rem;
+        padding: 1.5rem;
         color: var(--lv-dark);
+        background: rgba(255,255,255,0.9);
+        margin-top: -100px;
+        max-width: 100%;
+      }
+
+      /* Éditorial devient vertical */
+      .editorial-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .editorial-actions {
+        flex-direction: column;
+      }
+
+      .editorial-btn {
+        flex: none;
+      }
+
+      /* Footer devient vertical */
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
+      }
+
+      .social-links {
+        justify-content: center;
+      }
+    }
+
+    /* Petit mobile */
+    @media (max-width: 480px) {
+      .header-container {
+        padding: 0 0.5rem;
+      }
+
+      .logo {
+        font-size: 1rem;
+        letter-spacing: 1px;
+      }
+
+      .hero-title {
+        letter-spacing: 2px;
+      }
+
+      .collection-title {
+        letter-spacing: 1.5px;
+      }
+
+      .product-card-horizontal {
+        min-width: 260px;
       }
 
       .product-actions {
         flex-direction: column;
       }
 
-      .scroll-indicator {
-        display: none;
+      .lookbook-side {
+        flex-direction: column;
       }
 
-      .editorial-actions {
-        flex-direction: column;
+      .lookbook-side-product {
+        height: 150px;
+      }
+
+      .footer-content {
+        gap: 1.5rem;
+      }
+    }
+
+    /* Touch device optimizations */
+    @media (hover: none) {
+      .product-card-horizontal:hover {
+        transform: none;
+      }
+
+      .product-info-overlay {
+        opacity: 1;
+        background: linear-gradient(transparent, rgba(0,0,0,0.7));
+      }
+
+      .product-actions {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
   </style>
@@ -776,7 +957,11 @@
     <div class="header-container">
       <a href="#" class="logo"><%= boutique.nom %></a>
       
-      <nav class="nav-links">
+      <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+      
+      <nav class="nav-links" id="navLinks">
         <a href="#collection">NOUVELLE COLLECTION</a>
         <a href="#lookbook">LOOKBOOK</a>
         <a href="#editorial">ÉDITORIAL</a>
@@ -917,7 +1102,7 @@
     <div class="footer-content">
       <div class="footer-column">
         <h3><%= boutique.nom %></h3>
-        <p style="color: rgba(255,255,255,0.7); font-size: 0.8rem; font-weight: 300; letter-spacing: 1px; line-height: 1.6; margin-bottom: 2rem;">
+        <p style="color: rgba(255,255,255,0.7); font-size: 0.75rem; font-weight: 300; letter-spacing: 1px; line-height: 1.5; margin-bottom: 1.5rem;">
           <%= boutique.description %>
         </p>
         <div class="social-links">
@@ -964,6 +1149,26 @@
   </footer>
 
   <script>
+    // Gestion du menu mobile
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    if (menuToggle && navLinks) {
+      menuToggle.addEventListener('click', function() {
+        navLinks.classList.toggle('active');
+        menuToggle.innerHTML = navLinks.classList.contains('active') ? 
+          '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+      });
+
+      // Fermer le menu en cliquant sur un lien
+      navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          navLinks.classList.remove('active');
+          menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+        });
+      });
+    }
+
     // Fonction pour créer les étoiles scintillantes
     function createStars() {
       const starsContainer = document.createElement('div');
@@ -985,14 +1190,9 @@
         const star = document.createElement('div');
         star.className = 'star';
        
-        // Position aléatoire
         const left = Math.random() * 100;
         const top = Math.random() * 100;
-       
-        // Taille aléatoire
         const size = Math.random() * 2;
-       
-        // Délai d'animation aléatoire
         const delay = Math.random() * 3;
        
         star.style.cssText = `
@@ -1011,7 +1211,6 @@
         starsContainer.appendChild(star);
       }
 
-      // Ajouter l'animation twinkle
       const style = document.createElement('style');
       style.textContent = `
         @keyframes twinkle {
@@ -1043,15 +1242,10 @@
         const particle = document.createElement('div');
         particle.className = 'cosmic-particle';
        
-        // Position de départ aléatoire
         const startX = Math.random() * 100;
         const startY = Math.random() * 100;
-       
-        // Délai et durée d'animation aléatoires
         const delay = Math.random() * 8;
         const duration = 6 + Math.random() * 4;
-       
-        // Taille aléatoire
         const size = 1 + Math.random() * 3;
        
         particle.style.cssText = `
@@ -1070,7 +1264,6 @@
         particlesContainer.appendChild(particle);
       }
 
-      // Ajouter l'animation float
       const style = document.createElement('style');
       style.textContent = `
         @keyframes float {
@@ -1101,7 +1294,6 @@
       message.textContent = `${productName} - ${productPrice} a été ajouté à votre panier`;
       notification.classList.add('show');
       
-      // Masquer automatiquement après 5 secondes
       setTimeout(() => {
         notification.classList.remove('show');
       }, 5000);
@@ -1121,7 +1313,6 @@
       
       badge.textContent = count;
       
-      // Animation du badge
       badge.style.animation = 'none';
       setTimeout(() => {
         badge.style.animation = 'pulse 0.5s ease-in-out';
@@ -1131,12 +1322,10 @@
     // Fonction principale d'ajout au panier
     async function addToCart(productId, productName, productPrice, button) {
       try {
-        // Désactiver le bouton pendant la requête
         button.disabled = true;
         const originalText = button.textContent;
         button.textContent = 'AJOUT EN COURS...';
 
-        // Envoyer la requête AJAX
         const response = await fetch('/panier/ajouter/' + productId, {
           method: 'POST',
           headers: {
@@ -1151,13 +1340,9 @@
         const data = await response.json();
 
         if (data.success) {
-          // Afficher la notification
           showNotification(productName, productPrice + ' €');
-          
-          // Mettre à jour le badge du panier
           updateCartBadge(data.panierCount);
           
-          // Effet de confirmation sur le bouton
           button.textContent = '✓ AJOUTÉ !';
           button.style.background = '#28a745';
           button.style.borderColor = '#28a745';
@@ -1174,11 +1359,9 @@
       } catch (error) {
         console.error('Erreur:', error);
         
-        // Réactiver le bouton en cas d'erreur
         button.disabled = false;
         button.textContent = 'AJOUTER AU PANIER';
         
-        // Afficher un message d'erreur
         alert('Erreur: ' + error.message);
       }
     }
@@ -1253,7 +1436,6 @@
 
       // Réinitialiser les animations lors du redimensionnement
       window.addEventListener('resize', function() {
-        // Recréer les étoiles et particules
         const starsContainer = document.getElementById('starsContainer');
         const particlesContainer = document.getElementById('cosmicParticles');
         
