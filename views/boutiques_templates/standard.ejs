@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -17,13 +18,13 @@
       --zara-accent: #1a1a1a;
       --success-color: #000000;
     }
-    
+   
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-    
+   
     body {
       font-family: 'Helvetica Neue', Arial, sans-serif;
       color: var(--zara-text);
@@ -35,7 +36,7 @@
       flex-direction: column;
       overflow-x: hidden;
     }
-    
+   
     /* Notification Panier */
     .cart-notification {
       position: fixed;
@@ -54,27 +55,27 @@
       max-width: none;
       border-radius: 8px;
     }
-    
+   
     .cart-notification.show {
       transform: translateY(0);
       opacity: 1;
     }
-    
+   
     .notification-content {
       display: flex;
       align-items: center;
       gap: 0.8rem;
     }
-    
+   
     .notification-icon {
       font-size: 1rem;
       color: var(--zara-white);
     }
-    
+   
     .notification-text {
       flex: 1;
     }
-    
+   
     .notification-title {
       font-size: 0.8rem;
       font-weight: 400;
@@ -82,14 +83,14 @@
       text-transform: uppercase;
       margin-bottom: 0.2rem;
     }
-    
+   
     .notification-message {
       font-size: 0.75rem;
       font-weight: 300;
       letter-spacing: 0.5px;
       opacity: 0.9;
     }
-    
+   
     .notification-actions {
       display: flex;
       gap: 0.5rem;
@@ -97,7 +98,7 @@
       padding-top: 0.8rem;
       border-top: 1px solid rgba(255,255,255,0.2);
     }
-    
+   
     .notification-btn {
       padding: 0.5rem 0.8rem;
       font-size: 0.65rem;
@@ -111,27 +112,26 @@
       text-align: center;
       border-radius: 4px;
     }
-    
+   
     .notification-btn-primary {
       background: var(--zara-white);
       color: var(--zara-black);
     }
-    
+   
     .notification-btn-primary:hover {
       background: transparent;
       color: var(--zara-white);
     }
-    
+   
     .notification-btn-outline {
       background: transparent;
       color: var(--zara-white);
     }
-    
+   
     .notification-btn-outline:hover {
       background: var(--zara-white);
       color: var(--zara-black);
     }
-
     /* Badge de notification WhatsApp-like */
     .cart-badge {
       position: absolute;
@@ -150,13 +150,12 @@
       animation: pulse 2s infinite;
       box-shadow: 0 2px 8px rgba(255, 68, 68, 0.4);
     }
-
     @keyframes pulse {
       0% { transform: scale(1); }
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-    
+   
     /* Header Premium - Version Mobile First */
     header {
       background: var(--zara-white);
@@ -167,7 +166,7 @@
       z-index: 1000;
       backdrop-filter: blur(10px);
     }
-    
+   
     .header-container {
       max-width: 1400px;
       margin: 0 auto;
@@ -177,7 +176,7 @@
       align-items: center;
       flex-wrap: wrap;
     }
-    
+   
     .logo {
       font-size: 1.4rem;
       font-weight: 300;
@@ -187,7 +186,7 @@
       order: 1;
       flex: 1;
     }
-    
+   
     .nav-links {
       display: none;
       flex-direction: column;
@@ -201,11 +200,11 @@
       gap: 1rem;
       z-index: 999;
     }
-    
+   
     .nav-links.active {
       display: flex;
     }
-    
+   
     .nav-links a {
       font-weight: 300;
       font-size: 0.9rem;
@@ -218,11 +217,11 @@
       text-decoration: none;
       color: var(--zara-black);
     }
-    
+   
     .nav-links a:hover {
       opacity: 1;
     }
-    
+   
     .nav-links a::after {
       content: '';
       position: absolute;
@@ -233,24 +232,24 @@
       background: var(--zara-black);
       transition: width 0.3s ease;
     }
-    
+   
     .nav-links a:hover::after {
       width: 100%;
     }
-    
+   
     .header-actions {
       display: flex;
       gap: 0.8rem;
       align-items: center;
       order: 2;
     }
-    
+   
     .search-bar {
       display: none;
       align-items: center;
       position: relative;
     }
-    
+   
     .search-bar.active {
       display: flex;
       position: absolute;
@@ -262,7 +261,7 @@
       border-bottom: 1px solid var(--zara-border);
       z-index: 1001;
     }
-    
+   
     .search-bar input {
       border: none;
       outline: none;
@@ -274,17 +273,17 @@
       border-bottom: 1px solid var(--zara-border);
       transition: border-color 0.3s ease;
     }
-    
+   
     .search-bar input:focus {
       border-bottom-color: var(--zara-black);
     }
-    
+   
     .search-bar input::placeholder {
       color: var(--zara-dark-gray);
       font-weight: 300;
       letter-spacing: 1px;
     }
-    
+   
     .icon-btn {
       background: none;
       border: none;
@@ -299,20 +298,20 @@
       align-items: center;
       justify-content: center;
     }
-    
+   
     .icon-btn:hover {
       opacity: 1;
     }
-    
+   
     .mobile-menu-btn {
       display: block;
       order: 3;
     }
-    
+   
     .mobile-search-btn {
       display: block;
     }
-    
+   
     .cart-count {
       position: absolute;
       top: -2px;
@@ -328,7 +327,7 @@
       justify-content: center;
       font-weight: 400;
     }
-    
+   
     /* Hero Section - Optimisé Mobile */
     .hero {
       background: #000000;
@@ -342,7 +341,7 @@
       justify-content: center;
       isolation: isolate;
     }
-    
+   
     /* Optimisation des animations pour mobile */
     .hero-grid {
       position: absolute;
@@ -350,7 +349,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: 
+      background:
         linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
       background-size: 30px 30px;
@@ -358,12 +357,10 @@
       opacity: 0.3;
       z-index: 1;
     }
-
     @keyframes gridMove {
       0% { transform: translate(0, 0); }
       100% { transform: translate(30px, 30px); }
     }
-
     .cosmic-particles {
       position: absolute;
       top: 0;
@@ -373,23 +370,21 @@
       pointer-events: none;
       z-index: 2;
     }
-
     .cosmic-particle {
       position: absolute;
       background: radial-gradient(circle, #ffffff, transparent);
       border-radius: 50%;
       animation: cosmicFloat 8s ease-in-out infinite;
     }
-
     @keyframes cosmicFloat {
-      0%, 100% { 
+      0%, 100% {
         transform: translate(0, 0) scale(1);
         opacity: 0;
       }
       25% {
         opacity: 0.6;
       }
-      50% { 
+      50% {
         transform: translate(50px, -25px) scale(1.5);
         opacity: 0.3;
       }
@@ -397,7 +392,6 @@
         opacity: 0.8;
       }
     }
-
     .stars {
       position: absolute;
       top: 0;
@@ -406,19 +400,16 @@
       height: 100%;
       z-index: 1;
     }
-
     .star {
       position: absolute;
       background: white;
       border-radius: 50%;
       animation: twinkle 3s ease-in-out infinite;
     }
-
     @keyframes twinkle {
       0%, 100% { opacity: 0.2; transform: scale(0.8); }
       50% { opacity: 1; transform: scale(1.2); }
     }
-
     .light-beam {
       position: absolute;
       top: -50%;
@@ -437,12 +428,10 @@
       animation: beamSweep 15s ease-in-out infinite;
       z-index: 1;
     }
-
     @keyframes beamSweep {
       0%, 100% { transform: rotate(45deg) translateX(-100%); }
       50% { transform: rotate(45deg) translateX(100%); }
     }
-
     .hero-content {
       max-width: 800px;
       margin: 0 auto;
@@ -450,7 +439,6 @@
       position: relative;
       z-index: 3;
     }
-
     /* Titre optimisé mobile */
     .hero h1 {
       font-size: 2.2rem;
@@ -466,7 +454,6 @@
       position: relative;
       line-height: 1.2;
     }
-
     .hero h1::after {
       content: '';
       position: absolute;
@@ -479,12 +466,10 @@
       animation: lineReveal 2s ease-in-out 1.5s forwards;
       opacity: 0;
     }
-
     @keyframes lineReveal {
       0% { opacity: 0; width: 0; }
       100% { opacity: 1; width: 60px; }
     }
-
     @keyframes titleReveal {
       0% {
         opacity: 0;
@@ -500,7 +485,6 @@
         text-shadow: 0 0 20px rgba(255,255,255,0.5);
       }
     }
-
     /* Description optimisée mobile */
     .hero p {
       font-size: 1rem;
@@ -514,7 +498,6 @@
       animation: subtitleReveal 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1s forwards;
       padding: 0 0.5rem;
     }
-
     @keyframes subtitleReveal {
       0% {
         opacity: 0;
@@ -525,7 +508,7 @@
         transform: translateY(0);
       }
     }
-    
+   
     /* Bouton CTA optimisé mobile */
     .cta-button {
       display: inline-block;
@@ -547,7 +530,6 @@
       animation: buttonReveal 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.5s forwards;
       border-radius: 2px;
     }
-
     @keyframes buttonReveal {
       0% {
         opacity: 0;
@@ -561,7 +543,7 @@
         transform: translateY(0) scale(1);
       }
     }
-    
+   
     .cta-button::before {
       content: '';
       position: absolute;
@@ -572,11 +554,10 @@
       background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
       transition: left 0.6s ease;
     }
-    
+   
     .cta-button:hover::before {
       left: 100%;
     }
-
     .cta-button::after {
       content: '';
       position: absolute;
@@ -590,30 +571,28 @@
       opacity: 0;
       transition: opacity 0.3s ease;
     }
-    
+   
     .cta-button:hover::after {
       opacity: 1;
     }
-    
+   
     .cta-button span {
       position: relative;
       z-index: 1;
       display: inline-block;
       transition: transform 0.3s ease;
     }
-    
+   
     .cta-button:hover span {
       transform: translateY(-1px);
       color: #000000;
     }
-
     .cta-button:hover {
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba(255,255,255,0.2);
       background: #ffffff;
       color: #000000;
     }
-
     @keyframes whiteGlow {
       from {
         box-shadow: 0 0 5px rgba(255,255,255,0.2), 0 0 10px rgba(255,255,255,0.1);
@@ -622,7 +601,6 @@
         box-shadow: 0 0 10px rgba(255,255,255,0.3), 0 0 20px rgba(255,255,255,0.15);
       }
     }
-
     .scroll-indicator {
       position: absolute;
       bottom: 20px;
@@ -631,7 +609,6 @@
       opacity: 0;
       animation: scrollIndicator 2s ease-in-out 2.5s forwards;
     }
-
     @keyframes scrollIndicator {
       0% {
         opacity: 0;
@@ -646,7 +623,6 @@
         transform: translateX(-50%) translateY(0);
       }
     }
-
     .scroll-arrow {
       width: 20px;
       height: 20px;
@@ -656,7 +632,6 @@
       animation: bounce 2s infinite;
       opacity: 0.7;
     }
-
     @keyframes bounce {
       0%, 100% {
         transform: rotate(45deg) translateY(0);
@@ -665,28 +640,28 @@
         transform: rotate(45deg) translateY(-5px);
       }
     }
-    
+   
     /* Main Content */
     main {
       flex: 1;
     }
-    
+   
     .container {
       max-width: 1400px;
       margin: 0 auto;
       padding: 0 1rem;
     }
-    
+   
     .section {
       padding: 3rem 0;
     }
-    
+   
     .section-header {
       text-align: center;
       margin-bottom: 2rem;
       padding: 0 0.5rem;
     }
-    
+   
     .section-title {
       font-size: 1.6rem;
       font-weight: 300;
@@ -696,7 +671,7 @@
       color: var(--zara-black);
       line-height: 1.3;
     }
-    
+   
     .section-subtitle {
       color: var(--zara-dark-gray);
       max-width: 600px;
@@ -706,7 +681,7 @@
       letter-spacing: 1.2px;
       line-height: 1.5;
     }
-    
+   
     /* Produits Grid - Optimisé Mobile */
     .produits-grid {
       display: grid;
@@ -714,7 +689,7 @@
       gap: 1.5rem;
       margin-top: 1rem;
     }
-    
+   
     .produit-card {
       background: var(--zara-white);
       transition: all 0.3s ease;
@@ -722,30 +697,27 @@
       position: relative;
       overflow: hidden;
     }
-    
+   
     .produit-card:hover {
       transform: translateY(-5px);
       box-shadow: 0 10px 25px rgba(0,0,0,0.08);
     }
-    
+   
     /* Galerie de photos optimisée mobile */
     .produit-gallery {
       position: relative;
       height: 300px;
       overflow: hidden;
     }
-
     .gallery-main {
       width: 100%;
       height: 100%;
       object-fit: cover;
       transition: transform 0.4s ease;
     }
-
     .produit-card:hover .gallery-main {
       transform: scale(1.03);
     }
-
     .gallery-thumbnails {
       position: absolute;
       bottom: 8px;
@@ -756,7 +728,6 @@
       gap: 6px;
       padding: 0 8px;
     }
-
     .thumbnail {
       width: 30px;
       height: 30px;
@@ -766,17 +737,14 @@
       object-fit: cover;
       transition: all 0.2s ease;
     }
-
     .thumbnail:hover {
       transform: scale(1.1);
       border-color: var(--zara-black);
     }
-
     .thumbnail.active {
       border-color: var(--zara-black);
       transform: scale(1.1);
     }
-
     .gallery-counter {
       position: absolute;
       top: 8px;
@@ -787,7 +755,6 @@
       border-radius: 10px;
       font-size: 0.7rem;
     }
-
     .gallery-btn {
       position: absolute;
       bottom: 8px;
@@ -804,12 +771,11 @@
       transition: all 0.3s ease;
       border-radius: 3px;
     }
-
     .gallery-btn:hover {
       background: var(--zara-black);
       color: var(--zara-white);
     }
-    
+   
     .produit-badge {
       position: absolute;
       top: 0.8rem;
@@ -822,11 +788,11 @@
       letter-spacing: 0.8px;
       text-transform: uppercase;
     }
-    
+   
     .produit-content {
       padding: 1.5rem;
     }
-    
+   
     .produit-category {
       font-size: 0.65rem;
       font-weight: 400;
@@ -835,7 +801,7 @@
       letter-spacing: 1.2px;
       margin-bottom: 0.4rem;
     }
-    
+   
     .produit-name {
       font-size: 0.9rem;
       font-weight: 400;
@@ -845,7 +811,7 @@
       letter-spacing: 1px;
       line-height: 1.3;
     }
-    
+   
     .produit-prix {
       font-size: 1rem;
       font-weight: 400;
@@ -853,52 +819,83 @@
       margin-bottom: 1rem;
       letter-spacing: 0.8px;
     }
-    
+   
+    /* AMÉLIORATION DES BOUTONS - BIEN VISIBLES */
     .produit-actions {
       display: flex;
-      gap: 0.6rem;
+      gap: 0.8rem;
       flex-direction: column;
     }
-    
+   
     .btn {
       display: inline-block;
-      padding: 0.9rem 1.2rem;
+      padding: 1.1rem 1.5rem;
       text-align: center;
-      font-weight: 400;
-      font-size: 0.7rem;
+      font-weight: 600;
+      font-size: 0.85rem;
       cursor: pointer;
       transition: all 0.3s ease;
-      border: 1px solid var(--zara-black);
+      border: 2px solid var(--zara-black);
       text-transform: uppercase;
-      letter-spacing: 1.2px;
+      letter-spacing: 1.8px;
       text-decoration: none;
       width: 100%;
       position: relative;
       overflow: hidden;
-      border-radius: 2px;
+      border-radius: 3px;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    
+   
     .btn-primary {
       background: var(--zara-black);
       color: var(--zara-white);
+      font-weight: 700;
     }
-    
+   
     .btn-primary:hover {
       background: var(--zara-white);
       color: var(--zara-black);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
-    
+   
     .btn-outline {
       background: var(--zara-white);
       color: var(--zara-black);
-      border: 1px solid var(--zara-black);
+      border: 2.5px solid var(--zara-black);
+      font-weight: 700;
+      position: relative;
+      z-index: 1;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(10px);
     }
-    
+   
     .btn-outline:hover {
       background: var(--zara-black);
       color: var(--zara-white);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
-
+    /* Effet de surbrillance au survol */
+    .btn-outline::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
+      transition: left 0.5s ease;
+      z-index: -1;
+    }
+   
+    .btn-outline:hover::before {
+      left: 100%;
+    }
+   
     /* Modal pour la galerie - Optimisé Mobile */
     .modal {
       display: none;
@@ -912,12 +909,10 @@
       animation: fadeIn 0.3s ease;
       touch-action: pan-y pinch-zoom;
     }
-
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
     }
-
     .modal-content {
       position: relative;
       margin: auto;
@@ -929,7 +924,6 @@
       justify-content: center;
       touch-action: pan-y pinch-zoom;
     }
-
     .modal-image {
       max-width: 100%;
       max-height: 100%;
@@ -941,7 +935,6 @@
       -ms-user-select: none;
       user-select: none;
     }
-
     .modal-close {
       position: absolute;
       top: 15px;
@@ -959,7 +952,6 @@
       align-items: center;
       justify-content: center;
     }
-
     .modal-nav {
       position: absolute;
       top: 50%;
@@ -979,19 +971,15 @@
       align-items: center;
       justify-content: center;
     }
-
     .modal-prev {
       left: 10px;
     }
-
     .modal-next {
       right: 10px;
     }
-
     .modal-nav:hover {
       background: rgba(255,255,255,0.4);
     }
-
     .modal-counter {
       position: absolute;
       bottom: 15px;
@@ -1003,27 +991,27 @@
       padding: 6px 12px;
       border-radius: 15px;
     }
-    
+   
     /* Newsletter Section */
     .newsletter {
       background: var(--zara-light-gray);
       padding: 2.5rem 0;
       text-align: center;
     }
-    
+   
     .newsletter-content {
       max-width: 500px;
       margin: 0 auto;
       padding: 0 1rem;
     }
-    
+   
     .newsletter-form {
       display: flex;
       gap: 0.8rem;
       margin-top: 1.5rem;
       flex-direction: column;
     }
-    
+   
     .newsletter-input {
       padding: 0.9rem;
       border: 1px solid var(--zara-border);
@@ -1034,25 +1022,25 @@
       width: 100%;
       border-radius: 2px;
     }
-    
+   
     .newsletter-input::placeholder {
       color: var(--zara-dark-gray);
     }
-    
+   
     /* Empty State Premium */
     .empty-state {
       text-align: center;
       padding: 3rem 1rem;
       background: var(--zara-white);
     }
-    
+   
     .empty-state i {
       font-size: 3rem;
       color: var(--zara-dark-gray);
       margin-bottom: 1.5rem;
       opacity: 0.3;
     }
-    
+   
     .empty-state h3 {
       font-size: 1.4rem;
       font-weight: 300;
@@ -1061,7 +1049,7 @@
       text-transform: uppercase;
       letter-spacing: 2px;
     }
-    
+   
     .empty-state p {
       color: var(--zara-dark-gray);
       font-weight: 300;
@@ -1070,7 +1058,7 @@
       line-height: 1.5;
       font-size: 0.9rem;
     }
-    
+   
     /* Footer Premium - Optimisé Mobile */
     footer {
       background: var(--zara-white);
@@ -1078,14 +1066,14 @@
       padding: 2.5rem 0 1.5rem;
       margin-top: auto;
     }
-    
+   
     .footer-content {
       display: grid;
       grid-template-columns: 1fr;
       gap: 2rem;
       margin-bottom: 2rem;
     }
-    
+   
     .footer-column h3 {
       font-size: 0.85rem;
       margin-bottom: 1.2rem;
@@ -1094,15 +1082,15 @@
       text-transform: uppercase;
       letter-spacing: 2px;
     }
-    
+   
     .footer-links {
       list-style: none;
     }
-    
+   
     .footer-links li {
       margin-bottom: 0.8rem;
     }
-    
+   
     .footer-links a {
       color: var(--zara-dark-gray);
       transition: all 0.3s ease;
@@ -1112,18 +1100,18 @@
       text-transform: uppercase;
       text-decoration: none;
     }
-    
+   
     .footer-links a:hover {
       color: var(--zara-black);
       padding-left: 3px;
     }
-    
+   
     .social-links {
       display: flex;
       gap: 0.8rem;
       margin-top: 1.5rem;
     }
-    
+   
     .social-link {
       display: flex;
       align-items: center;
@@ -1137,13 +1125,13 @@
       font-size: 0.9rem;
       text-decoration: none;
     }
-    
+   
     .social-link:hover {
       background: var(--zara-black);
       color: var(--zara-white);
       transform: translateY(-1px);
     }
-    
+   
     .footer-bottom {
       text-align: center;
       padding-top: 1.5rem;
@@ -1155,34 +1143,34 @@
       text-transform: uppercase;
       line-height: 1.4;
     }
-    
+   
     /* Loading Animation */
     .loading {
       opacity: 0;
       transform: translateY(15px);
       animation: fadeInUp 0.6s ease forwards;
     }
-    
+   
     @keyframes fadeInUp {
       to {
         opacity: 1;
         transform: translateY(0);
       }
     }
-    
+   
     /* Media Queries pour les tablettes */
     @media (min-width: 768px) {
       .header-container {
         padding: 0 1.5rem;
         flex-wrap: nowrap;
       }
-      
+     
       .logo {
         font-size: 1.6rem;
         order: 1;
         flex: none;
       }
-      
+     
       .nav-links {
         display: flex;
         position: static;
@@ -1195,21 +1183,21 @@
         flex: 1;
         justify-content: center;
       }
-      
+     
       .nav-links a {
         font-size: 0.8rem;
         padding: 0;
       }
-      
+     
       .header-actions {
         order: 3;
         gap: 1rem;
       }
-      
+     
       .mobile-menu-btn {
         display: none;
       }
-      
+     
       .search-bar {
         display: flex;
         position: static;
@@ -1217,179 +1205,181 @@
         padding: 0;
         border: none;
       }
-      
+     
       .search-bar input {
         width: 180px;
         padding: 0.5rem 0;
       }
-      
+     
       .mobile-search-btn {
         display: none;
       }
-      
+     
       .hero {
         padding: 5rem 0 4rem;
         min-height: 80vh;
       }
-      
+     
       .hero h1 {
         font-size: 3rem;
         letter-spacing: 4px;
       }
-      
+     
       .hero p {
         font-size: 1.2rem;
       }
-      
+     
       .cta-button {
         padding: 1.3rem 3rem;
         font-size: 0.85rem;
       }
-      
+     
       .section {
         padding: 4rem 0;
       }
-      
+     
       .section-title {
         font-size: 1.8rem;
       }
-      
+     
       .produits-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 2rem;
       }
-      
+     
       .produit-gallery {
         height: 350px;
       }
-      
+     
       .produit-actions {
         flex-direction: row;
       }
-      
+     
       .btn {
         width: auto;
         flex: 1;
+        font-size: 0.8rem;
+        padding: 1rem 1.2rem;
       }
-      
+     
       .footer-content {
         grid-template-columns: 2fr 1fr 1fr;
         gap: 2.5rem;
       }
-      
+     
       .newsletter-form {
         flex-direction: row;
       }
-      
+     
       .cart-notification {
         right: 20px;
         left: auto;
         max-width: 350px;
       }
     }
-    
+   
     /* Media Queries pour les desktop */
     @media (min-width: 1024px) {
       .header-container {
         padding: 0 2rem;
       }
-      
+     
       .logo {
         font-size: 1.8rem;
       }
-      
+     
       .nav-links {
         gap: 3rem;
       }
-      
+     
       .search-bar input {
         width: 200px;
       }
-      
+     
       .hero {
         padding: 6rem 0 5rem;
         min-height: 100vh;
       }
-      
+     
       .hero h1 {
         font-size: 4rem;
         letter-spacing: 5px;
       }
-      
+     
       .hero p {
         font-size: 1.3rem;
       }
-      
+     
       .cta-button {
         padding: 1.4rem 3.5rem;
       }
-      
+     
       .section {
         padding: 5rem 0;
       }
-      
+     
       .section-title {
         font-size: 2rem;
       }
-      
+     
       .produits-grid {
         grid-template-columns: repeat(3, 1fr);
         gap: 2.5rem;
       }
-      
+     
       .produit-gallery {
         height: 400px;
       }
-      
+     
       .footer-content {
         grid-template-columns: 2fr 1fr 1fr 1fr;
         gap: 3rem;
       }
-      
+     
       .cart-notification {
         right: 30px;
         max-width: 380px;
       }
     }
-    
+   
     /* Media Queries pour les grands écrans */
     @media (min-width: 1200px) {
       .produits-grid {
         grid-template-columns: repeat(4, 1fr);
       }
-      
+     
       .hero h1 {
         font-size: 4.5rem;
       }
     }
-    
+   
     /* Support pour l'orientation paysage sur mobile */
     @media (max-height: 500px) and (orientation: landscape) {
       .hero {
         min-height: 100vh;
         padding: 3rem 0;
       }
-      
+     
       .hero h1 {
         font-size: 2rem;
         margin-bottom: 0.5rem;
       }
-      
+     
       .hero p {
         font-size: 0.9rem;
         margin-bottom: 1.5rem;
       }
-      
+     
       .cta-button {
         padding: 0.8rem 2rem;
         font-size: 0.75rem;
       }
-      
+     
       .produit-gallery {
         height: 250px;
       }
     }
-    
+   
     /* Support pour les appareils avec notch */
     @supports(padding: max(0px)) {
       .header-container,
@@ -1397,83 +1387,84 @@
         padding-left: max(1rem, env(safe-area-inset-left));
         padding-right: max(1rem, env(safe-area-inset-right));
       }
-      
+     
       .hero {
         padding-top: max(4rem, env(safe-area-inset-top));
       }
-      
+     
       footer {
         padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
       }
     }
-    
+   
     /* Améliorations pour le tactile */
     @media (hover: none) and (pointer: coarse) {
       .produit-card:hover {
         transform: none;
         box-shadow: none;
       }
-      
+     
       .produit-card:active {
         transform: scale(0.98);
       }
-      
+     
       .btn:active,
       .cta-button:active {
         transform: scale(0.95);
       }
-      
+     
       .thumbnail:hover {
         transform: none;
       }
-      
+     
       .thumbnail:active {
         transform: scale(1.1);
       }
     }
-    
+   
     /* Optimisations pour les écrans très petits */
     @media (max-width: 360px) {
       .header-container {
         padding: 0 0.8rem;
       }
-      
+     
       .logo {
         font-size: 1.2rem;
         letter-spacing: 1px;
       }
-      
+     
       .icon-btn {
         padding: 0.3rem;
         font-size: 1rem;
       }
-      
+     
       .hero h1 {
         font-size: 1.8rem;
         letter-spacing: 2px;
       }
-      
+     
       .hero p {
         font-size: 0.9rem;
         letter-spacing: 1px;
       }
-      
+     
       .cta-button {
         padding: 1rem 2rem;
         font-size: 0.75rem;
       }
-      
+     
       .produit-content {
         padding: 1rem;
       }
-      
+     
       .produit-actions {
         gap: 0.5rem;
       }
-      
+     
       .btn {
-        padding: 0.8rem 1rem;
-        font-size: 0.65rem;
+        padding: 1rem 1rem;
+        font-size: 0.8rem;
+        min-height: 48px;
       }
     }
   </style>
@@ -1493,39 +1484,37 @@
       <button onclick="hideNotification()" class="notification-btn notification-btn-outline">CONTINUER</button>
     </div>
   </div>
-
   <!-- Modal pour la galerie complète -->
   <div id="galleryModal" class="modal">
     <button class="modal-close" onclick="closeGallery()">&times;</button>
-    
+   
     <button class="modal-nav modal-prev" onclick="changeModalImage(-1)">❮</button>
     <button class="modal-nav modal-next" onclick="changeModalImage(1)">❯</button>
-    
+   
     <div class="modal-content">
       <img id="modalImage" class="modal-image" src="" alt="">
     </div>
-    
+   
     <div class="modal-counter">
       <span id="modalCounter">1 / 1</span>
     </div>
   </div>
-
   <!-- Header -->
   <header>
     <div class="header-container">
       <div class="logo"><%= boutique.nom %></div>
-      
+     
       <button class="icon-btn mobile-menu-btn" id="mobileMenuBtn">
         <i class="fas fa-bars"></i>
       </button>
-      
+     
       <nav class="nav-links" id="navLinks">
         <a href="#accueil">ACCUEIL</a>
         <a href="#produits">NOUVELLES COLLECTIONS</a>
         <a href="#categories">CATÉGORIES</a>
         <a href="/boutique/mon">MON COMPTE</a>
       </nav>
-      
+     
       <div class="header-actions">
         <div class="search-bar" id="searchBar">
           <input type="text" placeholder="RECHERCHER...">
@@ -1533,11 +1522,11 @@
             <i class="fas fa-times"></i>
           </button>
         </div>
-        
+       
         <button class="icon-btn mobile-search-btn" onclick="toggleSearch()">
           <i class="fas fa-search"></i>
         </button>
-        
+       
         <% if (typeof user !== 'undefined' && user) { %>
           <a href="/vendeur/dashboard" class="icon-btn">
             <i class="fas fa-user"></i>
@@ -1547,7 +1536,7 @@
             <i class="fas fa-user"></i>
           </a>
         <% } %>
-        
+       
         <a href="/panier" class="icon-btn" style="position: relative;" id="cartIcon">
           <i class="fas fa-shopping-bag"></i>
           <% if (typeof panierCount !== 'undefined' && panierCount > 0) { %>
@@ -1557,23 +1546,22 @@
       </div>
     </div>
   </header>
-
   <!-- Main Content -->
   <main>
     <!-- Hero Section avec Fond Noir et Animations Cosmiques -->
     <section class="hero" id="accueil">
       <!-- Grille animée en arrière-plan -->
       <div class="hero-grid"></div>
-      
+     
       <!-- Étoiles scintillantes -->
       <div class="stars" id="starsContainer"></div>
-      
+     
       <!-- Particules cosmiques -->
       <div class="cosmic-particles" id="cosmicParticles"></div>
-      
+     
       <!-- Effet de lumière mouvante -->
       <div class="light-beam"></div>
-      
+     
       <div class="hero-content">
         <h1><%= boutique.nom %></h1>
         <p><%= boutique.description %></p>
@@ -1581,13 +1569,11 @@
           <span>DÉCOUVRIR LA COLLECTION</span>
         </a>
       </div>
-
       <!-- Indicateur de défilement animé -->
       <div class="scroll-indicator">
         <div class="scroll-arrow"></div>
       </div>
     </section>
-
     <!-- Produits Section -->
     <section class="section" id="produits">
       <div class="container">
@@ -1595,7 +1581,7 @@
           <h2 class="section-title">NOUVELLE COLLECTION</h2>
           <p class="section-subtitle">Découvrez nos dernières créations et pièces exclusives</p>
         </div>
-        
+       
         <% if (produits && produits.length > 0) { %>
           <div class="produits-grid">
             <% produits.forEach((produit, index) => { %>
@@ -1603,20 +1589,19 @@
                 <!-- Galerie de photos -->
                 <div class="produit-gallery">
                   <% if (produit.imagesGallery && produit.imagesGallery.length > 0) { %>
-                    <img src="<%= produit.imagesGallery[0].url %>" 
-                         alt="<%= produit.nom %>" 
+                    <img src="<%= produit.imagesGallery[0].url %>"
+                         alt="<%= produit.nom %>"
                          class="gallery-main"
                          data-product-index="<%= index %>"
                          data-current-image="0">
-                    
+                   
                     <div class="gallery-counter">
                       <span class="current-image">1</span> / <%= produit.imagesGallery.length %>
                     </div>
-
                     <% if (produit.imagesGallery.length > 1) { %>
                       <div class="gallery-thumbnails">
                         <% produit.imagesGallery.forEach((image, imgIndex) => { %>
-                          <img src="<%= image.url %>" 
+                          <img src="<%= image.url %>"
                                alt="Miniature <%= imgIndex + 1 %>"
                                class="thumbnail <%= imgIndex === 0 ? 'active' : '' %>"
                                data-product-index="<%= index %>"
@@ -1625,11 +1610,9 @@
                         <% }); %>
                       </div>
                     <% } %>
-
                     <button class="gallery-btn" onclick="openGallery(<%= index %>)">
                       🖼️ Voir galerie
                     </button>
-
                   <% } else if (produit.image) { %>
                     <img src="<%= produit.image %>" alt="<%= produit.nom %>" class="gallery-main">
                   <% } else { %>
@@ -1637,10 +1620,9 @@
                       📷 Aucune image
                     </div>
                   <% } %>
-                  
+                 
                   <div class="produit-badge">NOUVEAU</div>
                 </div>
-
                 <div class="produit-content">
                   <div class="produit-category">COLLECTION EXCLUSIVE</div>
                   <h3 class="produit-name"><%= produit.nom %></h3>
@@ -1654,7 +1636,7 @@
                       </button>
                     </form>
                     <a href="/boutique/produit/<%= produit._id %>" class="btn btn-outline">
-                      Voir les détails
+                      VOIR LES DÉTAILS
                     </a>
                   </div>
                 </div>
@@ -1673,7 +1655,6 @@
         <% } %>
       </div>
     </section>
-
     <!-- Newsletter Section -->
     <section class="newsletter">
       <div class="container">
@@ -1688,7 +1669,6 @@
       </div>
     </section>
   </main>
-
   <!-- Footer -->
   <footer>
     <div class="container">
@@ -1705,7 +1685,7 @@
             <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
           </div>
         </div>
-        
+       
         <div class="footer-column">
           <h3>BOUTIQUE</h3>
           <ul class="footer-links">
@@ -1715,7 +1695,7 @@
             <li><a href="#">Lookbook</a></li>
           </ul>
         </div>
-        
+       
         <div class="footer-column">
           <h3>SERVICE CLIENT</h3>
           <ul class="footer-links">
@@ -1725,7 +1705,7 @@
             <li><a href="#">Guide des tailles</a></li>
           </ul>
         </div>
-        
+       
         <div class="footer-column">
           <h3>INFORMATIONS</h3>
           <ul class="footer-links">
@@ -1736,40 +1716,37 @@
           </ul>
         </div>
       </div>
-      
+     
       <div class="footer-bottom">
         <p>&copy; 2024 <%= boutique.nom %>. TOUS DROITS RÉSERVÉS | MENTIONS LÉGALES | POLITIQUE DE CONFIDENTIALITÉ</p>
       </div>
     </div>
   </footer>
-
   <script>
     // Stocker les données des produits globalement
     const produitsData = <%- JSON.stringify(produits) %>;
-
     // Variables globales pour la galerie
     let currentGallery = null;
     let currentImageIndex = 0;
-
     // Fonction pour créer les étoiles scintillantes
     function createStars() {
       const starsContainer = document.getElementById('starsContainer');
       const starCount = window.innerWidth < 768 ? 80 : 150;
-      
+     
       for (let i = 0; i < starCount; i++) {
         const star = document.createElement('div');
         star.className = 'star';
-        
+       
         // Position aléatoire
         const left = Math.random() * 100;
         const top = Math.random() * 100;
-        
+       
         // Taille aléatoire
         const size = Math.random() * 2;
-        
+       
         // Délai d'animation aléatoire
         const delay = Math.random() * 3;
-        
+       
         star.style.cssText = `
           left: ${left}%;
           top: ${top}%;
@@ -1777,31 +1754,30 @@
           height: ${size}px;
           animation-delay: ${delay}s;
         `;
-        
+       
         starsContainer.appendChild(star);
       }
     }
-
     // Fonction pour créer les particules cosmiques
     function createCosmicParticles() {
       const particlesContainer = document.getElementById('cosmicParticles');
       const particleCount = window.innerWidth < 768 ? 10 : 20;
-      
+     
       for (let i = 0; i < particleCount; i++) {
         const particle = document.createElement('div');
         particle.className = 'cosmic-particle';
-        
+       
         // Position de départ aléatoire
         const startX = Math.random() * 100;
         const startY = Math.random() * 100;
-        
+       
         // Délai et durée d'animation aléatoires
         const delay = Math.random() * 8;
         const duration = 6 + Math.random() * 4;
-        
+       
         // Taille aléatoire
         const size = 1 + Math.random() * 3;
-        
+       
         particle.style.cssText = `
           left: ${startX}%;
           top: ${startY}%;
@@ -1810,30 +1786,28 @@
           animation-delay: ${delay}s;
           animation-duration: ${duration}s;
         `;
-        
+       
         particlesContainer.appendChild(particle);
       }
     }
-
     // Fonction pour basculer le menu mobile
     function toggleMobileMenu() {
       const navLinks = document.getElementById('navLinks');
       navLinks.classList.toggle('active');
-      
+     
       // Fermer la recherche si ouverte
       const searchBar = document.getElementById('searchBar');
       searchBar.classList.remove('active');
     }
-
     // Fonction pour basculer la recherche mobile
     function toggleSearch() {
       const searchBar = document.getElementById('searchBar');
       searchBar.classList.toggle('active');
-      
+     
       // Fermer le menu si ouvert
       const navLinks = document.getElementById('navLinks');
       navLinks.classList.remove('active');
-      
+     
       // Focus sur l'input de recherche
       if (searchBar.classList.contains('active')) {
         setTimeout(() => {
@@ -1841,36 +1815,35 @@
         }, 100);
       }
     }
-
     // Fonction pour changer l'image principale
     function changeMainImage(productIndex, imageIndex) {
       const productCard = document.querySelector(`[data-product-index="${productIndex}"]`);
       if (!productCard) return;
-      
+     
       const mainImage = productCard.querySelector('.gallery-main');
       const thumbnails = productCard.querySelectorAll('.thumbnail');
       const counter = productCard.querySelector('.current-image');
-      
+     
       if (!mainImage) return;
-      
+     
       // Animation de fondu
       mainImage.style.opacity = '0';
-      
+     
       setTimeout(() => {
         // Mettre à jour l'image principale
         const produit = produitsData[productIndex];
         if (produit.imagesGallery && produit.imagesGallery[imageIndex]) {
           mainImage.src = produit.imagesGallery[imageIndex].url;
           mainImage.setAttribute('data-current-image', imageIndex);
-          
+         
           // Animation de fondu
           mainImage.style.opacity = '1';
-          
+         
           // Mettre à jour les miniatures actives
           thumbnails.forEach((thumb, index) => {
             thumb.classList.toggle('active', index === imageIndex);
           });
-          
+         
           // Mettre à jour le compteur
           if (counter) {
             counter.textContent = imageIndex + 1;
@@ -1878,29 +1851,27 @@
         }
       }, 150);
     }
-
     // Fonction pour ouvrir la galerie complète
     function openGallery(productIndex) {
       currentGallery = productIndex;
       currentImageIndex = 0;
-      
+     
       const produit = produitsData[productIndex];
       const modal = document.getElementById('galleryModal');
       const modalImage = document.getElementById('modalImage');
       const modalCounter = document.getElementById('modalCounter');
-      
+     
       if (produit.imagesGallery && produit.imagesGallery.length > 0) {
         modalImage.src = produit.imagesGallery[0].url;
         modalImage.alt = produit.nom;
         modalCounter.textContent = `1 / ${produit.imagesGallery.length}`;
         modal.style.display = 'block';
         document.body.style.overflow = 'hidden';
-        
+       
         // Empêcher le défilement de l'arrière-plan sur mobile
         document.documentElement.style.overflow = 'hidden';
       }
     }
-
     // Fonction pour fermer la galerie
     function closeGallery() {
       const modal = document.getElementById('galleryModal');
@@ -1909,28 +1880,27 @@
       document.documentElement.style.overflow = 'auto';
       currentGallery = null;
     }
-
     // Fonction pour changer d'image dans le modal
     function changeModalImage(direction) {
       if (currentGallery === null) return;
-      
+     
       const produit = produitsData[currentGallery];
       const images = produit.imagesGallery;
       const modalImage = document.getElementById('modalImage');
       const modalCounter = document.getElementById('modalCounter');
-      
+     
       currentImageIndex += direction;
-      
+     
       // Gérer le défilement circulaire
       if (currentImageIndex < 0) {
         currentImageIndex = images.length - 1;
       } else if (currentImageIndex >= images.length) {
         currentImageIndex = 0;
       }
-      
+     
       // Animation de fondu
       modalImage.style.opacity = '0';
-      
+     
       setTimeout(() => {
         modalImage.src = images[currentImageIndex].url;
         modalImage.alt = produit.nom;
@@ -1938,93 +1908,91 @@
         modalImage.style.opacity = '1';
       }, 200);
     }
-
     // Fonctions pour la notification panier
     function showNotification(productName, productPrice) {
       const notification = document.getElementById('cartNotification');
       const message = document.getElementById('notificationMessage');
-      
+     
       message.textContent = `${productName} - ${productPrice} a été ajouté à votre panier`;
       notification.classList.add('show');
-      
+     
       // Masquer automatiquement après 5 secondes
       setTimeout(() => {
         hideNotification();
       }, 5000);
     }
-    
+   
     function hideNotification() {
       const notification = document.getElementById('cartNotification');
       notification.classList.remove('show');
     }
-
     // Fonction pour mettre à jour le badge du panier
     function updateCartBadge(count) {
       const cartIcon = document.getElementById('cartIcon');
       let badge = document.getElementById('cartBadge');
-      
+     
       if (!badge) {
         badge = document.createElement('span');
         badge.id = 'cartBadge';
         badge.className = 'cart-badge';
         cartIcon.appendChild(badge);
       }
-      
+     
       badge.textContent = count;
-      
+     
       // Animation du badge (comme WhatsApp)
       badge.style.animation = 'none';
       setTimeout(() => {
         badge.style.animation = 'pulse 2s infinite';
       }, 10);
     }
-    
+   
     // Gestion de l'ajout au panier avec AJAX
     document.addEventListener('DOMContentLoaded', function() {
       // Créer les animations de fond
       createStars();
       createCosmicParticles();
-      
+     
       // Gestion du menu mobile
       const mobileMenuBtn = document.getElementById('mobileMenuBtn');
       if (mobileMenuBtn) {
         mobileMenuBtn.addEventListener('click', toggleMobileMenu);
       }
-      
+     
       // Fermer le menu en cliquant à l'extérieur
       document.addEventListener('click', function(e) {
         const navLinks = document.getElementById('navLinks');
         const searchBar = document.getElementById('searchBar');
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        
-        if (navLinks.classList.contains('active') && 
-            !navLinks.contains(e.target) && 
+       
+        if (navLinks.classList.contains('active') &&
+            !navLinks.contains(e.target) &&
             !mobileMenuBtn.contains(e.target)) {
           navLinks.classList.remove('active');
         }
-        
-        if (searchBar.classList.contains('active') && 
-            !searchBar.contains(e.target) && 
+       
+        if (searchBar.classList.contains('active') &&
+            !searchBar.contains(e.target) &&
             !document.querySelector('.mobile-search-btn').contains(e.target)) {
           searchBar.classList.remove('active');
         }
       });
-      
+     
       const forms = document.querySelectorAll('.add-to-cart-form');
-      
+     
       forms.forEach(form => {
         form.addEventListener('submit', function(e) {
           e.preventDefault();
-          
+         
           const formData = new FormData(this);
           const productName = this.querySelector('input[name="produitNom"]').value;
           const productPrice = this.querySelector('input[name="produitPrix"]').value;
           const submitBtn = this.querySelector('.add-to-cart-btn');
-          
+         
           // Désactiver le bouton pendant la requête
           submitBtn.disabled = true;
           submitBtn.textContent = 'AJOUT EN COURS...';
-          
+         
           // Envoyer la requête AJAX
           fetch(this.action, {
             method: 'POST',
@@ -2038,14 +2006,14 @@
             if (data.success) {
               // Afficher la notification
               showNotification(productName, productPrice);
-              
+             
               // Mettre à jour le badge du panier avec effet WhatsApp
               updateCartBadge(data.panierCount);
-              
+             
               // Effet de confirmation sur le bouton
               submitBtn.textContent = '✓ AJOUTÉ !';
               submitBtn.style.background = 'var(--success-color)';
-              
+             
               setTimeout(() => {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'AJOUTER AU PANIER';
@@ -2060,7 +2028,7 @@
           });
         });
       });
-      
+     
       // Smooth scroll pour les ancres
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -2071,14 +2039,13 @@
               behavior: 'smooth',
               block: 'start'
             });
-            
+           
             // Fermer le menu mobile après le clic
             const navLinks = document.getElementById('navLinks');
             navLinks.classList.remove('active');
           }
         });
       });
-
       // Animation des produits au scroll
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -2088,11 +2055,9 @@
           }
         });
       }, { threshold: 0.1 });
-
       document.querySelectorAll('.produit-card').forEach(card => {
         observer.observe(card);
       });
-
       // Navigation au clavier pour la galerie
       document.addEventListener('keydown', function(e) {
         const modal = document.getElementById('galleryModal');
@@ -2106,31 +2071,29 @@
           }
         }
       });
-
       // Fermer la galerie en cliquant à l'extérieur
       document.getElementById('galleryModal').addEventListener('click', function(e) {
         if (e.target === this) {
           closeGallery();
         }
       });
-
       // Support du swipe pour la galerie sur mobile
       let touchStartX = 0;
       let touchEndX = 0;
-      
+     
       document.getElementById('galleryModal').addEventListener('touchstart', function(e) {
         touchStartX = e.changedTouches[0].screenX;
       });
-      
+     
       document.getElementById('galleryModal').addEventListener('touchend', function(e) {
         touchEndX = e.changedTouches[0].screenX;
         handleSwipe();
       });
-      
+     
       function handleSwipe() {
         const swipeThreshold = 50;
         const diff = touchStartX - touchEndX;
-        
+       
         if (Math.abs(diff) > swipeThreshold) {
           if (diff > 0) {
             // Swipe gauche - image suivante
@@ -2141,14 +2104,13 @@
           }
         }
       }
-
       // Effet de parallaxe sur le défilement (désactivé sur mobile pour les performances)
       if (window.innerWidth > 768) {
         window.addEventListener('scroll', function() {
           const scrolled = window.pageYOffset;
           const stars = document.querySelector('.stars');
           const particles = document.querySelector('.cosmic-particles');
-          
+         
           if (stars) {
             stars.style.transform = `translateY(${scrolled * 0.5}px)`;
           }
@@ -2157,7 +2119,6 @@
           }
         });
       }
-
       // Réinitialiser les animations lors du redimensionnement
       window.addEventListener('resize', function() {
         // Recréer les étoiles et particules

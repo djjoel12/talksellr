@@ -14,8 +14,7 @@ router.use((req, res, next) => {
   next();
 });
 
-// GET route pour afficher panier AVEC commandes
-// GET route pour afficher panier - VERSION SIMPLIFIÉE
+// GET route pour afficher panier
 router.get('/', async (req, res) => {
   try {
     const panier = req.session.panier || [];
@@ -90,7 +89,8 @@ router.get('/', async (req, res) => {
     res.status(500).send('Erreur serveur lors de l\'affichage du panier');
   }
 });
-// POST route pour ajouter un produit au panier - VERSION ULTRA SIMPLIFIÉE
+
+// POST route pour ajouter un produit au panier - VERSION CORRIGÉE
 router.post('/ajouter/:id', async (req, res) => {
   try {
     const produitId = req.params.id;
@@ -98,17 +98,28 @@ router.post('/ajouter/:id', async (req, res) => {
     console.log('🛒 DÉBUT Ajout au panier');
     console.log('📦 Produit ID:', produitId);
     console.log('📝 Body reçu:', req.body);
-    console.log('📝 Query reçu:', req.query);
+    console.log('📝 Headers:', req.headers);
     
-    // CORRECTION SIMPLIFIÉE : Toujours utiliser 1 comme quantité
+    // CORRECTION : Toujours utiliser 1 comme quantité
     const quantite = 1;
-    console.log('🔢 Quantité utilisée:', quantite);
+
+    // Vérifier que l'ID est valide
+    if (!produitId || produitId.length !== 24) {
+      console.log('❌ ID produit invalide');
+      return res.json({ // TOUJOURS JSON pour AJAX
+        success: false,
+        message: 'ID produit invalide'
+      });
+    }
 
     // Vérifier que le produit existe AVEC populate de la boutique
     const produit = await Produit.findById(produitId).populate('boutique', 'slug nom');
     if (!produit) {
       console.log('❌ Produit non trouvé');
-      return res.status(404).send('Produit non trouvé');
+      return res.json({ // TOUJOURS JSON pour AJAX
+        success: false,
+        message: 'Produit non trouvé'
+      });
     }
 
     console.log('🏪 Produit trouvé:', produit.nom);
@@ -123,39 +134,32 @@ router.post('/ajouter/:id', async (req, res) => {
     console.log('📊 Panier avant ajout:', req.session.panier);
 
     // Vérifier si produit déjà dans le panier
-    const index = req.session.panier.findIndex(item => {
-      console.log('🔍 Comparaison:', item.produitId, '===', produitId);
-      return item.produitId === produitId;
-    });
+    const index = req.session.panier.findIndex(item => item.produitId === produitId);
 
     console.log('📌 Index trouvé:', index);
 
     if (index !== -1) {
-      // CORRECTION : Vérifier que l'item existe avant d'incrémenter
-      if (req.session.panier[index]) {
-        // Initialiser la quantité si elle n'existe pas
-        if (!req.session.panier[index].quantite) {
-          req.session.panier[index].quantite = 0;
-        }
-        // Incrémenter la quantité
-        req.session.panier[index].quantite += quantite;
-        console.log('📈 Quantité incrémentée:', req.session.panier[index].quantite);
-      } else {
-        console.log('⚠️ Item à l\'index', index, 'est undefined');
-        // Ajouter comme nouvel item
-        req.session.panier.push({ 
-          produitId, 
-          quantite: quantite 
-        });
+      // Produit déjà dans le panier - incrémenter la quantité
+      if (!req.session.panier[index].quantite) {
+        req.session.panier[index].quantite = 0;
       }
+      req.session.panier[index].quantite += quantite;
+      console.log('📈 Quantité incrémentée:', req.session.panier[index].quantite);
     } else {
-      // Ajouter comme nouvel item
+      // Nouveau produit - l'ajouter au panier
       req.session.panier.push({ 
         produitId, 
         quantite: quantite 
       });
       console.log('🆕 Nouveau produit ajouté');
     }
+
+    // CORRECTION : Calculer le TOTAL des articles (quantité totale)
+    const panierCount = req.session.panier.reduce((total, item) => {
+      return total + (item.quantite || 1);
+    }, 0);
+
+    console.log('🧮 TOTAL articles dans panier:', panierCount);
 
     // Stocker la boutique actuelle dans la session
     if (produit.boutique && produit.boutique.slug) {
@@ -172,46 +176,34 @@ router.post('/ajouter/:id', async (req, res) => {
     req.session.save((err) => {
       if (err) {
         console.error('❌ Erreur sauvegarde session:', err);
-        if (req.headers['x-requested-with'] === 'XMLHttpRequest') {
-          return res.json({
-            success: false,
-            message: 'Erreur sauvegarde session'
-          });
-        } else {
-          return res.status(500).send('Erreur sauvegarde session');
-        }
+        return res.json({ // TOUJOURS JSON même en cas d'erreur
+          success: false,
+          message: 'Erreur sauvegarde session'
+        });
       }
       
       console.log('✅ Session sauvegardée avec succès');
       
-      // Réponse JSON pour AJAX ou redirection normale
-      if (req.headers['x-requested-with'] === 'XMLHttpRequest') {
-        console.log('📨 Réponse AJAX envoyée');
-        res.json({
-          success: true,
-          message: 'Produit ajouté au panier',
-          panierCount: req.session.panier.length,
-          boutiqueSlug: req.session.boutiqueActuelle
-        });
-      } else {
-        console.log('🔄 Redirection vers:', req.get('Referer') || '/panier');
-        const referer = req.get('Referer') || '/panier';
-        res.redirect(referer);
-      }
+      // CORRECTION : TOUJOURS renvoyer du JSON pour les requêtes AJAX
+      // Ne pas faire de redirection HTML dans cette route
+      console.log('📨 Réponse JSON envoyée');
+      res.json({
+        success: true,
+        message: 'Produit ajouté au panier',
+        panierCount: panierCount,
+        boutiqueSlug: req.session.boutiqueActuelle
+      });
     });
     
   } catch (err) {
     console.error('❌ Erreur ajout panier :', err);
     console.error('❌ Stack trace:', err.stack);
     
-    if (req.headers['x-requested-with'] === 'XMLHttpRequest') {
-      res.json({
-        success: false,
-        message: 'Erreur lors de l\'ajout au panier: ' + err.message
-      });
-    } else {
-      res.status(500).send('Erreur serveur lors de l\'ajout au panier: ' + err.message);
-    }
+    // CORRECTION : TOUJOURS renvoyer du JSON même en cas d'erreur
+    res.json({
+      success: false,
+      message: 'Erreur lors de l\'ajout au panier: ' + err.message
+    });
   }
 });
 
@@ -298,6 +290,12 @@ router.get('/test-ajout/:id', async (req, res) => {
         </div>
         
         <div class="test-section">
+          <h3>Test AJAX</h3>
+          <button onclick="testAjax()">Tester AJAX</button>
+          <div id="ajax-result"></div>
+        </div>
+        
+        <div class="test-section">
           <h3>Formulaire normal POST</h3>
           <form action="/panier/ajouter/${produit._id}" method="POST">
             <input type="hidden" name="quantite" value="1">
@@ -311,6 +309,29 @@ router.get('/test-ajout/:id', async (req, res) => {
           <a href="/panier">Voir le panier</a><br>
           <a href="/panier/reset-session">Reset session</a>
         </div>
+
+        <script>
+          async function testAjax() {
+            try {
+              const resultDiv = document.getElementById('ajax-result');
+              resultDiv.innerHTML = 'Envoi en cours...';
+              
+              const response = await fetch('/panier/ajouter/${produit._id}', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded',
+                  'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: 'quantite=1'
+              });
+              
+              const data = await response.json();
+              resultDiv.innerHTML = '✅ Réponse: ' + JSON.stringify(data, null, 2);
+            } catch (error) {
+              document.getElementById('ajax-result').innerHTML = '❌ Erreur: ' + error.message;
+            }
+          }
+        </script>
       </body>
       </html>
     `);

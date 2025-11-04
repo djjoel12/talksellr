@@ -3,21 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mes Commandes</title>
+  <title><%= produit.nom %> - <%= boutique.nom %></title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* Gardez le même CSS que vous avez déjà */
     :root {
-      --bg-primary: #ffffff;
-      --bg-secondary: #f8f9fa;
-      --bg-card: #ffffff;
-      --text-primary: #000000;
-      --text-secondary: #6c757d;
-      --border: #dee2e6;
-      --success: #28a745;
-      --warning: #ffc107;
-      --info: #17a2b8;
-      --danger: #dc3545;
-      --shadow: 0 2px 4px rgba(0,0,0,0.1);
+      --lv-dark: #000000;
+      --lv-gold: #C9A96E;
+      --lv-beige: #F5F5F0;
+      --lv-white: #FFFFFF;
+      --lv-light-gray: #F8F8F8;
+      --lv-text: #1A1A1A;
+      --lv-border: #DDDDDD;
+      --transition-luxe: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
     * {
@@ -27,782 +24,1077 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg-secondary);
-      color: var(--text-primary);
-      line-height: 1.6;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      color: var(--lv-text);
+      background: var(--lv-white);
+      line-height: 1.5;
+      font-weight: 300;
+      min-height: 100vh;
     }
 
-    .container {
-      max-width: 1200px;
+    .container { 
+      max-width: 1400px; 
+      margin: 0 auto; 
+      padding: 2rem; 
+      position: relative; 
+    }
+
+    /* Header Louis Vuitton */
+    header {
+      background: var(--lv-white);
+      border-bottom: 1px solid var(--lv-border);
+      padding: 1.5rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(20px);
+    }
+   
+    .header-container {
+      max-width: 1400px;
       margin: 0 auto;
-      padding: 20px;
-    }
-
-    .page-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 30px;
-      padding-bottom: 20px;
-      border-bottom: 2px solid var(--border);
-    }
-
-    .page-title {
-      font-size: 2rem;
-      font-weight: 700;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      margin-bottom: 30px;
-    }
-
-    .stat-card {
-      background: var(--bg-card);
-      padding: 20px;
-      border-radius: 12px;
-      text-align: center;
-      box-shadow: var(--shadow);
-      border: 1px solid var(--border);
-    }
-
-    .stat-number {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 5px;
-    }
-
-    .stat-label {
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-    }
-
-    .filters-bar {
-      background: var(--bg-card);
-      padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 25px;
-      box-shadow: var(--shadow);
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .filter-group {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .filter-select {
-      padding: 8px 12px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-    }
-
-    .search-box {
-      padding: 8px 12px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      min-width: 250px;
-    }
-
-    .commande-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      margin-bottom: 20px;
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .commande-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-
-    .commande-header {
-      padding: 20px;
-      background: var(--bg-secondary);
-      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-
-    .commande-info {
-      display: flex;
-      gap: 20px;
-      align-items: center;
-    }
-
-    .commande-id {
-      font-weight: 700;
-      font-size: 1.1rem;
-    }
-
-    .commande-date {
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-    }
-
-    .statut {
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 600;
+   
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 300;
+      letter-spacing: 3px;
+      color: var(--lv-dark);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      text-decoration: none;
     }
 
-    .statut-enattente { background: #fff3cd; color: #856404; }
-    .statut-confirmee { background: #d1ecf1; color: #0c5460; }
-    .statut-enpreparation { background: #ffeaa7; color: #8d6e00; }
-    .statut-expediee { background: #cce7ff; color: #004085; }
-    .statut-livree { background: #d4edda; color: #155724; }
-    .statut-annulee { background: #f8d7da; color: #721c24; }
-
-    .commande-body {
-      padding: 20px;
-    }
-
-    .client-info {
-      background: var(--bg-secondary);
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 10px;
-    }
-
-    .client-detail {
+    .nav-links {
       display: flex;
-      align-items: center;
-      gap: 8px;
+      gap: 3rem;
     }
 
-    .client-type {
-      background: #e9ecef;
-      padding: 4px 8px;
-      border-radius: 12px;
-      font-size: 0.75rem;
-      font-weight: 600;
+    .nav-links a {
+      font-size: 0.8rem;
+      font-weight: 300;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--lv-dark);
+      text-decoration: none;
+      transition: color 0.3s ease;
     }
 
-    .client-type-invite { background: #fff3cd; color: #856404; }
-    .client-type-connecte { background: #d1ecf1; color: #0c5460; }
-
-    .produits-list {
-      margin: 20px 0;
+    .nav-links a:hover {
+      color: var(--lv-gold);
     }
 
-    .produit-item {
+    .header-actions {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px;
-      border-bottom: 1px solid var(--border);
+      gap: 1.5rem;
     }
 
-    .produit-item:last-child {
-      border-bottom: none;
-    }
-
-    .produit-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex: 1;
-    }
-
-    .produit-image {
-      width: 60px;
-      height: 60px;
-      border-radius: 8px;
-      overflow: hidden;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--bg-secondary);
-      border: 2px solid var(--border);
+    .icon-btn {
+      background: none;
+      border: none;
+      color: var(--lv-dark);
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: color 0.3s ease;
       position: relative;
     }
 
-    .produit-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.2s ease;
+    .icon-btn:hover {
+      color: var(--lv-gold);
     }
 
-    .produit-image:hover img {
-      transform: scale(1.05);
-    }
-
-    .produit-image-placeholder {
-      width: 100%;
-      height: 100%;
+    .cart-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: var(--lv-gold);
+      color: var(--lv-dark);
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      font-size: 0.6rem;
+      font-weight: 600;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #f8f9fa;
-      color: #6c757d;
-      font-size: 1.2rem;
     }
 
-    .produit-details {
-      flex: 1;
+    /* Détail Produit LV */
+    .produit-detail { 
+      display: grid; 
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem; 
+      margin: 4rem 0; 
+      align-items: start;
     }
 
-    .produit-nom {
-      font-weight: 600;
-      margin-bottom: 4px;
-      color: var(--text-primary);
+    /* Galerie Produit */
+    .produit-gallery {
+      position: relative;
     }
 
-    .produit-vendeur {
-      color: var(--text-secondary);
-      font-size: 0.85rem;
-      margin-bottom: 2px;
+    .gallery-main {
+      width: 100%;
+      height: 600px;
+      object-fit: cover;
+      border-radius: 0;
+      margin-bottom: 1rem;
     }
 
-    .produit-sku {
-      color: var(--text-secondary);
+    .gallery-thumbnails {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding: 1rem 0;
+    }
+
+    .thumbnail {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      cursor: pointer;
+      border: 1px solid var(--lv-border);
+      transition: all 0.3s ease;
+      opacity: 0.7;
+    }
+
+    .thumbnail:hover,
+    .thumbnail.active {
+      opacity: 1;
+      border-color: var(--lv-gold);
+    }
+
+    .gallery-badge {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      background: var(--lv-gold);
+      color: var(--lv-dark);
+      padding: 0.5rem 1rem;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* Informations Produit */
+    .produit-info { 
+      padding: 2rem 0;
+    }
+
+    .produit-category {
       font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--lv-gold);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 1rem;
     }
 
-    .produit-prix {
-      text-align: right;
-      min-width: 120px;
+    .produit-nom { 
+      font-size: 2.5rem; 
+      font-weight: 300;
+      letter-spacing: 2px;
+      margin-bottom: 1.5rem; 
+      line-height: 1.2;
+      text-transform: uppercase;
     }
 
-    .produit-total {
-      font-weight: 700;
+    .produit-prix { 
+      font-size: 1.8rem; 
+      color: var(--lv-dark); 
+      margin-bottom: 2rem; 
+      font-weight: 300;
+      letter-spacing: 1px;
+    }
+
+    .produit-description { 
+      margin-bottom: 2rem; 
+      line-height: 1.6;
+      font-weight: 300;
+      letter-spacing: 0.5px;
+      color: var(--lv-text);
+      opacity: 0.8;
+    }
+
+    /* Sélecteur Quantité LV */
+    .quantite-selector { 
+      margin: 2rem 0; 
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .quantite-label {
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--lv-dark);
+    }
+
+    .quantite-controls {
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--lv-border);
+    }
+
+    .quantite-btn {
+      background: var(--lv-white);
+      border: none;
+      padding: 0.8rem 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: var(--lv-dark);
       font-size: 1rem;
     }
 
-    .produit-unite {
-      color: var(--text-secondary);
-      font-size: 0.85rem;
+    .quantite-btn:hover {
+      background: var(--lv-gold);
+      color: var(--lv-dark);
     }
 
-    .commande-actions {
-      padding: 20px;
-      background: var(--bg-secondary);
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-
-    .action-group {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .statut-selector {
-      padding: 8px 12px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      min-width: 180px;
-    }
-
-    .btn {
-      padding: 8px 16px;
+    .quantite-input {
+      width: 60px;
+      text-align: center;
       border: none;
-      border-radius: 6px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      text-decoration: none;
+      padding: 0.8rem;
+      font-size: 1rem;
+      background: var(--lv-white);
+      -moz-appearance: textfield;
+    }
+
+    .quantite-input::-webkit-outer-spin-button,
+    .quantite-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* Boutons LV */
+    .btn { 
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      justify-content: center;
+      gap: 0.8rem;
+      padding: 1.2rem 2.5rem; 
+      background: var(--lv-dark); 
+      color: var(--lv-white); 
+      text-decoration: none; 
+      border-radius: 0;
+      border: 2px solid var(--lv-dark);
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: all 0.3s var(--transition-luxe);
+      position: relative;
+      overflow: hidden;
     }
 
-    .btn-primary {
-      background: var(--text-primary);
-      color: var(--bg-primary);
+    .btn-primary { 
+      background: var(--lv-dark); 
+      color: var(--lv-white);
     }
 
-    .btn-primary:hover {
-      background: #333;
+    .btn-primary:hover { 
+      background: var(--lv-gold); 
+      border-color: var(--lv-gold);
+      color: var(--lv-dark);
+      transform: translateY(-2px);
     }
 
-    .btn-success {
-      background: var(--success);
-      color: white;
+    .btn-outline {
+      background: transparent;
+      color: var(--lv-dark);
+      border: 2px solid var(--lv-dark);
+    }
+
+    .btn-outline:hover {
+      background: var(--lv-dark);
+      color: var(--lv-white);
+      transform: translateY(-2px);
     }
 
     .btn-whatsapp {
       background: #25D366;
-      color: white;
+      border-color: #25D366;
+      color: var(--lv-white);
     }
 
     .btn-whatsapp:hover {
       background: #128C7E;
+      border-color: #128C7E;
+      transform: translateY(-2px);
     }
 
-    .total-section {
-      text-align: right;
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+
+    /* Informations Stock */
+    .stock-info {
+      padding: 1rem;
+      border: 1px solid var(--lv-border);
+      margin-bottom: 2rem;
+      background: var(--lv-beige);
+    }
+
+    .stock-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+    }
+
+    .stock-available {
+      color: #28a745;
+    }
+
+    .stock-low {
+      color: var(--lv-gold);
+    }
+
+    .stock-out {
+      color: #dc3545;
+    }
+
+    /* Informations Vendeur */
+    .vendeur-info { 
+      background: var(--lv-beige); 
+      padding: 2rem; 
+      border-radius: 0;
+      margin-bottom: 2rem; 
+      border-left: 3px solid var(--lv-gold);
+    }
+
+    .vendeur-name {
       font-size: 1.2rem;
-      font-weight: 700;
-      margin-top: 20px;
-      padding-top: 20px;
-      border-top: 2px solid var(--border);
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: var(--lv-dark);
     }
 
-    .empty-state {
+    .vendeur-boutique {
+      font-size: 1rem;
+      color: var(--lv-gold);
+      margin-bottom: 1rem;
+      font-weight: 300;
+      letter-spacing: 1px;
+    }
+
+    .vendeur-contact {
+      font-size: 0.9rem;
+      color: var(--lv-text);
+      opacity: 0.8;
+    }
+
+    /* Produits Similaires LV */
+    .produits-similaires { 
+      margin-top: 6rem; 
+      padding-top: 4rem; 
+      border-top: 1px solid var(--lv-border); 
+    }
+
+    .section-title {
+      text-align: center; 
+      margin-bottom: 3rem; 
+      font-size: 2rem;
+      font-weight: 300;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--lv-dark);
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 1px;
+      background: var(--lv-gold);
+    }
+
+    .produits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .produit-card {
+      background: var(--lv-white);
+      border: 1px solid var(--lv-border);
+      transition: all 0.4s var(--transition-luxe);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .produit-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--lv-gold);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+
+    .produit-card-image {
+      height: 250px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      overflow: hidden;
+      background: var(--lv-beige);
+    }
+
+    .produit-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; 
+      transition: transform 0.6s var(--transition-luxe);
+    }
+
+    .produit-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .produit-card-content {
+      padding: 1.5rem;
+    }
+
+    .produit-card h3 {
+      font-size: 1rem; 
+      margin: 0 0 0.5rem 0; 
+      color: var(--lv-dark); 
+      font-weight: 400;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      line-height: 1.3;
+    }
+
+    .produit-card-prix {
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: var(--lv-dark);
+      margin: 0.5rem 0;
+      letter-spacing: 1px;
+    }
+
+    .produit-card-boutique {
+      font-size: 0.8rem;
+      color: var(--lv-gold);
+      margin-bottom: 1rem;
+      font-weight: 300;
+      letter-spacing: 0.5px;
+    }
+
+    .produit-card-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn-card {
+      flex: 1;
+      padding: 0.8rem 1rem;
+      font-size: 0.7rem;
       text-align: center;
-      padding: 60px 20px;
-      color: var(--text-secondary);
     }
 
-    .empty-state-icon {
-      font-size: 4rem;
-      margin-bottom: 20px;
+    .placeholder-image {
+      width: 100%;
+      height: 100%;
+      background: var(--lv-beige);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--lv-dark);
       opacity: 0.5;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
     }
 
+    /* Panier Latéral LV */
+    .panier-lateral {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 380px;
+      height: 100vh;
+      background: var(--lv-white);
+      border-left: 1px solid var(--lv-border);
+      box-shadow: -5px 0 30px rgba(0,0,0,0.1);
+      z-index: 1001;
+      transition: right 0.4s var(--transition-luxe);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panier-lateral.open {
+      right: 0;
+    }
+
+    .panier-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem;
+      border-bottom: 1px solid var(--lv-border);
+      background: var(--lv-dark);
+      color: var(--lv-white);
+    }
+
+    .panier-title {
+      font-size: 1.2rem;
+      font-weight: 300;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .btn-close-panier {
+      background: none;
+      border: none;
+      color: var(--lv-white);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      transition: color 0.3s ease;
+    }
+
+    .btn-close-panier:hover {
+      color: var(--lv-gold);
+    }
+
+    .panier-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 2rem;
+    }
+
+    .panier-item {
+      display: flex;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--lv-border);
+      gap: 1rem;
+    }
+
+    .panier-item-image {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .panier-item-info {
+      flex: 1;
+    }
+
+    .panier-item-nom {
+      font-size: 0.9rem;
+      font-weight: 400;
+      margin-bottom: 0.3rem;
+      color: var(--lv-dark);
+    }
+
+    .panier-item-details {
+      font-size: 0.8rem;
+      color: var(--lv-text);
+      opacity: 0.7;
+    }
+
+    .panier-item-prix {
+      color: var(--lv-dark);
+      font-weight: 500;
+    }
+
+    .panier-footer {
+      padding: 2rem;
+      border-top: 1px solid var(--lv-border);
+      background: var(--lv-beige);
+    }
+
+    .panier-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    .panier-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .btn-panier {
+      width: 100%;
+      text-align: center;
+    }
+
+    .empty-panier {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: var(--lv-text);
+      opacity: 0.6;
+    }
+
+    .empty-panier i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.3;
+    }
+
+    /* Overlay */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Responsive */
     @media (max-width: 768px) {
-      .page-header {
+      .container {
+        padding: 1rem;
+      }
+
+      .produit-detail { 
+        grid-template-columns: 1fr; 
+        gap: 2rem;
+      }
+
+      .gallery-main {
+        height: 400px;
+      }
+
+      .produit-nom {
+        font-size: 2rem;
+      }
+
+      .action-buttons {
         flex-direction: column;
-        gap: 15px;
-        align-items: flex-start;
       }
 
-      .filters-bar {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .commande-header {
-        flex-direction: column;
-        gap: 15px;
-        align-items: flex-start;
-      }
-
-      .commande-actions {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .action-group {
-        justify-content: space-between;
-      }
-
-      .produit-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-      }
-
-      .produit-prix {
-        text-align: left;
+      .btn {
         width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        justify-content: center;
+      }
+
+      .produits-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .panier-lateral {
+        width: 100%;
+        right: -100%;
+      }
+
+      .nav-links {
+        display: none;
       }
     }
   </style>
 </head>
 <body>
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <a href="/" class="logo"><%= boutique.nom %></a>
+      
+      <nav class="nav-links">
+        <a href="/">ACCUEIL</a>
+        <a href="#produits-similaires">PRODUITS SIMILAIRES</a>
+        <a href="/boutique/<%= produit.boutique.slug %>">BOUTIQUE</a>
+        <a href="/contact">CONTACT</a>
+      </nav>
+      
+      <div class="header-actions">
+        <button class="icon-btn">
+          <i class="fas fa-search"></i>
+        </button>
+        <button class="icon-btn" onclick="togglePanier()" style="position: relative;">
+          <i class="fas fa-shopping-bag"></i>
+          <% if (panier && panier.length > 0) { %>
+            <span class="cart-badge"><%= panier.reduce((total, item) => total + item.quantite, 0) %></span>
+          <% } %>
+        </button>
+        <button class="icon-btn">
+          <i class="fas fa-user"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Overlay -->
+  <div class="overlay" id="overlay" onclick="togglePanier()"></div>
+
+  <!-- Panier Latéral -->
+  <div class="panier-lateral" id="panierLateral">
+    <div class="panier-header">
+      <h3 class="panier-title">MON PANIER</h3>
+      <button class="btn-close-panier" onclick="togglePanier()">×</button>
+    </div>
+    
+    <div class="panier-content">
+      <% if (!panier || panier.length === 0) { %>
+        <div class="empty-panier">
+          <i class="fas fa-shopping-bag"></i>
+          <p>Votre panier est vide</p>
+          <p style="font-size: 0.9em; margin-top: 0.5rem; opacity: 0.6;">Ajoutez des produits pour les voir ici</p>
+        </div>
+      <% } else { %>
+        <% 
+        let totalArticles = 0;
+        panier.forEach((item, index) => { 
+          totalArticles += item.quantite;
+        %>
+          <div class="panier-item">
+            <% if (item.produit && item.produit.image) { %>
+              <img src="<%= item.produit.image %>" alt="<%= item.produit.nom %>" class="panier-item-image">
+            <% } else { %>
+              <div class="placeholder-image" style="width: 60px; height: 60px; font-size: 0.6em;">
+                IMG
+              </div>
+            <% } %>
+            
+            <div class="panier-item-info">
+              <div class="panier-item-nom">
+                <%= item.produit ? item.produit.nom.substring(0, 30) + (item.produit.nom.length > 30 ? '...' : '') : 'Produit' %>
+              </div>
+              <div class="panier-item-details">
+                <%= item.quantite %> × 
+                <span class="panier-item-prix">
+                  <%= item.produit ? item.produit.prix : '0' %> <%= item.produit ? item.produit.devise : 'EUR' %>
+                </span>
+              </div>
+            </div>
+            
+            <form action="/panier/supprimer/<%= item.produit ? item.produit._id : '' %>" method="POST" style="margin: 0;">
+              <button type="submit" style="background: none; border: none; color: #dc3545; cursor: pointer; padding: 5px;" title="Supprimer">
+                <i class="fas fa-trash"></i>
+              </button>
+            </form>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+    
+    <% if (panier && panier.length > 0) { %>
+      <div class="panier-footer">
+        <div class="panier-total">
+          <span>Total:</span>
+          <strong><%= totalPanier.toFixed(2) %> <%= panier[0] && panier[0].produit ? panier[0].produit.devise : 'EUR' %></strong>
+        </div>
+        <div style="text-align: center; font-size: 0.8em; color: var(--lv-text); opacity: 0.7; margin-bottom: 1rem;">
+          <%= totalArticles %> article(s)
+        </div>
+        <div class="panier-actions">
+          <a href="/panier" class="btn btn-outline btn-panier">Voir le panier complet</a>
+          <a href="/commandes/valider" class="btn btn-primary btn-panier">Passer la commande</a>
+        </div>
+      </div>
+    <% } %>
+  </div>
+
   <div class="container">
-    <!-- En-tête avec statistiques -->
-    <div class="page-header">
-      <h1 class="page-title">📦 Mes Commandes</h1>
-      <div class="debug-info" style="background: #fff3cd; padding: 10px; border-radius: 6px; font-size: 0.9rem;">
-        <strong>Debug:</strong> 
-        <%= commandes.length %> commande(s) | Vendeur: <%= user.nom %>
-        <% if (boutique) { %>
-          | Boutique: <%= boutique.nom %>
+    <!-- Détails du produit principal -->
+    <div class="produit-detail">
+      <div class="produit-gallery">
+        <!-- Image principale -->
+        <img src="<%= produit.image %>" alt="<%= produit.nom %>" class="gallery-main" id="mainImage">
+        
+        <!-- Badge -->
+        <div class="gallery-badge">NOUVEAU</div>
+
+        <!-- Vidéo du produit -->
+        <% if (produit.videoUrl) { %>
+          <div style="margin-top: 2rem;">
+            <video controls width="100%" style="border: 1px solid var(--lv-border);">
+              <source src="<%= produit.videoUrl %>" type="video/mp4">
+              Votre navigateur ne supporte pas la vidéo.
+            </video>
+          </div>
         <% } %>
       </div>
-    </div>
-
-    <!-- Statistiques rapides -->
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-number"><%= commandes.length %></div>
-        <div class="stat-label">Total Commandes</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number"><%= commandes.filter(c => c.statut === 'en_attente').length %></div>
-        <div class="stat-label">En Attente</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number"><%= commandes.filter(c => c.statut === 'en_preparation').length %></div>
-        <div class="stat-label">En Préparation</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number"><%= commandes.filter(c => c.client.id === null).length %></div>
-        <div class="stat-label">Clients Invités</div>
-      </div>
-    </div>
-
-    <!-- Barre de filtres -->
-    <div class="filters-bar">
-      <div class="filter-group">
-        <label>Statut:</label>
-        <select class="filter-select" onchange="filtrerCommandes()">
-          <option value="all">Tous les statuts</option>
-          <option value="en_attente">En attente</option>
-          <option value="confirmee">Confirmée</option>
-          <option value="en_preparation">En préparation</option>
-          <option value="expediee">Expédiée</option>
-          <option value="livree">Livrée</option>
-          <option value="annulee">Annulée</option>
-        </select>
-      </div>
       
-      <div class="filter-group">
-        <label>Tri:</label>
-        <select class="filter-select" onchange="trierCommandes()">
-          <option value="date-desc">Plus récentes</option>
-          <option value="date-asc">Plus anciennes</option>
-          <option value="total-desc">Montant (↓)</option>
-          <option value="total-asc">Montant (↑)</option>
-        </select>
-      </div>
+      <div class="produit-info">
+        <div class="produit-category">COLLECTION EXCLUSIVE</div>
+        <h1 class="produit-nom"><%= produit.nom %></h1>
+        <div class="produit-prix"><%= produit.prix %> <%= produit.devise %></div>
+        
+        <!-- Informations stock -->
+        <div class="stock-info">
+          <div class="stock-status">
+            <strong>Disponibilité :</strong> 
+            <% if (produit.stock > 10) { %>
+              <span class="stock-available">✓ En stock</span>
+            <% } else if (produit.stock > 0) { %>
+              <span class="stock-low">⚠ Stock limité (<%= produit.stock %> restants)</span>
+            <% } else { %>
+              <span class="stock-out">✗ Rupture de stock</span>
+            <% } %>
+          </div>
+          <% if (produit.sku) { %>
+            <div style="margin-top: 0.5rem; font-size: 0.9em; color: var(--lv-text); opacity: 0.7;">
+              Référence: <%= produit.sku %>
+            </div>
+          <% } %>
+        </div>
+        
+        <div class="produit-description">
+          <%= produit.description %>
+        </div>
 
-      <input type="text" class="search-box" placeholder="🔍 Rechercher une commande..." onkeyup="rechercherCommandes()">
+        <!-- Formulaire d'ajout au panier -->
+        <form action="/panier/ajouter/<%= produit._id %>" method="POST" id="form-ajout-panier">
+          <div class="quantite-selector">
+            <span class="quantite-label">Quantité:</span>
+            <div class="quantite-controls">
+              <button type="button" class="quantite-btn" onclick="changeQuantity(-1)">-</button>
+              <input type="number" name="quantite" id="quantite" value="1" min="1" max="<%= produit.stock || 10 %>" class="quantite-input">
+              <button type="button" class="quantite-btn" onclick="changeQuantity(1)">+</button>
+            </div>
+          </div>
+          
+          <div class="action-buttons">
+            <button type="submit" class="btn btn-primary" 
+                    <%= produit.stock === 0 ? 'disabled style="background: #ccc; border-color: #ccc;"' : '' %>>
+              <i class="fas fa-shopping-bag"></i>
+              <%= produit.stock === 0 ? 'RUPTURE DE STOCK' : 'AJOUTER AU PANIER' %>
+            </button>
+
+            <!-- Lien direct WhatsApp -->
+            <% if (produit.vendeur.telephone) { %>
+              <a href="https://wa.me/<%= produit.vendeur.telephone.replace(/\D/g, '') %>?text=Bonjour! Je suis intéressé par le produit: <%= encodeURIComponent(produit.nom) %> (<%= encodeURIComponent(produit.prix + ' ' + produit.devise) %>)" 
+                 target="_blank" 
+                 class="btn btn-whatsapp">
+                <i class="fab fa-whatsapp"></i>
+                CONTACTER
+              </a>
+            <% } %>
+          </div>
+        </form>
+
+        <!-- Informations vendeur -->
+        <div class="vendeur-info">
+          <div class="vendeur-name"><%= produit.vendeur.nom %></div>
+          <div class="vendeur-boutique"><%= produit.boutique.nom %></div>
+          <% if (produit.vendeur.telephone) { %>
+            <div class="vendeur-contact">
+              <i class="fas fa-phone"></i> <%= produit.vendeur.telephone %>
+            </div>
+          <% } %>
+        </div>
+      </div>
     </div>
 
-    <% if (commandes.length === 0) { %>
-      <div class="empty-state">
-        <div class="empty-state-icon">📦</div>
-        <h3 style="margin-bottom: 10px; color: var(--text-primary);">Aucune commande</h3>
-        <p>Les commandes de vos produits apparaîtront ici.</p>
-        <div style="margin-top: 20px;">
-          <a href="/commandes/debug-vendeur" class="btn" style="background: #6c757d; color: white;">
-            🔍 Vérifier le débogage
+    <!-- Section : Autres produits du vendeur -->
+    <% if (typeof produitsVendeur !== 'undefined' && produitsVendeur.length > 0) { %>
+      <div class="produits-similaires" id="produits-similaires">
+        <h2 class="section-title">
+          AUTRES PRODUITS DE <%= produit.vendeur.nom.toUpperCase() %>
+        </h2>
+        
+        <div class="produits-grid">
+          <% produitsVendeur.forEach(produitSimilaire => { %>
+            <div class="produit-card">
+              <a href="/boutique/produit/<%= produitSimilaire._id %>" style="text-decoration: none; color: inherit;">
+                <div class="produit-card-image">
+                  <% if (produitSimilaire.image) { %>
+                    <img src="<%= produitSimilaire.image %>" 
+                         alt="<%= produitSimilaire.nom %>">
+                  <% } else { %>
+                    <div class="placeholder-image">
+                      <i class="fas fa-image"></i>
+                    </div>
+                  <% } %>
+                </div>
+                
+                <div class="produit-card-content">
+                  <h3><%= produitSimilaire.nom %></h3>
+                  
+                  <div class="produit-card-prix">
+                    <%= produitSimilaire.prix %> <%= produitSimilaire.devise %>
+                  </div>
+                  
+                  <% if (produitSimilaire.boutique && produitSimilaire.boutique.nom) { %>
+                    <div class="produit-card-boutique">
+                      <%= produitSimilaire.boutique.nom %>
+                    </div>
+                  <% } %>
+                  
+                  <div class="produit-card-actions">
+                    <a href="/boutique/produit/<%= produitSimilaire._id %>" class="btn btn-outline btn-card">
+                      VOIR
+                    </a>
+                    <form action="/panier/ajouter/<%= produitSimilaire._id %>" method="POST" style="flex: 1;">
+                      <input type="hidden" name="quantite" value="1">
+                      <button type="submit" class="btn btn-primary btn-card">
+                        <i class="fas fa-shopping-bag"></i>
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </a>
+            </div>
+          <% }); %>
+        </div>
+        
+        <!-- Lien vers toute la boutique -->
+        <div style="text-align: center; margin-top: 3rem;">
+          <a href="/boutique/<%= produit.boutique.slug %>" class="btn btn-outline">
+            <i class="fas fa-store"></i>
+            VISITER LA BOUTIQUE <%= produit.boutique.nom.toUpperCase() %>
           </a>
         </div>
       </div>
     <% } else { %>
-      
-      <% commandes.forEach((commande, index) => { %>
-        <div class="commande-card" data-commande-id="<%= commande._id %>" data-statut="<%= commande.statut %>" data-total="<%= commande.total %>" data-date="<%= commande.dateCreation %>">
-          <!-- En-tête de la commande -->
-          <div class="commande-header">
-            <div class="commande-info">
-              <div class="commande-id">Commande #<%= commande.numeroCommande %></div>
-              <div class="commande-date"><%= new Date(commande.dateCreation).toLocaleDateString('fr-FR') %></div>
-              <span class="client-type <%= commande.client.id ? 'client-type-connecte' : 'client-type-invite' %>">
-                <%= commande.client.id ? 'Client Connecté' : 'Client Invité' %>
-              </span>
-            </div>
-            <span class="statut statut-<%= 
-              commande.statut === 'en_attente' ? 'enattente' :
-              commande.statut === 'confirmee' ? 'confirmee' :
-              commande.statut === 'en_preparation' ? 'enpreparation' :
-              commande.statut === 'expediee' ? 'expediee' :
-              commande.statut === 'livree' ? 'livree' :
-              commande.statut === 'annulee' ? 'annulee' : 'enattente'
-            %>">
-              <%= 
-                commande.statut === 'en_attente' ? 'En attente' :
-                commande.statut === 'confirmee' ? 'Confirmée' :
-                commande.statut === 'en_preparation' ? 'En préparation' :
-                commande.statut === 'expediee' ? 'Expédiée' :
-                commande.statut === 'livree' ? 'Livrée' :
-                commande.statut === 'annulee' ? 'Annulée' : 'En attente'
-              %>
-            </span>
-          </div>
-
-          <!-- Corps de la commande -->
-          <div class="commande-body">
-            <!-- Informations client - CORRIGÉ -->
-            <div class="client-info">
-              <div class="client-detail">
-                <span>👤</span>
-                <div>
-                  <strong><%= commande.client.nom %></strong>
-                  <div style="font-size: 0.85rem; color: var(--text-secondary);">
-                    <%= commande.client.id ? 'Client enregistré' : 'Client invité' %>
-                  </div>
-                </div>
-              </div>
-              <div class="client-detail">
-                <span>📞</span>
-                <div>
-                  <strong><%= commande.client.telephone %></strong>
-                  <div style="font-size: 0.85rem; color: var(--text-secondary);">Téléphone</div>
-                </div>
-              </div>
-              <div class="client-detail">
-                <span>📍</span>
-                <div>
-                  <strong><%= commande.client.adresse %></strong>
-                  <div style="font-size: 0.85rem; color: var(--text-secondary);">Adresse</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Produits avec images - CORRIGÉ -->
-            <div class="produits-list">
-              <h4 style="margin-bottom: 15px; color: var(--text-primary);">Produits commandés (<%= commande.produits.length %>)</h4>
-              
-              <% commande.produits.forEach((produit, pIndex) => { %>
-                <div class="produit-item">
-                  <div class="produit-info">
-                    <!-- Image du produit - CORRIGÉ -->
-                    <div class="produit-image">
-                      <% 
-                        let imageUrl = '';
-                        if (produit.produitId && produit.produitId.image) {
-                          imageUrl = produit.produitId.image;
-                        } else if (produit.produitId && produit.produitId.imagesGallery && produit.produitId.imagesGallery.length > 0) {
-                          imageUrl = produit.produitId.imagesGallery[0].url;
-                        } else if (produit.image) {
-                          imageUrl = produit.image;
-                        }
-                      %>
-                      
-                      <% if (imageUrl) { %>
-                        <img src="<%= imageUrl %>" 
-                             alt="<%= produit.produitId ? produit.produitId.nom : produit.nom %>" 
-                             title="Cliquer pour agrandir"
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="produit-image-placeholder" style="display: none;">
-                          🛍️
-                        </div>
-                      <% } else { %>
-                        <div class="produit-image-placeholder">
-                          🛍️
-                        </div>
-                      <% } %>
-                    </div>
-                    
-                    <div class="produit-details">
-                      <div class="produit-nom">
-                        <%= produit.produitId ? produit.produitId.nom : produit.nom %>
-                      </div>
-                      <div class="produit-vendeur">
-                        Quantité: <strong><%= produit.quantite %></strong>
-                        <% if (produit.vendeurId && produit.vendeurId.nom) { %>
-                          • Vendeur: <%= produit.vendeurId.nom %>
-                        <% } %>
-                      </div>
-                      <% if (produit.produitId && produit.produitId.sku) { %>
-                        <div class="produit-sku">
-                          SKU: <%= produit.produitId.sku %>
-                        </div>
-                      <% } %>
-                    </div>
-                  </div>
-                  <div class="produit-prix">
-                    <div class="produit-total"><%= (produit.prix * produit.quantite).toFixed(2) %> <%= produit.devise %></div>
-                    <div class="produit-unite"><%= produit.prix %> <%= produit.devise %>/unité</div>
-                  </div>
-                </div>
-              <% }) %>
-            </div>
-
-            <!-- Total -->
-            <div class="total-section">
-              Total: <span style="color: var(--text-primary);"><%= commande.total.toFixed(2) %> <%= commande.produits[0] && commande.produits[0].devise %></span>
-            </div>
-          </div>
-
-          <!-- Actions - CORRIGÉ -->
-          <div class="commande-actions">
-            <div class="action-group">
-              <select class="statut-selector" id="statut-<%= commande._id %>">
-                <option value="En attente" <%= commande.statut === 'en_attente' ? 'selected' : '' %>>En attente</option>
-                <option value="Confirmée" <%= commande.statut === 'confirmee' ? 'selected' : '' %>>Confirmée</option>
-                <option value="En préparation" <%= commande.statut === 'en_preparation' ? 'selected' : '' %>>En préparation</option>
-                <option value="Expédiée" <%= commande.statut === 'expediee' ? 'selected' : '' %>>Expédiée</option>
-                <option value="Livrée" <%= commande.statut === 'livree' ? 'selected' : '' %>>Livrée</option>
-                <option value="Annulée" <%= commande.statut === 'annulee' ? 'selected' : '' %>>Annulée</option>
-              </select>
-              <button class="btn btn-primary" onclick="mettreAJourStatut('<%= commande._id %>')">
-                💾 Sauvegarder
-              </button>
-              <span id="message-<%= commande._id %>" style="font-size: 0.85rem; margin-left: 10px;"></span>
-            </div>
-
-            <div class="action-group">
-              <% if (commande.client.telephone) { %>
-                <a href="https://wa.me/<%= commande.client.telephone.replace(/\D/g, '') %>?text=Bonjour <%= encodeURIComponent(commande.client.nom) %>, je suis <%= user.nom %>. Votre commande #<%= commande.numeroCommande %> est maintenant '<%= 
-                  commande.statut === 'en_attente' ? 'En attente' :
-                  commande.statut === 'confirmee' ? 'Confirmée' :
-                  commande.statut === 'en_preparation' ? 'En préparation' :
-                  commande.statut === 'expediee' ? 'Expédiée' :
-                  commande.statut === 'livree' ? 'Livrée' :
-                  commande.statut === 'annulee' ? 'Annulée' : 'En attente'
-                %>'." 
-                   target="_blank" 
-                   class="btn btn-whatsapp">
-                  📱 WhatsApp
-                </a>
-              <% } %>
-              <a href="/commandes/debug-vendeur" class="btn" style="background: #6c757d; color: white;">
-                🔍 Debug
-              </a>
-            </div>
-          </div>
+      <!-- Message si aucun autre produit du vendeur -->
+      <div class="produits-similaires">
+        <h2 class="section-title">
+          DÉCOUVREZ NOTRE UNIVERS
+        </h2>
+        <div style="text-align: center; color: var(--lv-text); opacity: 0.6; padding: 3rem;">
+          <p>Ce vendeur n'a pas d'autres produits pour le moment.</p>
+          <a href="/boutique/<%= produit.boutique.slug %>" class="btn btn-outline" style="margin-top: 1.5rem;">
+            <i class="fas fa-store"></i>
+            DÉCOUVRIR LA BOUTIQUE
+          </a>
         </div>
-      <% }) %>
+      </div>
     <% } %>
-
-    <!-- Pied de page -->
-    <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border);">
-      <a href="/vendeur/dashboard" class="btn" style="background: transparent; color: var(--text-primary); border: 1px solid var(--border);">
-        ← Retour au dashboard
-      </a>
-    </div>
   </div>
 
   <script>
-    // Fonction de mise à jour du statut - CORRIGÉE
-    async function mettreAJourStatut(commandeId) {
-      const selecteur = document.getElementById(`statut-${commandeId}`);
-      const messageElement = document.getElementById(`message-${commandeId}`);
-      let nouveauStatut = selecteur.value;
+    // Gestion de la quantité
+    function changeQuantity(change) {
+      const input = document.getElementById('quantite');
+      let value = parseInt(input.value) + change;
+      const max = parseInt(input.max) || 10;
+      const min = parseInt(input.min) || 1;
       
-      // Mapping des statuts français vers codes
-      const statutsMap = {
-        'En attente': 'en_attente',
-        'Confirmée': 'confirmee',
-        'En préparation': 'en_preparation',
-        'Expédiée': 'expediee',
-        'Livrée': 'livree',
-        'Annulée': 'annulee'
-      };
+      if (value < min) value = min;
+      if (value > max) value = max;
       
-      // Convertir le statut français en code
-      if (statutsMap[nouveauStatut]) {
-        nouveauStatut = statutsMap[nouveauStatut];
-      }
+      input.value = value;
+    }
+
+    // Gestion du panier latéral
+    function togglePanier() {
+      const panier = document.getElementById('panierLateral');
+      const overlay = document.getElementById('overlay');
       
-      messageElement.textContent = '⏳ Mise à jour...';
-      messageElement.style.color = '#6c757d';
+      panier.classList.toggle('open');
+      overlay.classList.toggle('active');
       
-      try {
-        const response = await fetch(`/commandes/${commandeId}/statut`, {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({ statut: nouveauStatut })
+      // Empêcher le défilement du body quand le panier est ouvert
+      document.body.style.overflow = panier.classList.contains('open') ? 'hidden' : '';
+    }
+
+    // Notification d'ajout au panier
+    function showAddToCartNotification() {
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--lv-gold);
+        color: var(--lv-dark);
+        padding: 1rem 2rem;
+        border-radius: 0;
+        z-index: 1002;
+        font-weight: 500;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+      `;
+      notification.innerHTML = '<i class="fas fa-check" style="margin-right: 0.5rem;"></i> Produit ajouté au panier !';
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.transition = 'all 0.3s ease';
+        notification.style.opacity = '0';
+        notification.style.transform = 'translateX(-50%) translateY(-20px)';
+        setTimeout(() => notification.remove(), 300);
+      }, 2000);
+    }
+
+    // Recharger la page après ajout au panier
+    document.addEventListener('DOMContentLoaded', function() {
+      const forms = document.querySelectorAll('form[action*="/panier/ajouter/"]');
+      forms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          // Soumettre le formulaire
+          fetch(this.action, {
+            method: 'POST',
+            body: new FormData(this)
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              showAddToCartNotification();
+              // Mettre à jour le badge du panier
+              const badge = document.querySelector('.cart-badge');
+              if (badge) {
+                badge.textContent = parseInt(badge.textContent) + 1;
+              } else {
+                const newBadge = document.createElement('span');
+                newBadge.className = 'cart-badge';
+                newBadge.textContent = '1';
+                document.querySelector('.icon-btn .fa-shopping-bag').parentNode.appendChild(newBadge);
+              }
+            }
+          })
+          .catch(error => {
+            console.error('Erreur:', error);
+            // Fallback: soumettre normalement
+            this.submit();
+          });
         });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-          messageElement.textContent = '✅ Statut mis à jour';
-          messageElement.style.color = '#28a745';
-          
-          // Mettre à jour le badge de statut
-          const badgeStatut = document.querySelector(`[data-commande-id="${commandeId}"] .statut`);
-          const statutTexte = {
-            'en_attente': 'En attente',
-            'confirmee': 'Confirmée',
-            'en_preparation': 'En préparation',
-            'expediee': 'Expédiée',
-            'livree': 'Livrée',
-            'annulee': 'Annulée'
-          }[nouveauStatut] || 'En attente';
-          
-          badgeStatut.textContent = statutTexte;
-          badgeStatut.className = `statut statut-${nouveauStatut}`;
-          
-          // Mettre à jour l'attribut data
-          document.querySelector(`[data-commande-id="${commandeId}"]`).dataset.statut = nouveauStatut;
-          
-          setTimeout(() => messageElement.textContent = '', 3000);
-        } else {
-          throw new Error(result.error);
-        }
-      } catch (error) {
-        messageElement.textContent = '❌ Erreur: ' + error.message;
-        messageElement.style.color = '#dc3545';
-        setTimeout(() => messageElement.textContent = '', 5000);
-      }
-    }
-
-    // Fonctions de filtrage
-    function filtrerCommandes() {
-      const filtre = document.querySelector('.filter-select').value;
-      const commandes = document.querySelectorAll('.commande-card');
-      
-      commandes.forEach(commande => {
-        if (filtre === 'all' || commande.dataset.statut === filtre) {
-          commande.style.display = 'block';
-        } else {
-          commande.style.display = 'none';
-        }
       });
-    }
 
-    function rechercherCommandes() {
-      const recherche = document.querySelector('.search-box').value.toLowerCase();
-      const commandes = document.querySelectorAll('.commande-card');
-      
-      commandes.forEach(commande => {
-        const texte = commande.textContent.toLowerCase();
-        commande.style.display = texte.includes(recherche) ? 'block' : 'none';
-      });
-    }
-
-    function trierCommandes() {
-      const tri = document.querySelectorAll('.filter-select')[1].value;
-      const container = document.querySelector('.container');
-      const commandes = Array.from(document.querySelectorAll('.commande-card'));
-      
-      commandes.sort((a, b) => {
-        switch(tri) {
-          case 'date-desc':
-            return new Date(b.dataset.date) - new Date(a.dataset.date);
-          case 'date-asc':
-            return new Date(a.dataset.date) - new Date(b.dataset.date);
-          case 'total-desc':
-            return parseFloat(b.dataset.total) - parseFloat(a.dataset.total);
-          case 'total-asc':
-            return parseFloat(a.dataset.total) - parseFloat(b.dataset.total);
-          default:
-            return 0;
+      // Désactiver le formulaire si rupture de stock
+      <% if (produit.stock === 0) { %>
+        const form = document.getElementById('form-ajout-panier');
+        const quantiteInput = document.getElementById('quantite');
+        if (form && quantiteInput) {
+          quantiteInput.disabled = true;
         }
-      });
-      
-      // Réorganiser les commandes dans le DOM
-      commandes.forEach(commande => container.appendChild(commande));
-    }
-
-    // Raccourci clavier pour sauvegarder (Ctrl + S)
-    document.addEventListener('keydown', function(e) {
-      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-        e.preventDefault();
-        const commandeActive = document.querySelector('.commande-card:hover');
-        if (commandeActive) {
-          const commandeId = commandeActive.dataset.commandeId;
-          mettreAJourStatut(commandeId);
-        }
-      }
+      <% } %>
     });
 
-    // Initialisation
-    document.addEventListener('DOMContentLoaded', function() {
-      console.log('Page "Mes Commandes" chargée avec succès');
-      console.log('Commandes affichées:', <%= commandes.length %>);
+    // Fermer le panier avec la touche Échap
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const panier = document.getElementById('panierLateral');
+        if (panier.classList.contains('open')) {
+          togglePanier();
+        }
+      }
     });
   </script>
 </body>

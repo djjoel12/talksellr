@@ -7,645 +7,1351 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --gucci-black: #000000;
-      --gucci-white: #FFFFFF;
-      --gucci-light-gray: #F5F5F5;
-      --gucci-medium-gray: #E5E5E5;
-      --gucci-dark-gray: #666666;
-      --gucci-text: #1A1A1A;
-      --gucci-border: #DDDDDD;
-      --gucci-red: #AF1E2D;
+      --lv-dark: #000000;
+      --lv-gold: #C9A96E;
+      --lv-beige: #F5F5F0;
+      --lv-white: #FFFFFF;
+      --lv-light-gray: #F8F8F8;
+      --lv-medium-gray: #E5E5E5;
+      --lv-dark-gray: #666666;
+      --lv-text: #1A1A1A;
+      --lv-border: #DDDDDD;
+      --lv-accent: #1A1A1A;
+      --success-color: #000000;
+      --transition-luxe: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
-    
+   
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-    
+   
     body {
       font-family: 'Helvetica Neue', Arial, sans-serif;
-      color: var(--gucci-text);
-      background: var(--gucci-white);
-      line-height: 1.4;
-      font-weight: 400;
+      color: var(--lv-text);
+      background: var(--lv-white);
+      line-height: 1.5;
+      font-weight: 300;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow-x: hidden;
     }
-    
-    /* Header Style Gucci Actuel */
+   
+    /* Notification Panier Luxueuse */
+    .cart-notification {
+      position: fixed;
+      top: 80px;
+      right: 10px;
+      left: 10px;
+      background: var(--lv-dark);
+      color: var(--lv-gold);
+      padding: 1.2rem;
+      border: 1px solid var(--lv-gold);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+      z-index: 9999;
+      transform: translateY(-100px);
+      opacity: 0;
+      transition: all 0.5s var(--transition-luxe);
+      max-width: none;
+      border-radius: 0;
+    }
+   
+    .cart-notification.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+   
+    .notification-content {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+   
+    .notification-icon {
+      font-size: 1.2rem;
+      color: var(--lv-gold);
+    }
+   
+    .notification-text {
+      flex: 1;
+    }
+   
+    .notification-title {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+      color: var(--lv-gold);
+    }
+   
+    .notification-message {
+      font-size: 0.75rem;
+      font-weight: 300;
+      letter-spacing: 1px;
+      opacity: 0.9;
+      color: var(--lv-white);
+    }
+   
+    .notification-actions {
+      display: flex;
+      gap: 0.8rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(201, 169, 110, 0.3);
+    }
+   
+    .notification-btn {
+      padding: 0.6rem 1rem;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border: 1px solid var(--lv-gold);
+      flex: 1;
+      text-align: center;
+      border-radius: 0;
+    }
+   
+    .notification-btn-primary {
+      background: var(--lv-gold);
+      color: var(--lv-dark);
+    }
+   
+    .notification-btn-primary:hover {
+      background: transparent;
+      color: var(--lv-gold);
+    }
+   
+    .notification-btn-outline {
+      background: transparent;
+      color: var(--lv-gold);
+    }
+   
+    .notification-btn-outline:hover {
+      background: var(--lv-gold);
+      color: var(--lv-dark);
+    }
+
+    /* Badge de notification LV */
+    .cart-badge {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: var(--lv-gold);
+      color: var(--lv-dark);
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pulse 2s infinite;
+      box-shadow: 0 2px 8px rgba(201, 169, 110, 0.4);
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+   
+    /* Header Louis Vuitton */
     header {
-      background: var(--gucci-white);
-      border-bottom: 1px solid var(--gucci-border);
-      padding: 0;
+      background: var(--lv-white);
+      border-bottom: 1px solid var(--lv-border);
+      padding: 1rem 0;
       position: sticky;
       top: 0;
       z-index: 1000;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
     }
-    
-    .header-top {
-      border-bottom: 1px solid var(--gucci-border);
-      padding: 0.8rem 0;
-      font-size: 0.7rem;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-    
+   
     .header-container {
-      max-width: 100%;
+      max-width: 1400px;
       margin: 0 auto;
-      padding: 0 2rem;
-    }
-    
-    .header-main {
+      padding: 0 1.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.5rem 0;
     }
-    
+   
     .logo {
-      font-size: 2rem;
-      font-weight: 400;
-      letter-spacing: 4px;
-      color: var(--gucci-black);
+      font-size: 1.6rem;
+      font-weight: 300;
+      letter-spacing: 3px;
+      color: var(--lv-dark);
       text-transform: uppercase;
-      text-align: center;
-      flex: 1;
+      position: relative;
     }
-    
+
+    .logo::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: var(--lv-gold);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover::after {
+      transform: scaleX(1);
+    }
+   
     .nav-links {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--lv-white);
+      border-bottom: 1px solid var(--lv-border);
+      padding: 1.5rem;
+      gap: 1.2rem;
+      z-index: 999;
+    }
+   
+    .nav-links.active {
       display: flex;
-      gap: 2.5rem;
-      flex: 1;
-      justify-content: flex-start;
     }
-    
+   
     .nav-links a {
-      font-weight: 400;
-      font-size: 0.75rem;
-      letter-spacing: 1.2px;
+      font-weight: 300;
+      font-size: 0.9rem;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
-      color: var(--gucci-black);
-      text-decoration: none;
-      transition: opacity 0.3s ease;
+      transition: all 0.3s ease;
       opacity: 0.8;
+      position: relative;
+      padding: 0.5rem 0;
+      text-decoration: none;
+      color: var(--lv-dark);
     }
-    
+   
     .nav-links a:hover {
       opacity: 1;
+      color: var(--lv-gold);
     }
-    
+   
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--lv-gold);
+      transition: width 0.3s ease;
+    }
+   
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+   
     .header-actions {
       display: flex;
-      gap: 1.5rem;
+      gap: 1.2rem;
       align-items: center;
-      flex: 1;
-      justify-content: flex-end;
     }
-    
+   
     .search-bar {
-      display: flex;
+      display: none;
       align-items: center;
       position: relative;
     }
-    
+   
+    .search-bar.active {
+      display: flex;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--lv-white);
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--lv-border);
+      z-index: 1001;
+    }
+   
     .search-bar input {
       border: none;
       outline: none;
       background: transparent;
-      color: var(--gucci-black);
-      padding: 0.5rem 0;
-      width: 180px;
-      font-size: 0.75rem;
-      border-bottom: 1px solid transparent;
+      color: var(--lv-dark);
+      padding: 1rem;
+      width: 100%;
+      font-size: 0.9rem;
+      border-bottom: 1px solid var(--lv-border);
       transition: border-color 0.3s ease;
-    }
-    
-    .search-bar input:focus {
-      border-bottom-color: var(--gucci-black);
-    }
-    
-    .search-bar input::placeholder {
-      color: var(--gucci-dark-gray);
-      font-weight: 400;
       letter-spacing: 1px;
     }
-    
+   
+    .search-bar input:focus {
+      border-bottom-color: var(--lv-gold);
+    }
+   
+    .search-bar input::placeholder {
+      color: var(--lv-dark-gray);
+      font-weight: 300;
+      letter-spacing: 1.5px;
+    }
+   
     .icon-btn {
       background: none;
       border: none;
-      color: var(--gucci-black);
-      font-size: 1rem;
+      color: var(--lv-dark);
+      font-size: 1.1rem;
       cursor: pointer;
-      transition: opacity 0.3s ease;
+      transition: all 0.3s ease;
       opacity: 0.8;
       padding: 0.5rem;
       position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    
+   
     .icon-btn:hover {
       opacity: 1;
+      color: var(--lv-gold);
     }
-    
-    .cart-badge {
-      position: absolute;
-      top: -2px;
-      right: -2px;
-      background: var(--gucci-black);
-      color: var(--gucci-white);
-      border-radius: 50%;
-      width: 16px;
-      height: 16px;
-      font-size: 0.6rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 400;
+   
+    .mobile-menu-btn {
+      display: block;
     }
-
-    /* Hero Section Style Gucci Actuel */
+   
+    .mobile-search-btn {
+      display: block;
+    }
+   
+    /* Hero Section Louis Vuitton */
     .hero {
-      background: var(--gucci-white);
-      padding: 0;
+      background: linear-gradient(135deg, var(--lv-dark) 0%, #1a1a1a 100%);
+      padding: 6rem 0 4rem;
+      text-align: center;
       position: relative;
       overflow: hidden;
-      min-height: 90vh;
+      min-height: 80vh;
       display: flex;
       align-items: center;
       justify-content: center;
+      isolation: isolate;
     }
 
-    .hero-image {
+    .hero-pattern {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
-      height: 90vh;
-      object-fit: cover;
+      height: 100%;
+      background-image: 
+        radial-gradient(circle at 25% 25%, rgba(201, 169, 110, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(201, 169, 110, 0.05) 0%, transparent 50%);
+      z-index: 1;
     }
 
     .hero-content {
-      position: absolute;
-      bottom: 4rem;
-      left: 4rem;
-      max-width: 500px;
-      text-align: left;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 3;
     }
 
     .hero h1 {
-      font-size: 3.5rem;
-      font-weight: 400;
+      font-size: 2.8rem;
+      font-weight: 300;
       margin-bottom: 1.5rem;
-      letter-spacing: 3px;
+      letter-spacing: 4px;
       text-transform: uppercase;
-      color: var(--gucci-white);
-      line-height: 1.1;
+      color: var(--lv-white);
+      opacity: 0;
+      transform: translateY(30px);
+      animation: titleReveal 1.5s var(--transition-luxe) 0.5s forwards;
+      position: relative;
+      line-height: 1.2;
+    }
+
+    .hero h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 2px;
+      background: var(--lv-gold);
+      animation: lineReveal 2s ease-in-out 1.5s forwards;
+      opacity: 0;
+    }
+
+    @keyframes lineReveal {
+      0% { opacity: 0; width: 0; }
+      100% { opacity: 1; width: 80px; }
+    }
+
+    @keyframes titleReveal {
+      0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
     }
 
     .hero p {
-      font-size: 1rem;
+      font-size: 1.1rem;
       margin-bottom: 2.5rem;
-      font-weight: 400;
-      letter-spacing: 1px;
-      color: var(--gucci-white);
+      font-weight: 300;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.8);
       line-height: 1.6;
-      opacity: 0.9;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: subtitleReveal 1.2s var(--transition-luxe) 1s forwards;
+      padding: 0 1rem;
     }
-    
+
+    @keyframes subtitleReveal {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+   
+    /* Bouton CTA Louis Vuitton */
     .cta-button {
       display: inline-block;
-      background: var(--gucci-white);
-      color: var(--gucci-black);
-      padding: 1.2rem 3rem;
+      background: transparent;
+      color: var(--lv-white);
+      padding: 1.3rem 3rem;
       font-weight: 400;
       font-size: 0.8rem;
       text-transform: uppercase;
-      letter-spacing: 2px;
-      transition: all 0.3s ease;
-      border: 1px solid var(--gucci-white);
+      letter-spacing: 2.5px;
+      transition: all 0.4s var(--transition-luxe);
+      border: 2px solid var(--lv-gold);
       cursor: pointer;
       text-decoration: none;
-    }
-    
-    .cta-button:hover {
-      background: transparent;
-      color: var(--gucci-white);
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: buttonReveal 1s var(--transition-luxe) 1.5s forwards;
     }
 
-    /* Produits Section */
-    .section {
-      padding: 5rem 0;
+    @keyframes buttonReveal {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
-    
+   
+    .cta-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(201, 169, 110, 0.2), transparent);
+      transition: left 0.6s ease;
+    }
+   
+    .cta-button:hover::before {
+      left: 100%;
+    }
+
+    .cta-button:hover {
+      background: var(--lv-gold);
+      color: var(--lv-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(201, 169, 110, 0.3);
+    }
+
+    .cta-button span {
+      position: relative;
+      z-index: 1;
+    }
+   
+    /* Main Content */
+    main {
+      flex: 1;
+    }
+   
     .container {
       max-width: 1400px;
       margin: 0 auto;
-      padding: 0 2rem;
+      padding: 0 1.5rem;
     }
-    
+   
+    .section {
+      padding: 4rem 0;
+    }
+   
     .section-header {
       text-align: center;
       margin-bottom: 3rem;
+      padding: 0 1rem;
     }
-    
+   
     .section-title {
       font-size: 1.8rem;
-      font-weight: 400;
+      font-weight: 300;
       margin-bottom: 1rem;
       letter-spacing: 3px;
       text-transform: uppercase;
-      color: var(--gucci-black);
+      color: var(--lv-dark);
+      line-height: 1.3;
+      position: relative;
+      display: inline-block;
     }
-    
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 1px;
+      background: var(--lv-gold);
+    }
+   
     .section-subtitle {
-      color: var(--gucci-dark-gray);
+      color: var(--lv-dark-gray);
       max-width: 600px;
       margin: 0 auto;
       font-size: 0.9rem;
-      font-weight: 400;
-      letter-spacing: 1px;
+      font-weight: 300;
+      letter-spacing: 1.5px;
       line-height: 1.6;
     }
-    
-    /* Produits Grid Style Gucci */
+   
+    /* Produits Grid Louis Vuitton */
     .produits-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: 1fr;
       gap: 2rem;
+      margin-top: 2rem;
     }
-    
+   
     .produit-card {
-      background: var(--gucci-white);
-      transition: all 0.3s ease;
+      background: var(--lv-white);
+      transition: all 0.4s var(--transition-luxe);
+      border: 1px solid var(--lv-border);
       position: relative;
-    }
-    
-    .produit-card:hover {
-      transform: translateY(-5px);
-    }
-    
-    .produit-image {
-      position: relative;
-      height: 500px;
       overflow: hidden;
-      margin-bottom: 1.5rem;
+    }
+   
+    .produit-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      border-color: var(--lv-gold);
+    }
+   
+    /* Galerie de photos LV */
+    .produit-gallery {
+      position: relative;
+      height: 350px;
+      overflow: hidden;
+      background: var(--lv-beige);
     }
 
-    .produit-image img {
+    .gallery-main {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.6s ease;
+      transition: transform 0.6s var(--transition-luxe);
     }
 
-    .produit-card:hover .produit-image img {
+    .produit-card:hover .gallery-main {
       transform: scale(1.05);
     }
 
+    .gallery-thumbnails {
+      position: absolute;
+      bottom: 12px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 12px;
+    }
+
+    .thumbnail {
+      width: 35px;
+      height: 35px;
+      border-radius: 2px;
+      border: 2px solid var(--lv-white);
+      cursor: pointer;
+      object-fit: cover;
+      transition: all 0.3s ease;
+    }
+
+    .thumbnail:hover {
+      transform: scale(1.1);
+      border-color: var(--lv-gold);
+    }
+
+    .thumbnail.active {
+      border-color: var(--lv-gold);
+      transform: scale(1.1);
+    }
+
+    .gallery-counter {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(0,0,0,0.8);
+      color: var(--lv-white);
+      padding: 4px 8px;
+      border-radius: 0;
+      font-size: 0.7rem;
+      letter-spacing: 1px;
+    }
+
+    .gallery-btn {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      background: var(--lv-white);
+      color: var(--lv-dark);
+      border: 1px solid var(--lv-border);
+      padding: 8px 12px;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .gallery-btn:hover {
+      background: var(--lv-gold);
+      color: var(--lv-dark);
+      border-color: var(--lv-gold);
+    }
+   
     .produit-badge {
       position: absolute;
       top: 1rem;
-      left: 1rem;
-      background: var(--gucci-white);
-      color: var(--gucci-black);
+      right: 1rem;
+      background: var(--lv-gold);
+      color: var(--lv-dark);
       padding: 0.3rem 0.8rem;
-      font-size: 0.7rem;
-      font-weight: 400;
+      font-size: 0.65rem;
+      font-weight: 500;
       letter-spacing: 1px;
       text-transform: uppercase;
     }
-    
+   
     .produit-content {
-      text-align: center;
+      padding: 2rem;
     }
-    
+   
     .produit-category {
       font-size: 0.7rem;
-      font-weight: 400;
-      color: var(--gucci-dark-gray);
+      font-weight: 500;
+      color: var(--lv-gold);
       text-transform: uppercase;
-      letter-spacing: 1.2px;
+      letter-spacing: 1.5px;
       margin-bottom: 0.5rem;
     }
-    
+   
     .produit-name {
-      font-size: 0.9rem;
+      font-size: 1rem;
       font-weight: 400;
       margin-bottom: 0.8rem;
-      color: var(--gucci-black);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      line-height: 1.4;
-    }
-    
-    .produit-prix {
-      font-size: 0.9rem;
-      font-weight: 400;
-      color: var(--gucci-black);
-      letter-spacing: 1px;
-    }
-    
-    .produit-actions {
-      display: flex;
-      gap: 0.5rem;
-      margin-top: 1rem;
-    }
-    
-    .btn {
-      display: inline-block;
-      padding: 0.8rem 1.5rem;
-      text-align: center;
-      font-weight: 400;
-      font-size: 0.7rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border: 1px solid var(--gucci-black);
+      color: var(--lv-dark);
       text-transform: uppercase;
       letter-spacing: 1.2px;
+      line-height: 1.4;
+    }
+   
+    .produit-prix {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--lv-dark);
+      margin-bottom: 1.5rem;
+      letter-spacing: 1px;
+    }
+   
+    /* BOUTONS LV */
+    .produit-actions {
+      display: flex;
+      gap: 1rem;
+      flex-direction: column;
+    }
+   
+    .btn {
+      display: inline-block;
+      padding: 1.2rem 1.5rem;
+      text-align: center;
+      font-weight: 500;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s var(--transition-luxe);
+      border: 2px solid var(--lv-dark);
+      text-transform: uppercase;
+      letter-spacing: 2px;
       text-decoration: none;
-      flex: 1;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      min-height: 55px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    
+   
     .btn-primary {
-      background: var(--gucci-black);
-      color: var(--gucci-white);
+      background: var(--lv-dark);
+      color: var(--lv-white);
+      font-weight: 500;
     }
-    
+   
     .btn-primary:hover {
-      background: var(--gucci-white);
-      color: var(--gucci-black);
+      background: var(--lv-gold);
+      color: var(--lv-dark);
+      border-color: var(--lv-gold);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(201, 169, 110, 0.3);
     }
-    
+   
     .btn-outline {
-      background: var(--gucci-white);
-      color: var(--gucci-black);
-      border: 1px solid var(--gucci-black);
+      background: var(--lv-white);
+      color: var(--lv-dark);
+      border: 2px solid var(--lv-dark);
+      font-weight: 500;
+      position: relative;
+      z-index: 1;
     }
-    
+   
     .btn-outline:hover {
-      background: var(--gucci-black);
-      color: var(--gucci-white);
+      background: var(--lv-dark);
+      color: var(--lv-white);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     }
 
-    /* Newsletter Section */
+    .btn-outline::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
+      transition: left 0.5s ease;
+      z-index: -1;
+    }
+   
+    .btn-outline:hover::before {
+      left: 100%;
+    }
+   
+    /* Modal pour la galerie LV */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.98);
+      animation: fadeIn 0.4s var(--transition-luxe);
+      touch-action: pan-y pinch-zoom;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      position: relative;
+      margin: auto;
+      padding: 20px;
+      width: 95%;
+      height: 95vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: pan-y pinch-zoom;
+    }
+
+    .modal-image {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      transition: opacity 0.3s ease;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: var(--lv-white);
+      font-size: 1.8rem;
+      font-weight: 300;
+      cursor: pointer;
+      background: none;
+      border: none;
+      z-index: 10001;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.3s ease;
+    }
+
+    .modal-close:hover {
+      color: var(--lv-gold);
+    }
+
+    .modal-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.1);
+      color: var(--lv-white);
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 15px 18px;
+      font-size: 1.4rem;
+      cursor: pointer;
+      z-index: 10001;
+      transition: all 0.3s ease;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-prev {
+      left: 20px;
+    }
+
+    .modal-next {
+      right: 20px;
+    }
+
+    .modal-nav:hover {
+      background: var(--lv-gold);
+      color: var(--lv-dark);
+      border-color: var(--lv-gold);
+    }
+
+    .modal-counter {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--lv-white);
+      font-size: 0.9rem;
+      background: rgba(0,0,0,0.7);
+      padding: 8px 16px;
+      letter-spacing: 1px;
+    }
+   
+    /* Newsletter Section LV */
     .newsletter {
-      background: var(--gucci-light-gray);
+      background: var(--lv-beige);
       padding: 4rem 0;
       text-align: center;
+      position: relative;
     }
-    
+
+    .newsletter::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--lv-gold);
+    }
+   
     .newsletter-content {
       max-width: 500px;
       margin: 0 auto;
+      padding: 0 1.5rem;
     }
-    
+   
     .newsletter-form {
       display: flex;
       gap: 1rem;
       margin-top: 2rem;
+      flex-direction: column;
     }
-    
+   
     .newsletter-input {
-      flex: 1;
-      padding: 1rem;
-      border: 1px solid var(--gucci-border);
-      background: var(--gucci-white);
-      font-size: 0.8rem;
-      font-weight: 400;
-      letter-spacing: 1px;
+      padding: 1.2rem;
+      border: 1px solid var(--lv-border);
+      background: var(--lv-white);
+      font-size: 0.85rem;
+      font-weight: 300;
+      letter-spacing: 1.5px;
+      width: 100%;
+      transition: border-color 0.3s ease;
     }
-    
+
+    .newsletter-input:focus {
+      border-color: var(--lv-gold);
+      outline: none;
+    }
+   
     .newsletter-input::placeholder {
-      color: var(--gucci-dark-gray);
+      color: var(--lv-dark-gray);
+      letter-spacing: 1.5px;
     }
-    
-    /* Footer Style Gucci */
+   
+    /* Empty State LV */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 1.5rem;
+      background: var(--lv-white);
+    }
+   
+    .empty-state i {
+      font-size: 3.5rem;
+      color: var(--lv-gold);
+      margin-bottom: 2rem;
+      opacity: 0.7;
+    }
+   
+    .empty-state h3 {
+      font-size: 1.6rem;
+      font-weight: 300;
+      color: var(--lv-dark);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+    }
+   
+    .empty-state p {
+      color: var(--lv-dark-gray);
+      font-weight: 300;
+      letter-spacing: 1.5px;
+      margin-bottom: 2.5rem;
+      line-height: 1.6;
+      font-size: 0.95rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+   
+    /* Footer Louis Vuitton */
     footer {
-      background: var(--gucci-black);
-      color: var(--gucci-white);
+      background: var(--lv-dark);
+      color: var(--lv-white);
       padding: 4rem 0 2rem;
       margin-top: auto;
     }
-    
+   
     .footer-content {
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 3rem;
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
       margin-bottom: 3rem;
     }
-    
+   
     .footer-column h3 {
-      font-size: 0.8rem;
-      margin-bottom: 2rem;
-      font-weight: 400;
-      color: var(--gucci-white);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+      color: var(--lv-gold);
       text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 2.5px;
     }
-    
+   
     .footer-links {
       list-style: none;
     }
-    
+   
     .footer-links li {
       margin-bottom: 1rem;
     }
-    
+   
     .footer-links a {
-      color: var(--gucci-light-gray);
+      color: rgba(255,255,255,0.7);
       transition: all 0.3s ease;
-      font-size: 0.75rem;
-      font-weight: 400;
-      letter-spacing: 1px;
+      font-size: 0.8rem;
+      font-weight: 300;
+      letter-spacing: 1.2px;
       text-transform: uppercase;
       text-decoration: none;
     }
-    
+   
     .footer-links a:hover {
-      color: var(--gucci-white);
+      color: var(--lv-gold);
+      padding-left: 5px;
     }
-    
+   
     .social-links {
       display: flex;
       gap: 1rem;
       margin-top: 2rem;
     }
-    
+   
     .social-link {
       display: flex;
       align-items: center;
       justify-content: center;
       width: 40px;
       height: 40px;
-      background: var(--gucci-white);
-      color: var(--gucci-black);
-      border-radius: 0;
+      background: rgba(255,255,255,0.1);
+      color: var(--lv-white);
+      border: 1px solid rgba(255,255,255,0.2);
       transition: all 0.3s ease;
       font-size: 1rem;
       text-decoration: none;
     }
-    
+   
     .social-link:hover {
-      background: var(--gucci-dark-gray);
-      color: var(--gucci-white);
+      background: var(--lv-gold);
+      color: var(--lv-dark);
+      transform: translateY(-2px);
     }
-    
+   
     .footer-bottom {
       text-align: center;
-      padding-top: 2rem;
-      border-top: 1px solid var(--gucci-dark-gray);
-      color: var(--gucci-light-gray);
-      font-size: 0.7rem;
-      font-weight: 400;
-      letter-spacing: 1px;
+      padding-top: 2.5rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.5);
+      font-size: 0.75rem;
+      font-weight: 300;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
+      line-height: 1.5;
     }
-    
-    /* Responsive */
-    @media (max-width: 1024px) {
-      .footer-content {
-        grid-template-columns: 1fr 1fr;
-        gap: 2rem;
-      }
-      
-      .nav-links {
-        gap: 2rem;
+   
+    /* Loading Animation */
+    .loading {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.8s var(--transition-luxe) forwards;
+    }
+   
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
-    
-    @media (max-width: 768px) {
-      .header-main {
-        flex-direction: column;
-        gap: 1.5rem;
-        padding: 1rem 0;
+   
+    /* Media Queries pour les tablettes */
+    @media (min-width: 768px) {
+      .header-container {
+        padding: 0 2rem;
       }
-      
-      .nav-links {
-        order: 3;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 1.5rem;
-      }
-      
+     
       .logo {
-        order: 1;
-        flex: none;
+        font-size: 1.8rem;
       }
-      
+     
+      .nav-links {
+        display: flex;
+        position: static;
+        flex-direction: row;
+        gap: 2.5rem;
+        background: none;
+        border: none;
+        padding: 0;
+        flex: 1;
+        justify-content: center;
+      }
+     
+      .nav-links a {
+        font-size: 0.8rem;
+        padding: 0;
+      }
+     
       .header-actions {
-        order: 2;
-        flex: none;
+        gap: 1.5rem;
       }
-      
+     
+      .mobile-menu-btn {
+        display: none;
+      }
+     
+      .search-bar {
+        display: flex;
+        position: static;
+        background: none;
+        padding: 0;
+        border: none;
+      }
+     
       .search-bar input {
-        width: 120px;
+        width: 200px;
+        padding: 0.6rem 0;
       }
-      
-      .hero-content {
-        left: 2rem;
-        bottom: 2rem;
-        max-width: 300px;
+     
+      .mobile-search-btn {
+        display: none;
       }
-
+     
+      .hero {
+        padding: 8rem 0 6rem;
+        min-height: 90vh;
+      }
+     
       .hero h1 {
-        font-size: 2rem;
+        font-size: 4rem;
+        letter-spacing: 5px;
       }
-
+     
       .hero p {
-        font-size: 0.9rem;
+        font-size: 1.3rem;
       }
-
+     
       .cta-button {
-        padding: 1rem 2rem;
-        font-size: 0.7rem;
+        padding: 1.5rem 4rem;
+        font-size: 0.85rem;
       }
-      
+     
+      .section {
+        padding: 6rem 0;
+      }
+     
       .section-title {
-        font-size: 1.5rem;
+        font-size: 2.2rem;
       }
-      
+     
       .produits-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2.5rem;
       }
-      
-      .produit-image {
+     
+      .produit-gallery {
         height: 400px;
       }
-      
-      .footer-content {
-        grid-template-columns: 1fr;
+     
+      .produit-actions {
+        flex-direction: row;
       }
-      
+     
+      .btn {
+        width: auto;
+        flex: 1;
+        font-size: 0.8rem;
+        padding: 1.2rem 1.5rem;
+      }
+     
+      .footer-content {
+        grid-template-columns: 2fr 1fr 1fr;
+        gap: 3rem;
+      }
+     
       .newsletter-form {
-        flex-direction: column;
+        flex-direction: row;
+      }
+     
+      .cart-notification {
+        right: 20px;
+        left: auto;
+        max-width: 400px;
+      }
+    }
+   
+    /* Media Queries pour les desktop */
+    @media (min-width: 1024px) {
+      .header-container {
+        padding: 0 3rem;
+      }
+     
+      .logo {
+        font-size: 2rem;
+      }
+     
+      .nav-links {
+        gap: 3.5rem;
+      }
+     
+      .search-bar input {
+        width: 250px;
+      }
+     
+      .hero {
+        padding: 10rem 0 8rem;
+        min-height: 100vh;
+      }
+     
+      .hero h1 {
+        font-size: 5rem;
+        letter-spacing: 6px;
+      }
+     
+      .hero p {
+        font-size: 1.5rem;
+      }
+     
+      .cta-button {
+        padding: 1.6rem 4.5rem;
+      }
+     
+      .section {
+        padding: 8rem 0;
+      }
+     
+      .section-title {
+        font-size: 2.5rem;
+      }
+     
+      .produits-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 3rem;
+      }
+     
+      .produit-gallery {
+        height: 450px;
+      }
+     
+      .footer-content {
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: 4rem;
+      }
+     
+      .cart-notification {
+        right: 30px;
+        max-width: 450px;
+      }
+    }
+   
+    /* Media Queries pour les grands écrans */
+    @media (min-width: 1200px) {
+      .produits-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+     
+      .hero h1 {
+        font-size: 5.5rem;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Header -->
-  <header>
-    <div class="header-top">
-      <div class="header-container" style="text-align: center;">
-        LIVRAISON GRATUITE POUR LES COMMANDES SUPÉRIEURES À 500€
+  <!-- Notification Panier -->
+  <div id="cartNotification" class="cart-notification">
+    <div class="notification-content">
+      <div class="notification-icon">✓</div>
+      <div class="notification-text">
+        <div class="notification-title">PRODUIT AJOUTÉ</div>
+        <div class="notification-message" id="notificationMessage">Le produit a été ajouté à votre panier</div>
       </div>
     </div>
-    
+    <div class="notification-actions">
+      <a href="/panier" class="notification-btn notification-btn-primary">VOIR LE PANIER</a>
+      <button onclick="hideNotification()" class="notification-btn notification-btn-outline">CONTINUER</button>
+    </div>
+  </div>
+
+  <!-- Modal pour la galerie complète -->
+  <div id="galleryModal" class="modal">
+    <button class="modal-close" onclick="closeGallery()">&times;</button>
+   
+    <button class="modal-nav modal-prev" onclick="changeModalImage(-1)">❮</button>
+    <button class="modal-nav modal-next" onclick="changeModalImage(1)">❯</button>
+   
+    <div class="modal-content">
+      <img id="modalImage" class="modal-image" src="" alt="">
+    </div>
+   
+    <div class="modal-counter">
+      <span id="modalCounter">1 / 1</span>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header>
     <div class="header-container">
-      <div class="header-main">
-        <nav class="nav-links">
-          <a href="#nouveautes">NOUVEAUTÉS</a>
-          <a href="#femme">FEMME</a>
-          <a href="#homme">HOMME</a>
-          <a href="#enfant">ENFANT</a>
-          <a href="#maison">MAISON</a>
-        </nav>
-        
-        <div class="logo"><%= boutique.nom %></div>
-        
-        <div class="header-actions">
-          <div class="search-bar">
-            <input type="text" placeholder="RECHERCHER">
-            <button class="icon-btn">
-              <i class="fas fa-search"></i>
-            </button>
-          </div>
-          
-          <% if (typeof user !== 'undefined' && user) { %>
-            <a href="/vendeur/dashboard" class="icon-btn">
-              <i class="fas fa-user"></i>
-            </a>
-          <% } else { %>
-            <a href="/auth/login" class="icon-btn">
-              <i class="fas fa-user"></i>
-            </a>
-          <% } %>
-          
-          <a href="/panier" class="icon-btn" style="position: relative;" id="cartIcon">
-            <i class="fas fa-shopping-bag"></i>
-            <% if (typeof panierCount !== 'undefined' && panierCount > 0) { %>
-              <span class="cart-badge" id="cartBadge"><%= panierCount %></span>
-            <% } %>
-          </a>
+      <div class="logo"><%= boutique.nom %></div>
+     
+      <button class="icon-btn mobile-menu-btn" id="mobileMenuBtn">
+        <i class="fas fa-bars"></i>
+      </button>
+     
+      <nav class="nav-links" id="navLinks">
+        <a href="#accueil">ACCUEIL</a>
+        <a href="#produits">NOUVELLES COLLECTIONS</a>
+        <a href="#categories">CATÉGORIES</a>
+        <a href="/boutique/mon">MON COMPTE</a>
+      </nav>
+     
+      <div class="header-actions">
+        <div class="search-bar" id="searchBar">
+          <input type="text" placeholder="RECHERCHER...">
+          <button class="icon-btn" onclick="toggleSearch()">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
+       
+        <button class="icon-btn mobile-search-btn" onclick="toggleSearch()">
+          <i class="fas fa-search"></i>
+        </button>
+       
+        <% if (typeof user !== 'undefined' && user) { %>
+          <a href="/vendeur/dashboard" class="icon-btn">
+            <i class="fas fa-user"></i>
+          </a>
+        <% } else { %>
+          <a href="/auth/login" class="icon-btn">
+            <i class="fas fa-user"></i>
+          </a>
+        <% } %>
+       
+        <a href="/panier" class="icon-btn" style="position: relative;" id="cartIcon">
+          <i class="fas fa-shopping-bag"></i>
+          <% if (typeof panierCount !== 'undefined' && panierCount > 0) { %>
+            <span class="cart-badge" id="cartBadge"><%= panierCount %></span>
+          <% } %>
+        </a>
       </div>
     </div>
   </header>
 
   <!-- Main Content -->
   <main>
-    <!-- Hero Section -->
+    <!-- Hero Section Louis Vuitton -->
     <section class="hero" id="accueil">
-      <!-- Remplacez cette URL par votre image hero -->
-      <img src="https://images.unsplash.com/photo-1591561954557-26941169b49e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1890&q=80" 
-           alt="Collection <%= boutique.nom %>" 
-           class="hero-image">
-      
+      <!-- Pattern de fond LV -->
+      <div class="hero-pattern"></div>
+     
       <div class="hero-content">
-        <h1>NOUVELLE COLLECTION</h1>
-        <p>Découvrez les dernières créations et pièces exclusives de la saison</p>
-        <a href="#produits" class="cta-button">EXPLORER</a>
+        <h1><%= boutique.nom %></h1>
+        <p><%= boutique.description %></p>
+        <a href="#produits" class="cta-button">
+          <span>DÉCOUVRIR LA COLLECTION</span>
+        </a>
       </div>
     </section>
 
@@ -653,64 +1359,85 @@
     <section class="section" id="produits">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">LES INCONTOURNABLES</h2>
-          <p class="section-subtitle">Pièces signature et essentiels de la collection</p>
+          <h2 class="section-title">NOUVELLE COLLECTION</h2>
+          <p class="section-subtitle">Découvrez nos dernières créations et pièces exclusives, inspirées par l'excellence et le savoir-faire artisanal</p>
         </div>
-        
+       
         <% if (produits && produits.length > 0) { %>
           <div class="produits-grid">
             <% produits.forEach((produit, index) => { %>
-              <div class="produit-card">
-                <div class="produit-image">
+              <div class="produit-card loading" style="animation-delay: <%= index * 0.1 %>s" data-product-index="<%= index %>">
+                <!-- Galerie de photos -->
+                <div class="produit-gallery">
                   <% if (produit.imagesGallery && produit.imagesGallery.length > 0) { %>
-                    <img src="<%= produit.imagesGallery[0].url %>" alt="<%= produit.nom %>">
+                    <img src="<%= produit.imagesGallery[0].url %>"
+                         alt="<%= produit.nom %>"
+                         class="gallery-main"
+                         data-product-index="<%= index %>"
+                         data-current-image="0">
+                   
+                    <div class="gallery-counter">
+                      <span class="current-image">1</span> / <%= produit.imagesGallery.length %>
+                    </div>
+
+                    <% if (produit.imagesGallery.length > 1) { %>
+                      <div class="gallery-thumbnails">
+                        <% produit.imagesGallery.forEach((image, imgIndex) => { %>
+                          <img src="<%= image.url %>"
+                               alt="Miniature <%= imgIndex + 1 %>"
+                               class="thumbnail <%= imgIndex === 0 ? 'active' : '' %>"
+                               data-product-index="<%= index %>"
+                               data-image-index="<%= imgIndex %>"
+                               onclick="changeMainImage(<%= index %>, <%= imgIndex %>)">
+                        <% }); %>
+                      </div>
+                    <% } %>
+
+                    <button class="gallery-btn" onclick="openGallery(<%= index %>)">
+                      Voir galerie
+                    </button>
+
                   <% } else if (produit.image) { %>
-                    <img src="<%= produit.image %>" alt="<%= produit.nom %>">
+                    <img src="<%= produit.image %>" alt="<%= produit.nom %>" class="gallery-main">
                   <% } else { %>
-                    <div style="background: #f5f5f5; height: 100%; display: flex; align-items: center; justify-content: center; color: #999;">
-                      <i class="fas fa-image" style="font-size: 2rem;"></i>
+                    <div style="background: var(--lv-beige); height: 100%; display: flex; align-items: center; justify-content: center; color: var(--lv-dark-gray); font-size: 0.8rem; letter-spacing: 1px;">
+                      IMAGE NON DISPONIBLE
                     </div>
                   <% } %>
-                  
-                  <% if (produit.nouveau) { %>
-                    <div class="produit-badge">NOUVEAU</div>
-                  <% } %>
+                 
+                  <div class="produit-badge">NOUVEAU</div>
                 </div>
 
                 <div class="produit-content">
-                  <div class="produit-category"><%= produit.categorie || 'ACCESSOIRES' %></div>
+                  <div class="produit-category">COLLECTION EXCLUSIVE</div>
                   <h3 class="produit-name"><%= produit.nom %></h3>
                   <p class="produit-prix"><%= produit.prix %> <%= produit.devise %></p>
                   <div class="produit-actions">
-                    <form action="/panier/ajouter/<%= produit._id %>" method="POST" style="display: inline; flex: 1;" class="add-to-cart-form">
+                    <form action="/panier/ajouter/<%= produit._id %>" method="POST" style="display: inline; width: 100%;" class="add-to-cart-form">
                       <input type="hidden" name="produitNom" value="<%= produit.nom %>">
                       <input type="hidden" name="produitPrix" value="<%= produit.prix %>">
                       <button type="submit" class="btn btn-primary add-to-cart-btn">
                         AJOUTER AU PANIER
                       </button>
                     </form>
+                    <a href="/boutique/produit/<%= produit._id %>" class="btn btn-outline">
+                      VOIR LES DÉTAILS
+                    </a>
                   </div>
                 </div>
               </div>
             <% }) %>
           </div>
         <% } else { %>
-          <div style="text-align: center; padding: 4rem 2rem;">
-            <h3 style="font-size: 1.2rem; font-weight: 400; letter-spacing: 2px; margin-bottom: 1rem; text-transform: uppercase;">COLLECTION À VENIR</h3>
-            <p style="color: var(--gucci-dark-gray); margin-bottom: 2rem;">Notre nouvelle collection sera bientôt disponible.</p>
-            <a href="#" class="btn btn-outline">ÊTRE INFORMÉ</a>
+          <div class="empty-state">
+            <i class="fas fa-gem"></i>
+            <h3>COLLECTION À VENIR</h3>
+            <p>Notre nouvelle collection sera bientôt disponible. Inscrivez-vous pour être informé du lancement en avant-première.</p>
+            <a href="#" class="btn btn-primary">
+              ÊTRE INFORMÉ
+            </a>
           </div>
         <% } %>
-      </div>
-    </section>
-
-    <!-- Bannière Secondaire -->
-    <section style="background: var(--gucci-black); color: var(--gucci-white); padding: 6rem 0; text-align: center;">
-      <div class="container">
-        <h2 style="font-size: 2rem; font-weight: 400; letter-spacing: 3px; margin-bottom: 1.5rem; text-transform: uppercase;">L'ART DE LA MODE</h2>
-        <p style="max-width: 600px; margin: 0 auto; font-size: 1rem; letter-spacing: 1px; line-height: 1.6; opacity: 0.9;">
-          Découvrez l'excellence du savoir-faire et l'innovation qui définissent notre maison
-        </p>
       </div>
     </section>
 
@@ -721,7 +1448,7 @@
           <h3 class="section-title">NEWSLETTER</h3>
           <p class="section-subtitle">Soyez le premier informé de nos nouvelles collections et offres exclusives</p>
           <form class="newsletter-form">
-            <input type="email" placeholder="VOTRE ADRESSE EMAIL" class="newsletter-input" required>
+            <input type="email" placeholder="VOTRE EMAIL" class="newsletter-input" required>
             <button type="submit" class="btn btn-primary">S'INSCRIRE</button>
           </form>
         </div>
@@ -735,75 +1462,325 @@
       <div class="footer-content">
         <div class="footer-column">
           <h3><%= boutique.nom %></h3>
-          <p style="color: var(--gucci-light-gray); font-size: 0.75rem; font-weight: 400; letter-spacing: 1px; line-height: 1.6; margin-bottom: 2rem; max-width: 300px;">
-            Depuis sa fondation, <%= boutique.nom %> incarne l'excellence du luxe et l'innovation créative.
+          <p style="color: rgba(255,255,255,0.7); font-size: 0.8rem; font-weight: 300; letter-spacing: 1px; line-height: 1.6; margin-bottom: 2rem;">
+            <%= boutique.description %>
           </p>
           <div class="social-links">
             <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
-            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
             <a href="#" class="social-link"><i class="fab fa-pinterest"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-tiktok"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
           </div>
         </div>
-        
+       
         <div class="footer-column">
           <h3>BOUTIQUE</h3>
           <ul class="footer-links">
-            <li><a href="#nouveautes">Nouveautés</a></li>
-            <li><a href="#femme">Femme</a></li>
-            <li><a href="#homme">Homme</a></li>
-            <li><a href="#enfant">Enfant</a></li>
-            <li><a href="#maison">Maison</a></li>
+            <li><a href="#accueil">Accueil</a></li>
+            <li><a href="#produits">Nouveautés</a></li>
+            <li><a href="#categories">Collections</a></li>
+            <li><a href="#">Lookbook</a></li>
           </ul>
         </div>
-        
+       
         <div class="footer-column">
           <h3>SERVICE CLIENT</h3>
           <ul class="footer-links">
             <li><a href="#">Contact</a></li>
             <li><a href="#">Livraison</a></li>
-            <li><a href="#">Retours</a></li>
+            <li><a href="#">Retours & Échanges</a></li>
             <li><a href="#">Guide des tailles</a></li>
-            <li><a href="#">FAQ</a></li>
           </ul>
         </div>
-        
+       
         <div class="footer-column">
-          <h3>À PROPOS</h3>
+          <h3>INFORMATIONS</h3>
           <ul class="footer-links">
-            <li><a href="#">Notre histoire</a></li>
-            <li><a href="#">Durabilité</a></li>
+            <li><a href="#">À propos</a></li>
             <li><a href="#">Carrières</a></li>
+            <li><a href="#">Développement durable</a></li>
             <li><a href="#">Presse</a></li>
-            <li><a href="#">Événements</a></li>
           </ul>
         </div>
       </div>
-      
+     
       <div class="footer-bottom">
-        <p>&copy; 2024 <%= boutique.nom %>. TOUS DROITS RÉSERVÉS</p>
+        <p>&copy; 2024 <%= boutique.nom %>. TOUS DROITS RÉSERVÉS | MENTIONS LÉGALES | POLITIQUE DE CONFIDENTIALITÉ</p>
       </div>
     </div>
   </footer>
 
   <script>
+    // Stocker les données des produits globalement
+    const produitsData = <%- JSON.stringify(produits) %>;
+    // Variables globales pour la galerie
+    let currentGallery = null;
+    let currentImageIndex = 0;
+    // Fonction pour créer les étoiles scintillantes
+    function createStars() {
+      const starsContainer = document.getElementById('starsContainer');
+      const starCount = window.innerWidth < 768 ? 80 : 150;
+     
+      for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+       
+        // Position aléatoire
+        const left = Math.random() * 100;
+        const top = Math.random() * 100;
+       
+        // Taille aléatoire
+        const size = Math.random() * 2;
+       
+        // Délai d'animation aléatoire
+        const delay = Math.random() * 3;
+       
+        star.style.cssText = `
+          left: ${left}%;
+          top: ${top}%;
+          width: ${size}px;
+          height: ${size}px;
+          animation-delay: ${delay}s;
+        `;
+       
+        starsContainer.appendChild(star);
+      }
+    }
+    // Fonction pour créer les particules cosmiques
+    function createCosmicParticles() {
+      const particlesContainer = document.getElementById('cosmicParticles');
+      const particleCount = window.innerWidth < 768 ? 10 : 20;
+     
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'cosmic-particle';
+       
+        // Position de départ aléatoire
+        const startX = Math.random() * 100;
+        const startY = Math.random() * 100;
+       
+        // Délai et durée d'animation aléatoires
+        const delay = Math.random() * 8;
+        const duration = 6 + Math.random() * 4;
+       
+        // Taille aléatoire
+        const size = 1 + Math.random() * 3;
+       
+        particle.style.cssText = `
+          left: ${startX}%;
+          top: ${startY}%;
+          width: ${size}px;
+          height: ${size}px;
+          animation-delay: ${delay}s;
+          animation-duration: ${duration}s;
+        `;
+       
+        particlesContainer.appendChild(particle);
+      }
+    }
+    // Fonction pour basculer le menu mobile
+    function toggleMobileMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+     
+      // Fermer la recherche si ouverte
+      const searchBar = document.getElementById('searchBar');
+      searchBar.classList.remove('active');
+    }
+    // Fonction pour basculer la recherche mobile
+    function toggleSearch() {
+      const searchBar = document.getElementById('searchBar');
+      searchBar.classList.toggle('active');
+     
+      // Fermer le menu si ouvert
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.remove('active');
+     
+      // Focus sur l'input de recherche
+      if (searchBar.classList.contains('active')) {
+        setTimeout(() => {
+          searchBar.querySelector('input').focus();
+        }, 100);
+      }
+    }
+    // Fonction pour changer l'image principale
+    function changeMainImage(productIndex, imageIndex) {
+      const productCard = document.querySelector(`[data-product-index="${productIndex}"]`);
+      if (!productCard) return;
+     
+      const mainImage = productCard.querySelector('.gallery-main');
+      const thumbnails = productCard.querySelectorAll('.thumbnail');
+      const counter = productCard.querySelector('.current-image');
+     
+      if (!mainImage) return;
+     
+      // Animation de fondu
+      mainImage.style.opacity = '0';
+     
+      setTimeout(() => {
+        // Mettre à jour l'image principale
+        const produit = produitsData[productIndex];
+        if (produit.imagesGallery && produit.imagesGallery[imageIndex]) {
+          mainImage.src = produit.imagesGallery[imageIndex].url;
+          mainImage.setAttribute('data-current-image', imageIndex);
+         
+          // Animation de fondu
+          mainImage.style.opacity = '1';
+         
+          // Mettre à jour les miniatures actives
+          thumbnails.forEach((thumb, index) => {
+            thumb.classList.toggle('active', index === imageIndex);
+          });
+         
+          // Mettre à jour le compteur
+          if (counter) {
+            counter.textContent = imageIndex + 1;
+          }
+        }
+      }, 150);
+    }
+    // Fonction pour ouvrir la galerie complète
+    function openGallery(productIndex) {
+      currentGallery = productIndex;
+      currentImageIndex = 0;
+     
+      const produit = produitsData[productIndex];
+      const modal = document.getElementById('galleryModal');
+      const modalImage = document.getElementById('modalImage');
+      const modalCounter = document.getElementById('modalCounter');
+     
+      if (produit.imagesGallery && produit.imagesGallery.length > 0) {
+        modalImage.src = produit.imagesGallery[0].url;
+        modalImage.alt = produit.nom;
+        modalCounter.textContent = `1 / ${produit.imagesGallery.length}`;
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+       
+        // Empêcher le défilement de l'arrière-plan sur mobile
+        document.documentElement.style.overflow = 'hidden';
+      }
+    }
+    // Fonction pour fermer la galerie
+    function closeGallery() {
+      const modal = document.getElementById('galleryModal');
+      modal.style.display = 'none';
+      document.body.style.overflow = 'auto';
+      document.documentElement.style.overflow = 'auto';
+      currentGallery = null;
+    }
+    // Fonction pour changer d'image dans le modal
+    function changeModalImage(direction) {
+      if (currentGallery === null) return;
+     
+      const produit = produitsData[currentGallery];
+      const images = produit.imagesGallery;
+      const modalImage = document.getElementById('modalImage');
+      const modalCounter = document.getElementById('modalCounter');
+     
+      currentImageIndex += direction;
+     
+      // Gérer le défilement circulaire
+      if (currentImageIndex < 0) {
+        currentImageIndex = images.length - 1;
+      } else if (currentImageIndex >= images.length) {
+        currentImageIndex = 0;
+      }
+     
+      // Animation de fondu
+      modalImage.style.opacity = '0';
+     
+      setTimeout(() => {
+        modalImage.src = images[currentImageIndex].url;
+        modalImage.alt = produit.nom;
+        modalCounter.textContent = `${currentImageIndex + 1} / ${images.length}`;
+        modalImage.style.opacity = '1';
+      }, 200);
+    }
+    // Fonctions pour la notification panier
+    function showNotification(productName, productPrice) {
+      const notification = document.getElementById('cartNotification');
+      const message = document.getElementById('notificationMessage');
+     
+      message.textContent = `${productName} - ${productPrice} a été ajouté à votre panier`;
+      notification.classList.add('show');
+     
+      // Masquer automatiquement après 5 secondes
+      setTimeout(() => {
+        hideNotification();
+      }, 5000);
+    }
+   
+    function hideNotification() {
+      const notification = document.getElementById('cartNotification');
+      notification.classList.remove('show');
+    }
+    // Fonction pour mettre à jour le badge du panier
+    function updateCartBadge(count) {
+      const cartIcon = document.getElementById('cartIcon');
+      let badge = document.getElementById('cartBadge');
+     
+      if (!badge) {
+        badge = document.createElement('span');
+        badge.id = 'cartBadge';
+        badge.className = 'cart-badge';
+        cartIcon.appendChild(badge);
+      }
+     
+      badge.textContent = count;
+     
+      // Animation du badge (comme WhatsApp)
+      badge.style.animation = 'none';
+      setTimeout(() => {
+        badge.style.animation = 'pulse 2s infinite';
+      }, 10);
+    }
+   
     // Gestion de l'ajout au panier avec AJAX
     document.addEventListener('DOMContentLoaded', function() {
+      // Créer les animations de fond
+      createStars();
+      createCosmicParticles();
+     
+      // Gestion du menu mobile
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+      }
+     
+      // Fermer le menu en cliquant à l'extérieur
+      document.addEventListener('click', function(e) {
+        const navLinks = document.getElementById('navLinks');
+        const searchBar = document.getElementById('searchBar');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+       
+        if (navLinks.classList.contains('active') &&
+            !navLinks.contains(e.target) &&
+            !mobileMenuBtn.contains(e.target)) {
+          navLinks.classList.remove('active');
+        }
+       
+        if (searchBar.classList.contains('active') &&
+            !searchBar.contains(e.target) &&
+            !document.querySelector('.mobile-search-btn').contains(e.target)) {
+          searchBar.classList.remove('active');
+        }
+      });
+     
       const forms = document.querySelectorAll('.add-to-cart-form');
-      
+     
       forms.forEach(form => {
         form.addEventListener('submit', function(e) {
           e.preventDefault();
-          
+         
           const formData = new FormData(this);
           const productName = this.querySelector('input[name="produitNom"]').value;
           const productPrice = this.querySelector('input[name="produitPrix"]').value;
           const submitBtn = this.querySelector('.add-to-cart-btn');
-          
+         
           // Désactiver le bouton pendant la requête
           submitBtn.disabled = true;
-          submitBtn.textContent = 'AJOUT...';
-          
+          submitBtn.textContent = 'AJOUT EN COURS...';
+         
           // Envoyer la requête AJAX
           fetch(this.action, {
             method: 'POST',
@@ -815,13 +1792,16 @@
           .then(response => response.json())
           .then(data => {
             if (data.success) {
-              // Mettre à jour le badge du panier
+              // Afficher la notification
+              showNotification(productName, productPrice);
+             
+              // Mettre à jour le badge du panier avec effet WhatsApp
               updateCartBadge(data.panierCount);
-              
+             
               // Effet de confirmation sur le bouton
-              submitBtn.textContent = '✓ AJOUTÉ';
-              submitBtn.style.background = '#0A7C0A';
-              
+              submitBtn.textContent = '✓ AJOUTÉ !';
+              submitBtn.style.background = 'var(--success-color)';
+             
               setTimeout(() => {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'AJOUTER AU PANIER';
@@ -831,26 +1811,12 @@
           })
           .catch(error => {
             console.error('Erreur:', error);
+            // Fallback: soumettre le formulaire normalement
             this.submit();
           });
         });
       });
-      
-      // Fonction pour mettre à jour le badge du panier
-      function updateCartBadge(count) {
-        const cartIcon = document.getElementById('cartIcon');
-        let badge = document.getElementById('cartBadge');
-        
-        if (!badge) {
-          badge = document.createElement('span');
-          badge.id = 'cartBadge';
-          badge.className = 'cart-badge';
-          cartIcon.appendChild(badge);
-        }
-        
-        badge.textContent = count;
-      }
-
+     
       // Smooth scroll pour les ancres
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -861,8 +1827,93 @@
               behavior: 'smooth',
               block: 'start'
             });
+           
+            // Fermer le menu mobile après le clic
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.remove('active');
           }
         });
+      });
+      // Animation des produits au scroll
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.animationDelay = '0s';
+            entry.target.classList.add('loading');
+          }
+        });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.produit-card').forEach(card => {
+        observer.observe(card);
+      });
+      // Navigation au clavier pour la galerie
+      document.addEventListener('keydown', function(e) {
+        const modal = document.getElementById('galleryModal');
+        if (modal.style.display === 'block') {
+          if (e.key === 'Escape') {
+            closeGallery();
+          } else if (e.key === 'ArrowLeft') {
+            changeModalImage(-1);
+          } else if (e.key === 'ArrowRight') {
+            changeModalImage(1);
+          }
+        }
+      });
+      // Fermer la galerie en cliquant à l'extérieur
+      document.getElementById('galleryModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+          closeGallery();
+        }
+      });
+      // Support du swipe pour la galerie sur mobile
+      let touchStartX = 0;
+      let touchEndX = 0;
+     
+      document.getElementById('galleryModal').addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+      });
+     
+      document.getElementById('galleryModal').addEventListener('touchend', function(e) {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+      });
+     
+      function handleSwipe() {
+        const swipeThreshold = 50;
+        const diff = touchStartX - touchEndX;
+       
+        if (Math.abs(diff) > swipeThreshold) {
+          if (diff > 0) {
+            // Swipe gauche - image suivante
+            changeModalImage(1);
+          } else {
+            // Swipe droite - image précédente
+            changeModalImage(-1);
+          }
+        }
+      }
+      // Effet de parallaxe sur le défilement (désactivé sur mobile pour les performances)
+      if (window.innerWidth > 768) {
+        window.addEventListener('scroll', function() {
+          const scrolled = window.pageYOffset;
+          const stars = document.querySelector('.stars');
+          const particles = document.querySelector('.cosmic-particles');
+         
+          if (stars) {
+            stars.style.transform = `translateY(${scrolled * 0.5}px)`;
+          }
+          if (particles) {
+            particles.style.transform = `translateY(${scrolled * 0.3}px)`;
+          }
+        });
+      }
+      // Réinitialiser les animations lors du redimensionnement
+      window.addEventListener('resize', function() {
+        // Recréer les étoiles et particules
+        document.getElementById('starsContainer').innerHTML = '';
+        document.getElementById('cosmicParticles').innerHTML = '';
+        createStars();
+        createCosmicParticles();
       });
     });
   </script>

@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const Boutique = require('../models/Boutique');
 const multer = require('multer');
 const path = require('path');
 const slugify = require('slugify');
-const Produit = require('../models/Product'); // <-- IMPORT essentiel
+const Produit = require('../models/Product');
+const Boutique = require('../models/Boutique');
+const Template = require('../models/Template');
 
 // 📁 Configuration Multer pour logos
 const storage = multer.diskStorage({
@@ -24,7 +25,6 @@ function estConnecte(req, res, next) {
   res.redirect('/auth/login');
 }
 
-
 function estVendeur(req, res, next) {
   if (req.session.user && req.session.user.role === 'vendeur') return next();
   res.redirect('/auth/login');
@@ -35,8 +35,7 @@ router.get('/creer', estConnecte, (req, res) => {
   res.render('boutique_creer');
 });
 
-// Route POST création boutique (avec fermeture try/catch correcte)it Boutique.findOne({ slug });
-   // ...existing code...
+// Route POST création boutique
 router.post('/creer', estConnecte, upload.single('logo'), async (req, res) => {
   try {
     const { nom, description, rue, ville, codePostal, pays, telephone } = req.body;
@@ -70,19 +69,13 @@ router.post('/creer', estConnecte, upload.single('logo'), async (req, res) => {
     });
     await boutique.save();
 
-    // Affiche la page publique avec le nom de la boutique
-   // Redirection vers le dashboard vendeur
-res.redirect('/vendeur/dashboard');
-
-    // Si tu veux rediriger vers la page "mon", remplace la ligne précédente par :
-    // res.redirect('/boutique/mon');
+    res.redirect('/vendeur/dashboard');
   } catch (err) {
     res.status(500).send('Erreur création boutique : ' + err.message);
   }
 });
-// ...existing code...
-const Template = require('../models/Template');
 
+// Route GET templates
 router.get('/templates', estVendeur, async (req, res) => {
   try {
     const templates = await Template.find();
@@ -91,21 +84,20 @@ router.get('/templates', estVendeur, async (req, res) => {
     res.status(500).send('Erreur chargement templates : ' + err.message);
   }
 });
-// ✅ Route POST : le vendeur choisit un template
+
+// Route POST choisir template
 router.post('/choisir-template', estVendeur, async (req, res) => {
   try {
-    const { template } = req.body; // nike, dior, zara
+    const { template } = req.body;
     const boutique = await Boutique.findOne({ proprietaire: req.session.user.id });
 
     if (!boutique) {
       return res.redirect('/boutique/creer');
     }
 
-    // On enregistre le choix du template dans la boutique
     boutique.template = template;
     await boutique.save();
 
-    // Une fois choisi, redirection vers la boutique
     res.redirect('/boutique/mon');
   } catch (error) {
     console.error('Erreur lors du choix du template :', error);
@@ -113,8 +105,7 @@ router.post('/choisir-template', estVendeur, async (req, res) => {
   }
 });
 
-
-// Route POST création ou modification boutique avec logo (upload)
+// Route POST création ou modification boutique avec logo
 router.post('/boutique', estVendeur, upload.single('logo'), async (req, res) => {
   const { nom, description, pays, telephone, rue, ville, codePostal } = req.body;
   const logoPath = req.file ? `/uploads/${req.file.filename}` : null;
@@ -152,11 +143,10 @@ router.post('/boutique', estVendeur, upload.single('logo'), async (req, res) => 
 });
 
 // Route GET : Affichage de la boutique du vendeur connecté
-// Route GET : Affichage de la boutique du vendeur connecté avec choix de template
 router.get('/mon', estVendeur, async (req, res) => {
   try {
     const boutique = await Boutique.findOne({ proprietaire: req.session.user.id });
-    const templates = await Template.find(); // Récupérer tous les templates
+    const templates = await Template.find();
 
     if (!boutique) {
       return res.render('boutique_mon', {
@@ -196,7 +186,6 @@ router.get('/vendeur/dashboard', estVendeur, async (req, res) => {
 });
 
 // Route publique boutique par slug
-// Route publique boutique par slug - VERSION CORRIGÉE
 router.get('/:slug', async (req, res) => {
   try {
     const boutique = await Boutique.findOne({ slug: req.params.slug });
@@ -206,8 +195,6 @@ router.get('/:slug', async (req, res) => {
 
     const produits = await Produit.find({ boutique: boutique._id });
 
-    // 🔥 CORRECTION : TOUJOURS mettre à jour la boutique actuelle
-    // même sans ajouter de produit au panier
     req.session.boutiqueActuelle = boutique.slug;
     
     console.log('💾 Boutique visitée stockée en session:', {
@@ -216,11 +203,9 @@ router.get('/:slug', async (req, res) => {
       action: 'simple visite'
     });
 
-    // Sauvegarder immédiatement la session
     req.session.save((err) => {
       if (err) console.error('Erreur sauvegarde session:', err);
       
-      // 🔥 DÉTECTION AUTOMATIQUE DU TEMPLATE
       let templatePath;
       let templateData = {
         boutique, 
@@ -229,16 +214,11 @@ router.get('/:slug', async (req, res) => {
         user: req.session.user
       };
 
-      // Cas 1: Boutique avec template personnalisé
       if (boutique.template && boutique.template !== 'standard') {
         templatePath = `boutiques_templates/${boutique.template}`;
-      }
-      // Cas 2: Template standard
-      else if (boutique.template === 'standard') {
+      } else if (boutique.template === 'standard') {
         templatePath = 'boutiques_templates/standard';
-      }
-      // Cas 3: Ancien template (par défaut)
-      else {
+      } else {
         templatePath = 'boutique_publique';
       }
 
@@ -252,7 +232,7 @@ router.get('/:slug', async (req, res) => {
   }
 });
 
-// Page d'accueil publique (liste des produits)
+// Page d'accueil publique
 router.get('/', async (req, res) => {
   try {
     const produits = await Produit.find().populate('boutique');
@@ -264,8 +244,6 @@ router.get('/', async (req, res) => {
 });
 
 // Route : afficher un produit par ID
-// Route : afficher un produit par ID avec produits similaires
-// Route : afficher un produit par ID avec panier
 router.get('/produit/:id', async (req, res, next) => {
   try {
     const produit = await Produit.findById(req.params.id)
@@ -288,6 +266,7 @@ router.get('/produit/:id', async (req, res, next) => {
     const panier = req.session.panier || [];
     let panierDetail = [];
     let totalPanier = 0;
+    let totalArticles = 0;
 
     if (panier.length > 0) {
       const produitsIds = panier.map(item => item.produitId);
@@ -299,6 +278,7 @@ router.get('/produit/:id', async (req, res, next) => {
         const produitPanier = produitsPanier.find(p => p._id.toString() === item.produitId);
         const sousTotal = produitPanier ? produitPanier.prix * item.quantite : 0;
         totalPanier += sousTotal;
+        totalArticles += item.quantite;
         
         return {
           produit: produitPanier,
@@ -315,24 +295,28 @@ router.get('/produit/:id', async (req, res, next) => {
       produitsVendeur,
       panier: panierDetail,
       totalPanier: totalPanier,
-      session: req.session // Passer la session complète
+      totalArticles: totalArticles,
+      session: req.session,
+      boutique: produit.boutique
     });
   } catch (err) {
     next(err);
   }
 });
-// Dans routes/boutique.js (ou fichier routes principal)
+
+// Route modification boutique
 router.get('/mon/modifier', estVendeur, async (req, res) => {
   try {
     const boutique = await Boutique.findOne({ proprietaire: req.session.user.id });
     if (!boutique) {
-      return res.redirect('/boutique/creer'); // S’il n’y a pas encore de boutique, on invite à créer
+      return res.redirect('/boutique/creer');
     }
     res.render('boutique_modifier', { boutique });
   } catch (err) {
     res.status(500).send('Erreur chargement boutique : ' + err.message);
   }
 });
+
 router.post('/mon/modifier', estVendeur, upload.single('logo'), async (req, res) => {
   try {
     const boutique = await Boutique.findOne({ proprietaire: req.session.user.id });
@@ -340,7 +324,6 @@ router.post('/mon/modifier', estVendeur, upload.single('logo'), async (req, res)
       return res.redirect('/boutique/creer');
     }
 
-    // Mise à jour des champs
     boutique.nom = req.body.nom;
     boutique.description = req.body.description;
     boutique.adresse.rue = req.body.rue;
@@ -349,7 +332,6 @@ router.post('/mon/modifier', estVendeur, upload.single('logo'), async (req, res)
     boutique.adresse.pays = req.body.pays;
     boutique.telephone = req.body.telephone;
 
-    // Mise à jour du logo uniquement si un nouveau fichier a été uploadé
     if (req.file) {
       boutique.logo = `/uploads/${req.file.filename}`;
     }
@@ -361,5 +343,5 @@ router.post('/mon/modifier', estVendeur, upload.single('logo'), async (req, res)
     res.status(500).send('Erreur mise à jour boutique : ' + err.message);
   }
 });
-// Exporter le router
+
 module.exports = router;
