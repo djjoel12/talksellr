@@ -302,16 +302,16 @@ router.get('/whatsapp/:numero', async (req, res) => {
     console.log('🔍 Numéro WhatsApp utilisé:', numeroWhatsApp);
     
     // Construire le message WhatsApp
-    const messageWhatsApp = encodeURIComponent(
-      `🛍️ NOUVELLE COMMANDE !\n\n` +
-      `Une nouvelle commande vient d'être passée sur votre boutique.\n\n` +
-      `👤 Client: ${commande.client.nom}\n` +
-      `📞 Téléphone: ${commande.client.telephone}\n` +
-      `💰 Montant: ${commande.total.toFixed(2)} ${commande.produits[0]?.devise || 'EUR'}\n\n` +
-      `📋 Voir les détails complets :\n` +
-      `🔗 ${req.protocol}://${req.get('host')}/commandes/vendeur/${commande._id}\n\n` +
-      `🎯 Merci de traiter cette commande rapidement !`
-    );
+   const messageWhatsApp = encodeURIComponent(
+  `🛍️ NOUVELLE COMMANDE !\n\n` +
+  `Une nouvelle commande vient d'être passée sur votre boutique.\n\n` +
+  `👤 Client: ${commande.client.nom}\n` +
+  `📞 Téléphone: ${commande.client.telephone}\n` +
+  `💰 Montant: ${commande.total.toFixed(2)} ${commande.produits[0]?.devise || 'EUR'}\n\n` +
+  `📋 Voir toutes vos commandes :\n` +
+  `https://talksellr.onrender.com/commandes/mes-commandes\n\n` + // ← LIEN VERS LA PAGE MES COMMANDES
+  `🎯 Merci de traiter rapidement !`
+);
 
     res.render('whatsapp_confirm', {
       numeroWhatsApp: numeroWhatsApp,
