@@ -695,7 +695,7 @@
       
       // Calculer la devise principale (celle la plus utilisée)
       const devisesUtilisees = {};
-      let devisePrincipale = 'EUR';
+      let devisePrincipale = 'XOF';
       let maxCount = 0;
       
       document.querySelectorAll('.devise-select').forEach(select => {
@@ -755,8 +755,8 @@
         const deviseSelectionnee = select.value;
         let texteInfo = '';
         
-        if (deviseSelectionnee === 'EUR') {
-          texteInfo = `1 EUR ≈ ${tauxChange['USD'].toFixed(2)} USD`;
+        if (deviseSelectionnee === 'XOF') {
+          texteInfo = `1 XOF ≈ ${tauxChange['USD'].toFixed(2)} USD`;
         } else {
           texteInfo = `1 ${deviseSelectionnee} ≈ ${(1 / tauxChange[deviseSelectionnee]).toFixed(2)} EUR`;
         }

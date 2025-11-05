@@ -447,7 +447,7 @@ if (fichiersProduit.photos.length > 0) {
     // CRÉATION DU PRODUIT
     const produit = new Produit({
       prix: prixNumber,
-      devise: 'EUR',
+      devise: 'XOF',
       nom: nomProduit,
       description: descriptionProduit,
       categorie: categorieProduit,
