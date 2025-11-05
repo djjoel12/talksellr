@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
+const { uploadMixed } = require('../config/multer-cloudinary'); // 👈 NOUVEAU
 const path = require('path');
 const fs = require('fs');
 const Produit = require('../models/Product');
@@ -9,70 +9,36 @@ const { analyzeImageComplet, geminiQueue } = require('../config/gemini');
 const cloudinary = require('../config/cloudinary');
 const estVendeur = require('../middlewares/estVendeur');
 
-// Configuration multer
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/');
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + '-' + file.originalname);
-  }
-});
-
-const upload = multer({ storage: storage });
-
 // GET : formulaire d'ajout produit
 router.get('/ajouter', estVendeur, (req, res) => {
   res.render('produit_ajouter');
 });
 
-// POST : ajouter un produit avec image ET vidéo compressée
+// POST : ajouter un produit avec image ET vidéo compressée - VERSION CORRIGÉE
 router.post(
   '/ajouter',
   estVendeur,
-  upload.fields([
+  uploadMixed.fields([ // 👈 UTILISEZ uploadMixed
     { name: 'image', maxCount: 1 },
     { name: 'video', maxCount: 1 }
   ]),
   async (req, res) => {
     try {
       const boutique = await Boutique.findOne({ proprietaire: req.session.user.id });
-      // 🔥 CORRECTION : Guillemets doubles
       if (!boutique) return res.send("Vous devez d'abord créer votre boutique.");
 
       const imageFile = req.files['image'] ? req.files['image'][0] : null;
       const videoFile = req.files['video'] ? req.files['video'][0] : null;
 
-      let imageUrl = '';
-      let imageId = '';
-      let videoUrl = '';
-
-      if (imageFile) {
-        imageUrl = imageFile.path;
-        imageId = imageFile.public_id;
-      }
-
-      if (videoFile) {
-        // Compresser la vidéo automatiquement lors de l'upload sur Cloudinary
-        const videoCompressed = await cloudinary.uploader.upload(videoFile.path, {
-          resource_type: 'video',
-          folder: 'produits/videos',
-          transformation: [
-            { width: 640, height: 360, crop: 'limit' },
-            { quality: 'auto' }
-          ]
-        });
-        videoUrl = videoCompressed.secure_url;
-      }
-
+      // MAINTENANT les fichiers sont DÉJÀ sur Cloudinary !
       const produit = new Produit({
         nom: req.body.nom,
         description: req.body.description,
         prix: parseFloat(req.body.prix),
         devise: req.body.devise || 'EUR',
-        image: imageUrl,
-        cloudinary_id: imageId,
-        videoUrl: videoUrl,
+        image: imageFile ? imageFile.path : '', // URL Cloudinary directe
+        cloudinary_id: imageFile ? imageFile.filename : '',
+        videoUrl: videoFile ? videoFile.path : '', // URL Cloudinary directe
         boutique: boutique._id,
         vendeur: req.session.user.id
       });
@@ -90,7 +56,6 @@ router.post(
 router.get('/mes', estVendeur, async (req, res) => {
   try {
     const boutique = await Boutique.findOne({ proprietaire: req.session.user.id });
-    // 🔥 CORRECTION : Guillemets doubles
     if (!boutique) return res.send("Vous devez d'abord créer votre boutique.");
 
     const produits = await Produit.find({ boutique: boutique._id })
@@ -119,7 +84,7 @@ router.get('/modifier/:id', estVendeur, async (req, res) => {
 });
 
 // POST : modification produit
-router.post('/modifier/:id', estVendeur, upload.single('image'), async (req, res) => {
+router.post('/modifier/:id', estVendeur, uploadMixed.single('image'), async (req, res) => {
   try {
     const produit = await Produit.findById(req.params.id);
     if (!produit) return res.status(404).send('Produit non trouvé');
@@ -137,7 +102,7 @@ router.post('/modifier/:id', estVendeur, upload.single('image'), async (req, res
       }
 
       updates.image = req.file.path;
-      updates.cloudinary_id = req.file.public_id;
+      updates.cloudinary_id = req.file.filename;
     }
 
     await Produit.findByIdAndUpdate(req.params.id, updates);
@@ -171,14 +136,13 @@ router.get('/import-masse', estVendeur, (req, res) => {
   res.render('produit_import_masse');
 });
 
-// POST : Import en masse avec galerie de photos - VERSION CORRIGÉE
-router.post('/import-masse', estVendeur, upload.any(), async (req, res) => {
+// POST : Import en masse avec galerie de photos - VERSION CLOUDINARY
+router.post('/import-masse', estVendeur, uploadMixed.any(), async (req, res) => {
   try {
     const boutique = await Boutique.findOne({ proprietaire: req.session.user.id });
     if (!boutique) {
       return res.status(400).json({ 
         success: false, 
-        // 🔥 CORRECTION : Guillemets doubles
         message: "Vous devez d'abord créer votre boutique." 
       });
     }
@@ -191,7 +155,7 @@ router.post('/import-masse', estVendeur, upload.any(), async (req, res) => {
     console.log(`🔄 Début import de ${produitsData.length} produits`);
     console.log(`📁 Total fichiers reçus: ${fichiers.length}`);
 
-    // Grouper les fichiers par produit
+    // Grouper les fichiers par produit (DÉJÀ sur Cloudinary)
     const fichiersParProduit = {};
     
     fichiers.forEach(file => {
@@ -205,9 +169,14 @@ router.post('/import-masse', estVendeur, upload.any(), async (req, res) => {
         }
         
         if (type === 'photos') {
-          fichiersParProduit[productNumber].photos.push(file);
+          // Fichier DÉJÀ sur Cloudinary
+          fichiersParProduit[productNumber].photos.push({
+            url: file.path, // URL Cloudinary
+            cloudinary_id: file.filename,
+            ordre: fichiersParProduit[productNumber].photos.length
+          });
         } else if (type === 'video') {
-          fichiersParProduit[productNumber].video = file;
+          fichiersParProduit[productNumber].video = file.path; // URL Cloudinary
         }
       }
     });
@@ -225,51 +194,10 @@ router.post('/import-masse', estVendeur, upload.any(), async (req, res) => {
         }
 
         const fichiersProduit = fichiersParProduit[productNumber] || { photos: [], video: null };
-        const photosFiles = fichiersProduit.photos || [];
-        const videoFile = fichiersProduit.video;
+        const imagesGallery = fichiersProduit.photos || [];
+        const videoUrl = fichiersProduit.video || '';
 
-        console.log(`📸 Produit ${productNumber} "${produitData.nom}": ${photosFiles.length} photos, ${videoFile ? '1 vidéo' : '0 vidéo'}`);
-
-        let imagesGallery = [];
-        let videoUrl = '';
-
-        // Traitement de la galerie de photos
-        if (photosFiles.length > 0) {
-          console.log(`🖼️ Traitement des ${photosFiles.length} photos pour produit ${productNumber}`);
-          
-          for (let j = 0; j < photosFiles.length; j++) {
-            const photoFile = photosFiles[j];
-            console.log(`📸 Photo ${j + 1}:`, photoFile.originalname);
-            
-            imagesGallery.push({
-              url: photoFile.path,
-              cloudinary_id: photoFile.public_id || `img-${Date.now()}-${productNumber}-${j}`,
-              ordre: j
-            });
-          }
-        } else {
-          console.log(`⚠️ Aucune photo trouvée pour le produit ${productNumber}`);
-        }
-
-        // Traitement de la vidéo
-        if (videoFile) {
-          try {
-            console.log(`🎥 Traitement vidéo pour produit ${productNumber}:`, videoFile.originalname);
-            const videoCompressed = await cloudinary.uploader.upload(videoFile.path, {
-              resource_type: 'video',
-              folder: 'produits/videos',
-              transformation: [
-                { width: 640, height: 360, crop: 'limit' },
-                { quality: 'auto' }
-              ]
-            });
-            videoUrl = videoCompressed.secure_url;
-            console.log(`✅ Vidéo uploadée pour le produit ${productNumber}`);
-          } catch (videoError) {
-            console.error(`❌ Erreur vidéo produit ${productNumber}:`, videoError);
-            erreurs.push(`Produit ${productNumber}: Erreur vidéo - ${videoError.message}`);
-          }
-        }
+        console.log(`📸 Produit ${productNumber} "${produitData.nom}": ${imagesGallery.length} photos, ${videoUrl ? '1 vidéo' : '0 vidéo'}`);
 
         // Création du produit
         const imagePrincipale = imagesGallery.length > 0 ? imagesGallery[0].url : '';
@@ -322,7 +250,7 @@ router.post('/import-masse', estVendeur, upload.any(), async (req, res) => {
 });
 
 // Route pour l'import simple
-router.post('/import-masse-simple', estVendeur, upload.any(), async (req, res) => {
+router.post('/import-masse-simple', estVendeur, uploadMixed.any(), async (req, res) => {
   let fichiersASupprimer = [];
   let boutique = null;
   
@@ -331,7 +259,6 @@ router.post('/import-masse-simple', estVendeur, upload.any(), async (req, res) =
     if (!boutique) {
       return res.status(400).json({ 
         success: false, 
-        // 🔥 CORRECTION : Guillemets doubles
         message: "Créez d'abord votre boutique." 
       });
     }
@@ -355,7 +282,6 @@ router.post('/import-masse-simple', estVendeur, upload.any(), async (req, res) =
           fichiersParProduit[productNumber] = { photos: [] };
         }
         fichiersParProduit[productNumber].photos.push(file);
-        fichiersASupprimer.push(file.path);
       }
     });
 
@@ -393,10 +319,6 @@ router.post('/import-masse-simple', estVendeur, upload.any(), async (req, res) =
     console.log(`\n⏳ Attente de ${traitementsProduits.length} traitements...`);
     await Promise.all(traitementsProduits);
 
-    // NETTOYAGE
-    console.log(`\n🧹 Nettoyage de ${fichiersASupprimer.length} fichiers temporaires...`);
-    await nettoyerFichiers(fichiersASupprimer);
-
     const stats = geminiQueue ? geminiQueue.getStats() : { successful: 0, failed: 0, retries: 0, queueLength: 0 };
     
     const result = {
@@ -418,12 +340,6 @@ router.post('/import-masse-simple', estVendeur, upload.any(), async (req, res) =
   } catch (err) {
     console.error('💥 ERREUR GLOBALE IMPORT:', err);
     
-    if (fichiersASupprimer && fichiersASupprimer.length > 0) {
-      // 🔥 CORRECTION : Guillemets doubles
-      console.log("🧹 Nettoyage des fichiers en cas d'erreur...");
-      await nettoyerFichiers(fichiersASupprimer);
-    }
-    
     res.status(500).json({ 
       success: false, 
       message: 'Erreur serveur: ' + err.message 
@@ -431,7 +347,7 @@ router.post('/import-masse-simple', estVendeur, upload.any(), async (req, res) =
   }
 });
 
-// FONCTION DE TRAITEMENT D'UN PRODUIT
+// FONCTION DE TRAITEMENT D'UN PRODUIT - VERSION CLOUDINARY
 async function traiterProduit(productNumber, fichiersProduit, prixProduits, boutique, userId) {
   console.log(`\n--- DÉBUT PRODUIT ${productNumber} ---`);
   
@@ -460,60 +376,41 @@ async function traiterProduit(productNumber, fichiersProduit, prixProduits, bout
     let donneesIA = null;
     const imagesGallery = [];
 
-    // ANALYSE IA AVEC QUEUE INTELLIGENTE
-    if (fichiersProduit.photos.length > 0) {
-      const premierePhoto = fichiersProduit.photos[0];
-      
-      if (fs.existsSync(premierePhoto.path)) {
-        try {
-          console.log(`🧠 Ajout à la queue IA: Produit ${productNumber}`);
-          const imageBuffer = fs.readFileSync(premierePhoto.path);
-          
-          // Utilisation de la queue intelligente
-          donneesIA = await analyzeImageComplet(imageBuffer, {
-            fileName: premierePhoto.originalname,
-            productNumber: productNumber
-          });
-          
-          if (donneesIA && donneesIA.nom) {
-            console.log(`✅ IA ${productNumber} réussie: ${donneesIA.nom}`);
-          } else {
-            console.log(`🔄 IA ${productNumber} - utilisation fallback`);
-          }
-          
-        } catch (iaError) {
-          console.error(`❌ Erreur IA ${productNumber}:`, iaError.message);
-        }
-      }
-    }
-
-    // UPLOAD CLOUDINARY PARALLÈLE
-    console.log(`☁️ Upload Cloudinary produit ${productNumber}...`);
-    const uploads = fichiersProduit.photos.map(async (photoFile, index) => {
-      try {
-        if (fs.existsSync(photoFile.path)) {
-          const result = await cloudinary.uploader.upload(photoFile.path, {
-            folder: 'produits/photos',
-            quality: 'auto',
-            fetch_format: 'auto',
-            transformation: [
-              { width: 800, height: 800, crop: 'limit' }
-            ]
-          });
-          
-          imagesGallery.push({
-            url: result.secure_url,
-            cloudinary_id: result.public_id,
-            ordre: index
-          });
-          console.log(`✅ Photo ${index+1} produit ${productNumber} uploadée`);
-        }
-      } catch (uploadError) {
-        console.error(`❌ Erreur upload ${productNumber}-${index}:`, uploadError.message);
-      }
+    // ANALYSE IA AVEC QUEUE INTELLIGENTE - VERSION CORRIGÉE
+if (fichiersProduit.photos.length > 0) {
+  const premierePhoto = fichiersProduit.photos[0];
+  
+  try {
+    console.log(`🧠 Ajout à la queue IA: Produit ${productNumber}`);
+    console.log(`📸 URL Cloudinary: ${premierePhoto.path}`);
+    
+    // OPTION 1: Utiliser directement l'URL Cloudinary pour l'analyse
+    // L'IA Gemini peut analyser les images via URL
+    donneesIA = await analyzeImageComplet(null, {
+      imageUrl: premierePhoto.path, // On passe l'URL Cloudinary
+      fileName: premierePhoto.originalname,
+      productNumber: productNumber
     });
+    
+    if (donneesIA && donneesIA.nom) {
+      console.log(`✅ IA ${productNumber} réussie: ${donneesIA.nom}`);
+    } else {
+      console.log(`🔄 IA ${productNumber} - utilisation fallback`);
+    }
+    
+  } catch (iaError) {
+    console.error(`❌ Erreur IA ${productNumber}:`, iaError.message);
+  }
 
-    await Promise.all(uploads);
+  // UTILISER DIRECTEMENT LES URLS CLOUDINARY
+  fichiersProduit.photos.forEach((photoFile, index) => {
+    imagesGallery.push({
+      url: photoFile.path, // URL Cloudinary
+      cloudinary_id: photoFile.filename,
+      ordre: index
+    });
+  });
+}
 
     // DÉTERMINER LES DONNÉES FINALES
     let nomProduit, descriptionProduit, categorieProduit;
@@ -588,21 +485,6 @@ async function traiterProduit(productNumber, fichiersProduit, prixProduits, bout
     console.error(`💥 ERREUR CRITIQUE produit ${productNumber}:`, error.message);
     throw error;
   }
-}
-
-// FONCTION DE NETTOYAGE
-async function nettoyerFichiers(fichiersASupprimer) {
-  const suppressions = fichiersASupprimer.map(async filePath => {
-    try {
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-      }
-    } catch (cleanError) {
-      console.error(`❌ Nettoyage ${filePath}:`, cleanError.message);
-    }
-  });
-  
-  await Promise.all(suppressions);
 }
 
 module.exports = router;

@@ -1,5 +1,6 @@
-// geminiAPI.js - VERSION COMPLÈTE CORRIGÉE
+// geminiAPI.js - VERSION CORRIGÉE
 const { GoogleGenerativeAI } = require("@google/generative-ai");
+const axios = require('axios');
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
@@ -19,7 +20,7 @@ class IntelligentGeminiQueue {
       processing: 0
     };
 
-    // Catégories prédéfinies améliorées - CHAUSSURES SÉPARÉE DES VÊTEMENTS
+    // Catégories prédéfinies améliorées
     this.categoriesPredefinies = {
       "Vêtements": ["Chemises", "Pantalons", "Robes", "Vestes", "Sous-vêtements", "Accessoires", "Sport"],
       "Chaussures": ["Baskets", "Sandales", "Bottes", "Talons", "Chaussures de sport", "Chaussures de ville", "Chaussures de sécurité"],
@@ -84,9 +85,30 @@ class IntelligentGeminiQueue {
     }
   }
 
+  // 🔥 FONCTION : Télécharger l'image depuis Cloudinary
+  async downloadImageFromCloudinary(imageUrl) {
+    try {
+      console.log(`📥 Téléchargement depuis Cloudinary: ${imageUrl}`);
+      
+      const response = await axios({
+        method: 'GET',
+        url: imageUrl,
+        responseType: 'arraybuffer',
+        timeout: 30000
+      });
+      
+      console.log(`✅ Image téléchargée: ${response.data.length} bytes`);
+      return Buffer.from(response.data);
+      
+    } catch (error) {
+      console.error(`❌ Erreur téléchargement Cloudinary:`, error.message);
+      throw new Error(`Impossible de télécharger l'image: ${error.message}`);
+    }
+  }
+
   async processWithRetry(item, modelType = 'primary') {
     try {
-      const modelName = "gemini-2.5-flash";
+      const modelName = "gemini-2.5-flash"; // 🔥 CORRECTION : modelName au lieu de modelini
       console.log(`🔄 Analyse IA avec ${modelName} (retry ${item.retryCount})`);
       
       const model = genAI.getGenerativeModel({ model: modelName });
@@ -132,13 +154,29 @@ FORMAT JSON STRICT:
 
 IMPORTANT: Réponds UNIQUEMENT avec le JSON, sans \`\`\`json ni commentaires.`;
 
+      let imageBuffer = item.imageBuffer;
+
+      // 🔥 Si on a une URL Cloudinary, on télécharge l'image
+      if (item.metadata && item.metadata.imageUrl) {
+        console.log(`🌐 Téléchargement depuis Cloudinary: ${item.metadata.imageUrl}`);
+        imageBuffer = await this.downloadImageFromCloudinary(item.metadata.imageUrl);
+      }
+
+      // Si toujours pas d'image buffer, on utilise le fallback
+      if (!imageBuffer) {
+        console.log(`⚠️ Aucune image disponible, utilisation du fallback`);
+        return this.getFallbackData(item.metadata);
+      }
+
+      console.log(`📸 Analyse de l'image (${imageBuffer.length} bytes)`);
+
       const result = await model.generateContent({
         contents: [{
           role: "user",
           parts: [
             {
               inlineData: {
-                data: item.imageBuffer.toString("base64"),
+                data: imageBuffer.toString("base64"),
                 mimeType: "image/jpeg"
               }
             },
@@ -272,10 +310,14 @@ IMPORTANT: Réponds UNIQUEMENT avec le JSON, sans \`\`\`json ni commentaires.`;
 
   getFallbackData(metadata) {
     const fileName = metadata.fileName || '';
+    const imageUrl = metadata.imageUrl || '';
+    
+    console.log(`🔄 Utilisation fallback pour: ${fileName || imageUrl}`);
     
     // Détection spécifique pour les chaussures
     if (fileName.includes('chaussure') || fileName.includes('basket') || fileName.includes('sneaker') || 
-        fileName.includes('sandale') || fileName.includes('botte') || fileName.includes('talon')) {
+        fileName.includes('sandale') || fileName.includes('botte') || fileName.includes('talon') ||
+        imageUrl.includes('chaussure') || imageUrl.includes('basket') || imageUrl.includes('sneaker')) {
       return {
         nom: "Chaussures de qualité supérieure",
         description: "Chaussures confortables et stylées pour un usage quotidien",
@@ -290,7 +332,8 @@ IMPORTANT: Réponds UNIQUEMENT avec le JSON, sans \`\`\`json ni commentaires.`;
       };
     }
     
-    if (fileName.includes('cheval') || fileName.includes('cavalier') || fileName.includes('equestre')) {
+    if (fileName.includes('cheval') || fileName.includes('cavalier') || fileName.includes('equestre') ||
+        imageUrl.includes('cheval') || imageUrl.includes('cavalier')) {
       return {
         nom: "Tenue équestre traditionnelle",
         description: "Tenue complète pour cavalier, style traditionnel et élégant",
@@ -305,17 +348,33 @@ IMPORTANT: Réponds UNIQUEMENT avec le JSON, sans \`\`\`json ni commentaires.`;
       };
     }
     
+    // Détection par URL Cloudinary
+    if (imageUrl.includes('zara') || fileName.includes('zara')) {
+      return {
+        nom: "Vêtement ZARA collection premium",
+        description: "Vêtement ZARA de la dernière collection, style moderne et tendance",
+        categorie: "Vêtements",
+        sous_categorie: "Prêt-à-porter",
+        marque: "ZARA",
+        couleurs: ["Noir", "Blanc", "Bleu"],
+        style: "Moderne",
+        materiau: "Coton et élasthanne",
+        etat: "Neuf",
+        tags: ["zara", "mode", "fashion", "tendance"]
+      };
+    }
+    
     return {
-      nom: "Produit de qualité",
-      description: "Produit fiable pour usage quotidien",
-      categorie: "Autre",
-      sous_categorie: "Divers",
+      nom: "Produit de qualité professionnelle",
+      description: "Produit fiable et robuste pour un usage professionnel",
+      categorie: "Équipement professionnel",
+      sous_categorie: "Outillage",
       marque: "Générique",
-      couleurs: ["Multicolor"],
-      style: "Standard",
-      materiau: "Divers",
+      couleurs: ["Noir", "Gris métallisé"],
+      style: "Professionnel",
+      materiau: "Métal haute résistance",
       etat: "Neuf",
-      tags: ["produit", "qualité", "usage"]
+      tags: ["professionnel", "qualité", "robuste", "fiable"]
     };
   }
 

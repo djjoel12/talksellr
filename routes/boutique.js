@@ -1,24 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
-const uploadTemp = require('../config/storage-temp'); // 👈 NOUVEAU
+const { uploadMixed } = require('../config/multer-cloudinary'); // 👈 UTILISEZ Cloudinary
 const path = require('path');
 const slugify = require('slugify');
 const Produit = require('../models/Product');
 const Boutique = require('../models/Boutique');
 const Template = require('../models/Template');
 
-// 📁 Configuration Multer pour logos
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'public/uploads');
-  },
-  filename: (req, file, cb) => {
-    const uniqueName = Date.now() + '-' + file.originalname;
-    cb(null, uniqueName);
-  }
-});
-const upload = multer({ storage });
+// 🔥 SUPPRIMEZ l'ancienne configuration multer locale
+// const storage = multer.diskStorage({ ... });
+// const upload = multer({ storage });
 
 // 🔒 Middleware sécurité
 function estConnecte(req, res, next) {
@@ -36,8 +27,8 @@ router.get('/creer', estConnecte, (req, res) => {
   res.render('boutique_creer');
 });
 
-// Route POST création boutique
-router.post('/creer', estConnecte, upload.single('logo'), async (req, res) => {
+// Route POST création boutique - VERSION CLOUDINARY
+router.post('/creer', estConnecte, uploadMixed.single('logo'), async (req, res) => {
   try {
     const { nom, description, rue, ville, codePostal, pays, telephone } = req.body;
 
@@ -56,8 +47,11 @@ router.post('/creer', estConnecte, upload.single('logo'), async (req, res) => {
     // Vérifier si boutique existe déjà pour ce propriétaire
     const exist = await Boutique.findOne({ proprietaire: req.session.user.id });
     if (exist) {
-      return res.send('Vous avez déjà une boutique.');
+      return res.status(400).json({ error: 'Vous avez déjà une boutique.' });
     }
+
+    // 🔥 CORRECTION : Logo depuis Cloudinary
+    const logoUrl = req.file ? req.file.path : null;
 
     // Création boutique
     const boutique = new Boutique({
@@ -66,13 +60,15 @@ router.post('/creer', estConnecte, upload.single('logo'), async (req, res) => {
       adresse: { rue, ville, codePostal, pays },
       telephone,
       slug,
+      logo: logoUrl, // URL Cloudinary
       proprietaire: req.session.user.id
     });
     await boutique.save();
 
     res.redirect('/vendeur/dashboard');
   } catch (err) {
-    res.status(500).send('Erreur création boutique : ' + err.message);
+    console.error('Erreur création boutique:', err);
+    res.status(500).json({ error: 'Erreur création boutique : ' + err.message });
   }
 });
 
@@ -82,7 +78,7 @@ router.get('/templates', estVendeur, async (req, res) => {
     const templates = await Template.find();
     res.render('templates_disponibles', { templates });
   } catch (err) {
-    res.status(500).send('Erreur chargement templates : ' + err.message);
+    res.status(500).json({ error: 'Erreur chargement templates : ' + err.message });
   }
 });
 
@@ -102,14 +98,16 @@ router.post('/choisir-template', estVendeur, async (req, res) => {
     res.redirect('/boutique/mon');
   } catch (error) {
     console.error('Erreur lors du choix du template :', error);
-    res.status(500).send('Erreur serveur : ' + error.message);
+    res.status(500).json({ error: 'Erreur serveur : ' + error.message });
   }
 });
 
-// Route POST création ou modification boutique avec logo
-router.post('/boutique', estVendeur, upload.single('logo'), async (req, res) => {
+// Route POST création ou modification boutique avec logo - VERSION CLOUDINARY
+router.post('/boutique', estVendeur, uploadMixed.single('logo'), async (req, res) => {
   const { nom, description, pays, telephone, rue, ville, codePostal } = req.body;
-  const logoPath = req.file ? `/uploads/${req.file.filename}` : null;
+  
+  // 🔥 CORRECTION : Logo depuis Cloudinary
+  const logoUrl = req.file ? req.file.path : null;
 
   try {
     let boutique = await Boutique.findOne({ proprietaire: req.session.user.id });
@@ -121,14 +119,14 @@ router.post('/boutique', estVendeur, upload.single('logo'), async (req, res) => 
       boutique.telephone = telephone;
       boutique.pays = pays;
       boutique.adresse = { rue, ville, codePostal, pays };
-      if (logoPath) boutique.logo = logoPath;
+      if (logoUrl) boutique.logo = logoUrl;
       await boutique.save();
     } else {
       // Création boutique
       boutique = new Boutique({
         nom,
         description,
-        logo: logoPath,
+        logo: logoUrl, // URL Cloudinary
         pays,
         telephone,
         adresse: { rue, ville, codePostal, pays },
@@ -139,7 +137,8 @@ router.post('/boutique', estVendeur, upload.single('logo'), async (req, res) => 
 
     res.redirect('/vendeur/dashboard');
   } catch (err) {
-    res.status(500).send('Erreur création/modification boutique : ' + err.message);
+    console.error('Erreur création/modification boutique:', err);
+    res.status(500).json({ error: 'Erreur création/modification boutique : ' + err.message });
   }
 });
 
@@ -169,7 +168,7 @@ router.get('/mon', estVendeur, async (req, res) => {
 
   } catch (error) {
     console.error('Erreur affichage boutique :', error);
-    res.status(500).send('Erreur serveur : ' + error.message);
+    res.status(500).json({ error: 'Erreur serveur : ' + error.message });
   }
 });
 
@@ -182,13 +181,9 @@ router.get('/vendeur/dashboard', estVendeur, async (req, res) => {
       boutique: boutique || null
     });
   } catch (error) {
-    res.status(500).send('Erreur serveur');
+    res.status(500).json({ error: 'Erreur serveur' });
   }
 });
-
-// Route publique boutique par slug
-// Dans votre fichier de routes (boutique.js ou produit.js)
-// 🔥 DÉPLACER CES FONCTIONS AVANT LA ROUTE
 
 // 🔥 NOUVELLE FONCTION : Catégorisation IA des produits
 async function categoriserProduitsParIA(produits) {
@@ -396,6 +391,7 @@ router.get('/:slug', async (req, res) => {
     });
   }
 });
+
 // Page d'accueil publique
 router.get('/', async (req, res) => {
   try {
@@ -403,7 +399,7 @@ router.get('/', async (req, res) => {
     res.render('boutique_accueil', { produits });
   } catch (err) {
     console.error(err);
-    res.status(500).send('Erreur chargement produits');
+    res.status(500).json({ error: 'Erreur chargement produits' });
   }
 });
 
@@ -543,10 +539,10 @@ router.get('/mon/modifier', estVendeur, async (req, res) => {
     }
     res.render('boutique_modifier', { boutique });
   } catch (err) {
-    res.status(500).send('Erreur chargement boutique : ' + err.message);
+    res.status(500).json({ error: 'Erreur chargement boutique : ' + err.message });
   }
 });
-// Route : afficher un produit par ID
+
 // Route : afficher un produit par ID
 router.get('/produit/:id', async (req, res) => {
   try {
@@ -604,7 +600,9 @@ router.get('/produit/:id', async (req, res) => {
     });
   }
 });
-router.post('/mon/modifier', estVendeur, upload.single('logo'), async (req, res) => {
+
+// Route POST modification boutique - VERSION CLOUDINARY
+router.post('/mon/modifier', estVendeur, uploadMixed.single('logo'), async (req, res) => {
   try {
     const boutique = await Boutique.findOne({ proprietaire: req.session.user.id });
     if (!boutique) {
@@ -619,15 +617,17 @@ router.post('/mon/modifier', estVendeur, upload.single('logo'), async (req, res)
     boutique.adresse.pays = req.body.pays;
     boutique.telephone = req.body.telephone;
 
+    // 🔥 CORRECTION : Logo depuis Cloudinary
     if (req.file) {
-      boutique.logo = `/uploads/${req.file.filename}`;
+      boutique.logo = req.file.path; // URL Cloudinary
     }
 
     await boutique.save();
 
     res.redirect('/boutique/mon');
   } catch (err) {
-    res.status(500).send('Erreur mise à jour boutique : ' + err.message);
+    console.error('Erreur mise à jour boutique:', err);
+    res.status(500).json({ error: 'Erreur mise à jour boutique : ' + err.message });
   }
 });
 
