@@ -91,6 +91,8 @@ router.get('/', async (req, res) => {
 });
 
 // POST route pour ajouter un produit au panier - VERSION CORRIGÉE
+// POST route pour ajouter un produit au panier - VERSION CORRIGÉE
+// POST route pour ajouter un produit au panier - VERSION CORRIGÉE
 router.post('/ajouter/:id', async (req, res) => {
   try {
     const produitId = req.params.id;
@@ -100,13 +102,20 @@ router.post('/ajouter/:id', async (req, res) => {
     console.log('📝 Body reçu:', req.body);
     console.log('📝 Headers:', req.headers);
     
-    // CORRECTION : Toujours utiliser 1 comme quantité
-    const quantite = 1;
+    // CORRECTION : Gestion robuste de la quantité
+    let quantite = 1;
+    if (req.body && req.body.quantite) {
+      quantite = parseInt(req.body.quantite) || 1;
+    } else {
+      console.log('⚠️ Body non défini, utilisation de la quantité par défaut (1)');
+    }
+
+    console.log('📦 Quantité utilisée:', quantite);
 
     // Vérifier que l'ID est valide
     if (!produitId || produitId.length !== 24) {
       console.log('❌ ID produit invalide');
-      return res.json({ // TOUJOURS JSON pour AJAX
+      return res.json({
         success: false,
         message: 'ID produit invalide'
       });
@@ -116,9 +125,18 @@ router.post('/ajouter/:id', async (req, res) => {
     const produit = await Produit.findById(produitId).populate('boutique', 'slug nom');
     if (!produit) {
       console.log('❌ Produit non trouvé');
-      return res.json({ // TOUJOURS JSON pour AJAX
+      return res.json({
         success: false,
         message: 'Produit non trouvé'
+      });
+    }
+
+    // Vérifier le stock disponible
+    if (produit.stock < quantite) {
+      console.log('❌ Stock insuffisant');
+      return res.json({
+        success: false,
+        message: `Stock insuffisant. Il ne reste que ${produit.stock} unité(s) disponible(s).`
       });
     }
 
@@ -149,12 +167,12 @@ router.post('/ajouter/:id', async (req, res) => {
       // Nouveau produit - l'ajouter au panier
       req.session.panier.push({ 
         produitId, 
-        quantite: quantite 
+        quantite: quantite
       });
-      console.log('🆕 Nouveau produit ajouté');
+      console.log('🆕 Nouveau produit ajouté avec quantité:', quantite);
     }
 
-    // CORRECTION : Calculer le TOTAL des articles (quantité totale)
+    // Calculer le TOTAL des articles (quantité totale)
     const panierCount = req.session.panier.reduce((total, item) => {
       return total + (item.quantite || 1);
     }, 0);
@@ -176,7 +194,7 @@ router.post('/ajouter/:id', async (req, res) => {
     req.session.save((err) => {
       if (err) {
         console.error('❌ Erreur sauvegarde session:', err);
-        return res.json({ // TOUJOURS JSON même en cas d'erreur
+        return res.json({
           success: false,
           message: 'Erreur sauvegarde session'
         });
@@ -184,14 +202,14 @@ router.post('/ajouter/:id', async (req, res) => {
       
       console.log('✅ Session sauvegardée avec succès');
       
-      // CORRECTION : TOUJOURS renvoyer du JSON pour les requêtes AJAX
-      // Ne pas faire de redirection HTML dans cette route
+      // Réponse JSON pour les requêtes AJAX
       console.log('📨 Réponse JSON envoyée');
       res.json({
         success: true,
         message: 'Produit ajouté au panier',
         panierCount: panierCount,
-        boutiqueSlug: req.session.boutiqueActuelle
+        boutiqueSlug: req.session.boutiqueActuelle,
+        quantiteAjoutee: quantite
       });
     });
     
@@ -199,14 +217,65 @@ router.post('/ajouter/:id', async (req, res) => {
     console.error('❌ Erreur ajout panier :', err);
     console.error('❌ Stack trace:', err.stack);
     
-    // CORRECTION : TOUJOURS renvoyer du JSON même en cas d'erreur
     res.json({
       success: false,
       message: 'Erreur lors de l\'ajout au panier: ' + err.message
     });
   }
 });
+// AJOUTEZ CETTE ROUTE API MANQUANTE
+router.get('/api/contenu', async (req, res) => {
+  try {
+    const panier = req.session.panier || [];
+    
+    console.log('🔄 API Panier - Panier session:', panier);
 
+    if (panier.length === 0) {
+      return res.json({
+        panier: [],
+        totalPanier: 0
+      });
+    }
+
+    // Récupérer les produits depuis la BDD
+    const produitsIds = panier.map(item => item.produitId);
+    const produits = await Produit.find({ _id: { $in: produitsIds } })
+      .populate('vendeur', 'nom telephone')
+      .populate('boutique', 'slug nom');
+
+    // Fusionner infos produit + quantité et calculer le total
+    let totalPanier = 0;
+    const panierDetail = panier.map(item => {
+      const produit = produits.find(p => p._id.toString() === item.produitId);
+      const sousTotal = produit ? produit.prix * item.quantite : 0;
+      totalPanier += sousTotal;
+      
+      return {
+        produit: produit,
+        quantite: item.quantite,
+        sousTotal: sousTotal
+      };
+    });
+
+    console.log('✅ API Panier - Données envoyées:', {
+      items: panierDetail.length,
+      total: totalPanier
+    });
+
+    res.json({
+      panier: panierDetail,
+      totalPanier: totalPanier
+    });
+    
+  } catch (err) {
+    console.error('❌ Erreur API panier:', err);
+    res.status(500).json({
+      error: 'Erreur lors du chargement du panier',
+      panier: [],
+      totalPanier: 0
+    });
+  }
+});
 // Supprimer un produit du panier
 router.post('/supprimer/:id', (req, res) => {
   try {

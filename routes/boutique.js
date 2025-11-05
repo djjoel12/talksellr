@@ -244,63 +244,129 @@ router.get('/', async (req, res) => {
 });
 
 // Route : afficher un produit par ID
-router.get('/produit/:id', async (req, res, next) => {
+// POST route pour ajouter un produit au panier - VERSION CORRIGÉE
+router.post('/ajouter/:id', async (req, res) => {
   try {
-    const produit = await Produit.findById(req.params.id)
-      .populate('vendeur', 'nom email telephone')
-      .populate('boutique', 'nom slug adresse');
+    const produitId = req.params.id;
+    
+    console.log('🛒 DÉBUT Ajout au panier');
+    console.log('📦 Produit ID:', produitId);
+    console.log('📝 Body reçu:', req.body);
+    console.log('📝 Headers:', req.headers);
+    
+    // CORRECTION : Utiliser la quantité envoyée par le formulaire
+    const quantite = parseInt(req.body.quantite) || 1; // ← CORRECTION ICI
 
-    if (!produit) {
-      return res.status(404).send('Produit non trouvé');
-    }
-
-    // Récupérer d'autres produits du même vendeur
-    const produitsVendeur = await Produit.find({
-      vendeur: produit.vendeur._id,
-      _id: { $ne: produit._id }
-    })
-    .limit(8)
-    .populate('boutique', 'nom slug');
-
-    // Récupérer les produits du panier avec leurs détails
-    const panier = req.session.panier || [];
-    let panierDetail = [];
-    let totalPanier = 0;
-    let totalArticles = 0;
-
-    if (panier.length > 0) {
-      const produitsIds = panier.map(item => item.produitId);
-      const produitsPanier = await Produit.find({ _id: { $in: produitsIds } })
-        .populate('vendeur', 'nom telephone')
-        .populate('boutique', 'slug nom');
-
-      panierDetail = panier.map(item => {
-        const produitPanier = produitsPanier.find(p => p._id.toString() === item.produitId);
-        const sousTotal = produitPanier ? produitPanier.prix * item.quantite : 0;
-        totalPanier += sousTotal;
-        totalArticles += item.quantite;
-        
-        return {
-          produit: produitPanier,
-          quantite: item.quantite,
-          sousTotal: sousTotal
-        };
+    // Vérifier que l'ID est valide
+    if (!produitId || produitId.length !== 24) {
+      console.log('❌ ID produit invalide');
+      return res.json({
+        success: false,
+        message: 'ID produit invalide'
       });
     }
 
-    console.log("📦 Panier détail:", panierDetail.length, "articles");
+    // Vérifier que le produit existe AVEC populate de la boutique
+    const produit = await Produit.findById(produitId).populate('boutique', 'slug nom');
+    if (!produit) {
+      console.log('❌ Produit non trouvé');
+      return res.json({
+        success: false,
+        message: 'Produit non trouvé'
+      });
+    }
 
-    res.render('produit_detail', { 
-      produit,
-      produitsVendeur,
-      panier: panierDetail,
-      totalPanier: totalPanier,
-      totalArticles: totalArticles,
-      session: req.session,
-      boutique: produit.boutique
+    // Vérifier le stock disponible
+    if (produit.stock < quantite) {
+      console.log('❌ Stock insuffisant');
+      return res.json({
+        success: false,
+        message: `Stock insuffisant. Il ne reste que ${produit.stock} unité(s) disponible(s).`
+      });
+    }
+
+    console.log('🏪 Produit trouvé:', produit.nom);
+    console.log('🏪 Boutique:', produit.boutique);
+    console.log('📦 Quantité demandée:', quantite);
+
+    // Initialiser le panier si inexistant
+    if (!req.session.panier) {
+      console.log('🆕 Initialisation du panier');
+      req.session.panier = [];
+    }
+
+    console.log('📊 Panier avant ajout:', req.session.panier);
+
+    // Vérifier si produit déjà dans le panier
+    const index = req.session.panier.findIndex(item => item.produitId === produitId);
+
+    console.log('📌 Index trouvé:', index);
+
+    if (index !== -1) {
+      // Produit déjà dans le panier - incrémenter la quantité
+      if (!req.session.panier[index].quantite) {
+        req.session.panier[index].quantite = 0;
+      }
+      req.session.panier[index].quantite += quantite; // ← AJOUTE LA QUANTITÉ SÉLECTIONNÉE
+      console.log('📈 Quantité incrémentée:', req.session.panier[index].quantite);
+    } else {
+      // Nouveau produit - l'ajouter au panier
+      req.session.panier.push({ 
+        produitId, 
+        quantite: quantite // ← UTILISE LA QUANTITÉ SÉLECTIONNÉE
+      });
+      console.log('🆕 Nouveau produit ajouté avec quantité:', quantite);
+    }
+
+    // Calculer le TOTAL des articles (quantité totale)
+    const panierCount = req.session.panier.reduce((total, item) => {
+      return total + (item.quantite || 1);
+    }, 0);
+
+    console.log('🧮 TOTAL articles dans panier:', panierCount);
+
+    // Stocker la boutique actuelle dans la session
+    if (produit.boutique && produit.boutique.slug) {
+      req.session.boutiqueActuelle = produit.boutique.slug;
+      console.log('💾 Slug stocké en session:', produit.boutique.slug);
+    } else {
+      console.log('⚠️ Aucune boutique trouvée pour le produit');
+    }
+
+    console.log('📊 Panier après ajout:', req.session.panier);
+    console.log('📍 Boutique actuelle:', req.session.boutiqueActuelle);
+
+    // Sauvegarder explicitement la session
+    req.session.save((err) => {
+      if (err) {
+        console.error('❌ Erreur sauvegarde session:', err);
+        return res.json({
+          success: false,
+          message: 'Erreur sauvegarde session'
+        });
+      }
+      
+      console.log('✅ Session sauvegardée avec succès');
+      
+      // Réponse JSON pour les requêtes AJAX
+      console.log('📨 Réponse JSON envoyée');
+      res.json({
+        success: true,
+        message: 'Produit ajouté au panier',
+        panierCount: panierCount,
+        boutiqueSlug: req.session.boutiqueActuelle,
+        quantiteAjoutee: quantite // ← INFORMATION SUPPLEMENTAIRE
+      });
     });
+    
   } catch (err) {
-    next(err);
+    console.error('❌ Erreur ajout panier :', err);
+    console.error('❌ Stack trace:', err.stack);
+    
+    res.json({
+      success: false,
+      message: 'Erreur lors de l\'ajout au panier: ' + err.message
+    });
   }
 });
 

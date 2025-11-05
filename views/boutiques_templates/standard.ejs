@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -17,6 +16,16 @@
       --zara-border: #ddd;
       --zara-accent: #1a1a1a;
       --success-color: #000000;
+      
+      /* Variables pour la section horizontale */
+      --lv-dark: #000000;
+      --lv-gold: #C9A96E;
+      --lv-beige: #F5F5F0;
+      --lv-white: #FFFFFF;
+      --lv-light-gray: #F8F8F8;
+      --lv-text: #1A1A1A;
+      --lv-border: #DDDDDD;
+      --transition-luxe: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
    
     * {
@@ -36,102 +45,278 @@
       flex-direction: column;
       overflow-x: hidden;
     }
-   
-    /* Notification Panier */
-    .cart-notification {
-      position: fixed;
-      top: 80px;
-      right: 10px;
-      left: 10px;
-      background: var(--zara-black);
-      color: var(--zara-white);
-      padding: 1rem;
-      border: 1px solid var(--zara-border);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      z-index: 9999;
-      transform: translateY(-100px);
-      opacity: 0;
-      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      max-width: none;
-      border-radius: 8px;
+
+    /* ========== SECTION COLLECTION HORIZONTALE (Style Louis Vuitton) ========== */
+    .collection-horizontal {
+      padding: 3rem 0;
+      background: var(--lv-beige);
+      position: relative;
     }
-   
-    .cart-notification.show {
-      transform: translateY(0);
-      opacity: 1;
+
+    .collection-header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding: 0 1rem;
     }
-   
-    .notification-content {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-    }
-   
-    .notification-icon {
-      font-size: 1rem;
-      color: var(--zara-white);
-    }
-   
-    .notification-text {
-      flex: 1;
-    }
-   
-    .notification-title {
-      font-size: 0.8rem;
-      font-weight: 400;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 0.2rem;
-    }
-   
-    .notification-message {
-      font-size: 0.75rem;
+
+    .collection-title {
+      font-size: clamp(1.5rem, 4vw, 2rem);
       font-weight: 300;
-      letter-spacing: 0.5px;
-      opacity: 0.9;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+      color: var(--lv-dark);
     }
-   
-    .notification-actions {
+
+    .collection-subtitle {
+      font-size: clamp(0.8rem, 2vw, 0.9rem);
+      font-weight: 300;
+      letter-spacing: 1.2px;
+      color: var(--lv-text);
+      opacity: 0.7;
+      max-width: 90%;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    /* Barre de défilement horizontale */
+    .scroll-container {
+      position: relative;
+      padding: 0 1rem;
+    }
+
+    /* Indicateur de défilement en bas */
+    .scroll-indicator-bottom {
       display: flex;
-      gap: 0.5rem;
-      margin-top: 0.8rem;
-      padding-top: 0.8rem;
-      border-top: 1px solid rgba(255,255,255,0.2);
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      padding: 0 1rem;
     }
-   
-    .notification-btn {
-      padding: 0.5rem 0.8rem;
-      font-size: 0.65rem;
+
+    .scroll-progress {
+      flex: 1;
+      max-width: 200px;
+      height: 3px;
+      background: var(--lv-border);
+      border-radius: 2px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scroll-progress-bar {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      background: var(--lv-dark);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .scroll-text-bottom {
+      font-size: 0.7rem;
+      font-weight: 300;
+      letter-spacing: 1px;
+      color: var(--lv-dark);
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .horizontal-scroll {
+      display: flex;
+      overflow-x: auto;
+      gap: 1.2rem;
+      padding: 1rem 0;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      scroll-behavior: smooth;
+      scroll-padding: 0 1rem;
+      cursor: grab;
+    }
+
+    .horizontal-scroll:active {
+      cursor: grabbing;
+    }
+
+    .horizontal-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Cartes produits réduites */
+    .product-card-horizontal {
+      min-width: min(75vw, 250px);
+      background: var(--lv-white);
+      position: relative;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+      flex-shrink: 0;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid var(--lv-border);
+    }
+
+    .product-card-horizontal:hover {
+      transform: translateY(-3px);
+    }
+
+    /* Images réduites */
+    .product-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .product-card-horizontal:hover .product-image {
+      transform: scale(1.05);
+    }
+
+    .product-info {
+      padding: 1rem;
+      background: var(--lv-white);
+    }
+
+    .product-name {
+      font-size: 0.85rem;
       font-weight: 400;
       letter-spacing: 1px;
       text-transform: uppercase;
-      text-decoration: none;
+      margin-bottom: 0.4rem;
+      line-height: 1.3;
+      color: var(--lv-dark);
+    }
+
+    .product-price {
+      font-size: 0.9rem;
+      font-weight: 300;
+      letter-spacing: 0.8px;
+      margin-bottom: 0.8rem;
+      color: var(--lv-dark);
+    }
+
+    .product-actions {
+      display: flex;
+      gap: 0.6rem;
+    }
+
+    .product-btn {
+      padding: 0.6rem 0.8rem;
+      border: 1px solid var(--lv-dark);
+      background: transparent;
+      color: var(--lv-dark);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 0.65rem;
+      cursor: pointer;
       transition: all 0.3s ease;
-      border: 1px solid var(--zara-white);
+      text-decoration: none;
       flex: 1;
       text-align: center;
-      border-radius: 4px;
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 2px;
     }
-   
-    .notification-btn-primary {
-      background: var(--zara-white);
+
+    .product-btn-primary {
+      background: var(--lv-dark);
+      color: var(--lv-white);
+    }
+
+    .product-btn-primary:hover {
+      background: var(--lv-gold);
+      border-color: var(--lv-gold);
+      color: var(--lv-dark);
+    }
+
+    .product-btn-outline:hover {
+      background: var(--lv-dark);
+      color: var(--lv-white);
+    }
+
+    /* Badge nouveau */
+    .product-badge {
+      position: absolute;
+      top: 0.8rem;
+      left: 0.8rem;
+      background: var(--lv-dark);
+      color: var(--lv-white);
+      padding: 0.3rem 0.6rem;
+      font-size: 0.6rem;
+      font-weight: 400;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+
+    /* Contrôles de défilement automatique */
+    .carousel-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .carousel-btn {
+      background: var(--lv-dark);
+      color: var(--lv-white);
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.8rem;
+    }
+
+    .carousel-btn:hover {
+      background: var(--lv-gold);
+      transform: scale(1.1);
+    }
+
+    .carousel-indicator {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .carousel-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--lv-border);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .carousel-dot.active {
+      background: var(--lv-dark);
+      transform: scale(1.2);
+    }
+
+    /* CORRECTION : Icône panier toujours cliquable */
+    .cart-icon-link {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem;
       color: var(--zara-black);
+      text-decoration: none;
+      opacity: 0.8;
+      transition: opacity 0.3s ease;
     }
-   
-    .notification-btn-primary:hover {
-      background: transparent;
-      color: var(--zara-white);
+
+    .cart-icon-link:hover {
+      opacity: 1;
     }
-   
-    .notification-btn-outline {
-      background: transparent;
-      color: var(--zara-white);
-    }
-   
-    .notification-btn-outline:hover {
-      background: var(--zara-white);
-      color: var(--zara-black);
-    }
+
     /* Badge de notification WhatsApp-like */
     .cart-badge {
       position: absolute;
@@ -150,12 +335,13 @@
       animation: pulse 2s infinite;
       box-shadow: 0 2px 8px rgba(255, 68, 68, 0.4);
     }
+
     @keyframes pulse {
       0% { transform: scale(1); }
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-   
+
     /* Header Premium - Version Mobile First */
     header {
       background: var(--zara-white);
@@ -310,22 +496,6 @@
    
     .mobile-search-btn {
       display: block;
-    }
-   
-    .cart-count {
-      position: absolute;
-      top: -2px;
-      right: -2px;
-      background: var(--zara-black);
-      color: var(--zara-white);
-      border-radius: 50%;
-      width: 16px;
-      height: 16px;
-      font-size: 0.6rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 400;
     }
    
     /* Hero Section - Optimisé Mobile */
@@ -1276,6 +1446,10 @@
         left: auto;
         max-width: 350px;
       }
+
+      .carousel-controls {
+        margin-top: 1.5rem;
+      }
     }
    
     /* Media Queries pour les desktop */
@@ -1420,6 +1594,10 @@
       .thumbnail:active {
         transform: scale(1.1);
       }
+     
+      .product-card-horizontal:hover {
+        transform: none;
+      }
     }
    
     /* Optimisations pour les écrans très petits */
@@ -1436,6 +1614,10 @@
       .icon-btn {
         padding: 0.3rem;
         font-size: 1rem;
+      }
+     
+      .cart-icon-link {
+        padding: 0.3rem;
       }
      
       .hero h1 {
@@ -1466,6 +1648,53 @@
         font-size: 0.8rem;
         min-height: 48px;
       }
+
+      .carousel-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 0.6rem;
+      }
+    }
+
+    /* Responsive pour la section horizontale */
+    @media (max-width: 768px) {
+      .collection-horizontal {
+        padding: 2rem 0;
+      }
+
+      .product-card-horizontal {
+        min-width: 220px;
+      }
+
+      .product-image {
+        height: 160px;
+      }
+
+      .product-actions {
+        flex-direction: column;
+      }
+
+      .product-btn {
+        font-size: 0.6rem;
+        padding: 0.5rem 0.6rem;
+        min-height: 32px;
+      }
+
+      .carousel-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 0.7rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .product-card-horizontal {
+        min-width: 280px;
+      }
+
+      .product-image {
+        height: 200px;
+      }
     }
   </style>
 </head>
@@ -1473,17 +1702,19 @@
   <!-- Notification Panier -->
   <div id="cartNotification" class="cart-notification">
     <div class="notification-content">
-      <div class="notification-icon">✓</div>
+      <div class="notification-icon"></div>
       <div class="notification-text">
-        <div class="notification-title">PRODUIT AJOUTÉ</div>
-        <div class="notification-message" id="notificationMessage">Le produit a été ajouté à votre panier</div>
+        <div class="notification-title"></div>
+        <!-- CORRECTION : Ajout de l'ID manquant -->
+        <div class="notification-message" id="notificationMessage"></div>
       </div>
     </div>
     <div class="notification-actions">
-      <a href="/panier" class="notification-btn notification-btn-primary">VOIR LE PANIER</a>
-      <button onclick="hideNotification()" class="notification-btn notification-btn-outline">CONTINUER</button>
+      <a href="/panier" class="notification-btn notification-btn-primary"></a>
+      <button onclick="hideNotification()" class="notification-btn notification-btn-outline"></button>
     </div>
   </div>
+
   <!-- Modal pour la galerie complète -->
   <div id="galleryModal" class="modal">
     <button class="modal-close" onclick="closeGallery()">&times;</button>
@@ -1499,6 +1730,7 @@
       <span id="modalCounter">1 / 1</span>
     </div>
   </div>
+
   <!-- Header -->
   <header>
     <div class="header-container">
@@ -1537,7 +1769,8 @@
           </a>
         <% } %>
        
-        <a href="/panier" class="icon-btn" style="position: relative;" id="cartIcon">
+        <!-- CORRECTION : Icône panier toujours cliquable -->
+        <a href="/panier" class="cart-icon-link" id="cartIcon">
           <i class="fas fa-shopping-bag"></i>
           <% if (typeof panierCount !== 'undefined' && panierCount > 0) { %>
             <span class="cart-badge" id="cartBadge"><%= panierCount %></span>
@@ -1546,6 +1779,7 @@
       </div>
     </div>
   </header>
+
   <!-- Main Content -->
   <main>
     <!-- Hero Section avec Fond Noir et Animations Cosmiques -->
@@ -1574,12 +1808,70 @@
         <div class="scroll-arrow"></div>
       </div>
     </section>
-    <!-- Produits Section -->
+
+    <!-- ========== SECTION COLLECTION HORIZONTALE (Images réduites + Barre indicateur + Défilement auto) ========== -->
+    <section class="collection-horizontal" id="collection-horizontale">
+      <div class="collection-header">
+        <h2 class="collection-title">NOUVELLES CRÉATIONS</h2>
+        <p class="collection-subtitle">Pièces exclusives réinterprétant les codes de la marque avec modernité</p>
+      </div>
+      
+      <div class="scroll-container">
+        <div class="horizontal-scroll" id="horizontalScroll">
+          <% produits.forEach((produit, index) => { %>
+            <div class="product-card-horizontal" data-product-id="<%= produit._id %>">
+              <div class="product-badge">NOUVEAU</div>
+              <img src="<%= produit.imagesGallery && produit.imagesGallery[0] ? produit.imagesGallery[0].url : produit.image %>" 
+                   alt="<%= produit.nom %>" 
+                   class="product-image">
+              <div class="product-info">
+                <h3 class="product-name"><%= produit.nom %></h3>
+                <p class="product-price"><%= produit.prix %> <%= produit.devise %></p>
+                <div class="product-actions">
+                  <a href="/boutique/produit/<%= produit._id %>" class="product-btn product-btn-outline">Découvrir</a>
+                  <button class="product-btn product-btn-primary add-to-cart-horizontal" 
+                          data-product-id="<%= produit._id %>"
+                          data-product-name="<%= produit.nom %>"
+                          data-product-price="<%= produit.prix %>">
+                    Ajouter au panier
+                  </button>
+                </div>
+              </div>
+            </div>
+          <% }); %>
+        </div>
+      </div>
+
+      <!-- Barre indicateur de défilement en bas -->
+      <div class="scroll-indicator-bottom">
+        <span class="scroll-text-bottom">Défiler horizontalement</span>
+        <div class="scroll-progress">
+          <div class="scroll-progress-bar" id="scrollProgressBar"></div>
+        </div>
+      </div>
+
+      <!-- Contrôles de défilement automatique -->
+      <div class="carousel-controls">
+        <button class="carousel-btn" id="carouselPrev">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        
+        <div class="carousel-indicator" id="carouselDots">
+          <!-- Les points seront générés dynamiquement en JavaScript -->
+        </div>
+        
+        <button class="carousel-btn" id="carouselNext">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- Produits Section (Grille classique) -->
     <section class="section" id="produits">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">NOUVELLE COLLECTION</h2>
-          <p class="section-subtitle">Découvrez nos dernières créations et pièces exclusives</p>
+          <h2 class="section-title">TOUTE LA COLLECTION</h2>
+          <p class="section-subtitle">Découvrez l'ensemble de nos créations et pièces exclusives</p>
         </div>
        
         <% if (produits && produits.length > 0) { %>
@@ -1655,6 +1947,7 @@
         <% } %>
       </div>
     </section>
+
     <!-- Newsletter Section -->
     <section class="newsletter">
       <div class="container">
@@ -1669,6 +1962,7 @@
       </div>
     </section>
   </main>
+
   <!-- Footer -->
   <footer>
     <div class="container">
@@ -1691,7 +1985,7 @@
           <ul class="footer-links">
             <li><a href="#accueil">Accueil</a></li>
             <li><a href="#produits">Nouveautés</a></li>
-            <li><a href="#categories">Collections</a></li>
+            <li><a href="#collection-horizontale">Collection Exclusive</a></li>
             <li><a href="#">Lookbook</a></li>
           </ul>
         </div>
@@ -1722,12 +2016,21 @@
       </div>
     </div>
   </footer>
+
   <script>
     // Stocker les données des produits globalement
     const produitsData = <%- JSON.stringify(produits) %>;
     // Variables globales pour la galerie
     let currentGallery = null;
     let currentImageIndex = 0;
+
+    // ========== VARIABLES POUR LE DÉFILEMENT AUTOMATIQUE ==========
+    let autoScrollInterval;
+    let currentScrollIndex = 0;
+    const scrollDuration = 3000; // 3 secondes entre chaque défilement
+
+    // ========== FONCTIONS POUR LA SECTION HORIZONTALE ==========
+    
     // Fonction pour créer les étoiles scintillantes
     function createStars() {
       const starsContainer = document.getElementById('starsContainer');
@@ -1758,6 +2061,7 @@
         starsContainer.appendChild(star);
       }
     }
+
     // Fonction pour créer les particules cosmiques
     function createCosmicParticles() {
       const particlesContainer = document.getElementById('cosmicParticles');
@@ -1790,31 +2094,289 @@
         particlesContainer.appendChild(particle);
       }
     }
+
+    // Fonction pour mettre à jour la barre de progression du défilement horizontal
+    function updateHorizontalScrollProgress() {
+      const scrollContainer = document.getElementById('horizontalScroll');
+      const progressBar = document.getElementById('scrollProgressBar');
+      
+      if (!scrollContainer || !progressBar) return;
+      
+      const scrollWidth = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+      const scrollLeft = scrollContainer.scrollLeft;
+      const progress = (scrollLeft / scrollWidth) * 100;
+      
+      progressBar.style.width = progress + '%';
+    }
+
+    // ========== FONCTIONS POUR LE DÉFILEMENT AUTOMATIQUE ==========
+
+    // Fonction pour initialiser le carousel automatique
+    function initAutoScroll() {
+      const scrollContainer = document.getElementById('horizontalScroll');
+      const productCards = document.querySelectorAll('.product-card-horizontal');
+      const dotsContainer = document.getElementById('carouselDots');
+      
+      if (!scrollContainer || productCards.length === 0) return;
+
+      // Créer les points indicateurs
+      dotsContainer.innerHTML = '';
+      for (let i = 0; i < productCards.length; i++) {
+        const dot = document.createElement('div');
+        dot.className = `carousel-dot ${i === 0 ? 'active' : ''}`;
+        dot.addEventListener('click', () => scrollToIndex(i));
+        dotsContainer.appendChild(dot);
+      }
+
+      // Gérer le défilement manuel
+      scrollContainer.addEventListener('scroll', () => {
+        updateHorizontalScrollProgress();
+        updateActiveDot();
+      });
+
+      // Contrôles précédent/suivant
+      document.getElementById('carouselPrev').addEventListener('click', scrollToPrev);
+      document.getElementById('carouselNext').addEventListener('click', scrollToNext);
+
+      // Démarrer le défilement automatique
+      startAutoScroll();
+    }
+
+    // Fonction pour faire défiler vers un index spécifique
+    function scrollToIndex(index) {
+      const scrollContainer = document.getElementById('horizontalScroll');
+      const productCards = document.querySelectorAll('.product-card-horizontal');
+      
+      if (index >= 0 && index < productCards.length) {
+        const card = productCards[index];
+        const scrollPosition = card.offsetLeft - scrollContainer.offsetLeft;
+        
+        scrollContainer.scrollTo({
+          left: scrollPosition,
+          behavior: 'smooth'
+        });
+        
+        currentScrollIndex = index;
+        updateActiveDot();
+        
+        // Redémarrer le défilement automatique après une interaction manuelle
+        restartAutoScroll();
+      }
+    }
+
+    // Fonction pour défiler vers l'élément précédent
+    function scrollToPrev() {
+      const productCards = document.querySelectorAll('.product-card-horizontal');
+      let newIndex = currentScrollIndex - 1;
+      if (newIndex < 0) newIndex = productCards.length - 1;
+      scrollToIndex(newIndex);
+    }
+
+    // Fonction pour défiler vers l'élément suivant
+    function scrollToNext() {
+      const productCards = document.querySelectorAll('.product-card-horizontal');
+      let newIndex = currentScrollIndex + 1;
+      if (newIndex >= productCards.length) newIndex = 0;
+      scrollToIndex(newIndex);
+    }
+
+    // Fonction pour mettre à jour le point actif
+    function updateActiveDot() {
+      const scrollContainer = document.getElementById('horizontalScroll');
+      const productCards = document.querySelectorAll('.product-card-horizontal');
+      const dots = document.querySelectorAll('.carousel-dot');
+      
+      if (productCards.length === 0) return;
+
+      // Trouver l'élément le plus visible
+      let mostVisibleIndex = 0;
+      let maxVisibility = 0;
+
+      productCards.forEach((card, index) => {
+        const rect = card.getBoundingClientRect();
+        const containerRect = scrollContainer.getBoundingClientRect();
+        
+        // Calculer la surface visible
+        const visibleLeft = Math.max(rect.left, containerRect.left);
+        const visibleRight = Math.min(rect.right, containerRect.right);
+        const visibleWidth = Math.max(0, visibleRight - visibleLeft);
+        const visibility = visibleWidth / rect.width;
+
+        if (visibility > maxVisibility) {
+          maxVisibility = visibility;
+          mostVisibleIndex = index;
+        }
+      });
+
+      currentScrollIndex = mostVisibleIndex;
+
+      // Mettre à jour les points
+      dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentScrollIndex);
+      });
+    }
+
+    // Fonction pour démarrer le défilement automatique
+    function startAutoScroll() {
+      autoScrollInterval = setInterval(() => {
+        scrollToNext();
+      }, scrollDuration);
+    }
+
+    // Fonction pour arrêter le défilement automatique
+    function stopAutoScroll() {
+      if (autoScrollInterval) {
+        clearInterval(autoScrollInterval);
+      }
+    }
+
+    // Fonction pour redémarrer le défilement automatique
+    function restartAutoScroll() {
+      stopAutoScroll();
+      startAutoScroll();
+    }
+
+    // CORRECTION : Fonction pour afficher la notification avec vérification de sécurité
+    function showNotification(productName, productPrice) {
+      const notification = document.getElementById('cartNotification');
+      const message = document.getElementById('notificationMessage');
+      
+      // VÉRIFICATION DE SÉCURITÉ
+      if (!notification || !message) {
+        console.error('Éléments de notification non trouvés');
+        return;
+      }
+      
+      message.textContent = `${productName} - ${productPrice} a été ajouté à votre panier`;
+      notification.classList.add('show');
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 5000);
+    }
+
+    // CORRECTION : Fonction pour mettre à jour le badge du panier avec vérification de sécurité
+    function updateCartBadge(count) {
+      const cartIcon = document.getElementById('cartIcon');
+      
+      // VÉRIFICATION DE SÉCURITÉ
+      if (!cartIcon) {
+        console.error('Icône panier non trouvée');
+        return;
+      }
+      
+      let badge = document.getElementById('cartBadge');
+      
+      if (count > 0) {
+        if (!badge) {
+          badge = document.createElement('span');
+          badge.id = 'cartBadge';
+          badge.className = 'cart-badge';
+          cartIcon.appendChild(badge);
+        }
+        badge.textContent = count;
+        badge.style.animation = 'none';
+        setTimeout(() => {
+          badge.style.animation = 'pulse 2s infinite';
+        }, 10);
+      } else if (badge) {
+        badge.remove();
+      }
+    }
+
+    // CORRECTION : Fonction principale d'ajout au panier avec meilleure gestion d'erreurs
+    async function addToCartHorizontal(productId, productName, productPrice, button) {
+      try {
+        // Sauvegarder l'état original du bouton
+        const originalText = button.textContent;
+        const originalBackground = button.style.background;
+        const originalBorderColor = button.style.borderColor;
+        
+        button.disabled = true;
+        button.textContent = 'AJOUT EN COURS...';
+
+        const response = await fetch('/panier/ajouter/' + productId, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          body: JSON.stringify({
+            quantite: 1
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          showNotification(productName, productPrice + ' €');
+          updateCartBadge(data.panierCount);
+          
+          button.textContent = '✓ AJOUTÉ !';
+          button.style.background = '#28a745';
+          button.style.borderColor = '#28a745';
+          
+          setTimeout(() => {
+            button.disabled = false;
+            button.textContent = originalText;
+            button.style.background = originalBackground;
+            button.style.borderColor = originalBorderColor;
+          }, 2000);
+        } else {
+          throw new Error(data.message || 'Erreur lors de l\'ajout au panier');
+        }
+      } catch (error) {
+        console.error('Erreur:', error);
+        
+        // Réinitialiser le bouton en cas d'erreur
+        button.disabled = false;
+        button.textContent = 'AJOUTER AU PANIER';
+        
+        // Optionnel : afficher un message d'erreur à l'utilisateur
+        alert('Erreur: ' + error.message);
+      }
+    }
+
+    // ========== FONCTIONS EXISTANTES DU CODE 2 ==========
+
     // Fonction pour basculer le menu mobile
     function toggleMobileMenu() {
       const navLinks = document.getElementById('navLinks');
-      navLinks.classList.toggle('active');
+      const searchBar = document.getElementById('searchBar');
+      
+      if (navLinks) {
+        navLinks.classList.toggle('active');
+      }
      
       // Fermer la recherche si ouverte
-      const searchBar = document.getElementById('searchBar');
-      searchBar.classList.remove('active');
+      if (searchBar) {
+        searchBar.classList.remove('active');
+      }
     }
+
     // Fonction pour basculer la recherche mobile
     function toggleSearch() {
       const searchBar = document.getElementById('searchBar');
-      searchBar.classList.toggle('active');
+      const navLinks = document.getElementById('navLinks');
+      
+      if (searchBar) {
+        searchBar.classList.toggle('active');
+      }
      
       // Fermer le menu si ouvert
-      const navLinks = document.getElementById('navLinks');
-      navLinks.classList.remove('active');
+      if (navLinks) {
+        navLinks.classList.remove('active');
+      }
      
       // Focus sur l'input de recherche
-      if (searchBar.classList.contains('active')) {
+      if (searchBar && searchBar.classList.contains('active')) {
         setTimeout(() => {
-          searchBar.querySelector('input').focus();
+          const input = searchBar.querySelector('input');
+          if (input) input.focus();
         }, 100);
       }
     }
+
     // Fonction pour changer l'image principale
     function changeMainImage(productIndex, imageIndex) {
       const productCard = document.querySelector(`[data-product-index="${productIndex}"]`);
@@ -1851,6 +2413,7 @@
         }
       }, 150);
     }
+
     // Fonction pour ouvrir la galerie complète
     function openGallery(productIndex) {
       currentGallery = productIndex;
@@ -1861,7 +2424,7 @@
       const modalImage = document.getElementById('modalImage');
       const modalCounter = document.getElementById('modalCounter');
      
-      if (produit.imagesGallery && produit.imagesGallery.length > 0) {
+      if (produit.imagesGallery && produit.imagesGallery.length > 0 && modal && modalImage && modalCounter) {
         modalImage.src = produit.imagesGallery[0].url;
         modalImage.alt = produit.nom;
         modalCounter.textContent = `1 / ${produit.imagesGallery.length}`;
@@ -1872,14 +2435,18 @@
         document.documentElement.style.overflow = 'hidden';
       }
     }
+
     // Fonction pour fermer la galerie
     function closeGallery() {
       const modal = document.getElementById('galleryModal');
-      modal.style.display = 'none';
+      if (modal) {
+        modal.style.display = 'none';
+      }
       document.body.style.overflow = 'auto';
       document.documentElement.style.overflow = 'auto';
       currentGallery = null;
     }
+
     // Fonction pour changer d'image dans le modal
     function changeModalImage(direction) {
       if (currentGallery === null) return;
@@ -1888,6 +2455,8 @@
       const images = produit.imagesGallery;
       const modalImage = document.getElementById('modalImage');
       const modalCounter = document.getElementById('modalCounter');
+     
+      if (!modalImage || !modalCounter) return;
      
       currentImageIndex += direction;
      
@@ -1908,78 +2477,68 @@
         modalImage.style.opacity = '1';
       }, 200);
     }
-    // Fonctions pour la notification panier
-    function showNotification(productName, productPrice) {
-      const notification = document.getElementById('cartNotification');
-      const message = document.getElementById('notificationMessage');
-     
-      message.textContent = `${productName} - ${productPrice} a été ajouté à votre panier`;
-      notification.classList.add('show');
-     
-      // Masquer automatiquement après 5 secondes
-      setTimeout(() => {
-        hideNotification();
-      }, 5000);
-    }
-   
+
     function hideNotification() {
       const notification = document.getElementById('cartNotification');
-      notification.classList.remove('show');
-    }
-    // Fonction pour mettre à jour le badge du panier
-    function updateCartBadge(count) {
-      const cartIcon = document.getElementById('cartIcon');
-      let badge = document.getElementById('cartBadge');
-     
-      if (!badge) {
-        badge = document.createElement('span');
-        badge.id = 'cartBadge';
-        badge.className = 'cart-badge';
-        cartIcon.appendChild(badge);
+      if (notification) {
+        notification.classList.remove('show');
       }
-     
-      badge.textContent = count;
-     
-      // Animation du badge (comme WhatsApp)
-      badge.style.animation = 'none';
-      setTimeout(() => {
-        badge.style.animation = 'pulse 2s infinite';
-      }, 10);
     }
-   
-    // Gestion de l'ajout au panier avec AJAX
+
+    // Initialisation quand le DOM est chargé
     document.addEventListener('DOMContentLoaded', function() {
+      console.log('DOM chargé - Initialisation des fonctionnalités');
+      
       // Créer les animations de fond
       createStars();
       createCosmicParticles();
-     
+
+      // CORRECTION : S'assurer que l'icône panier est toujours cliquable
+      const cartIcon = document.getElementById('cartIcon');
+      if (cartIcon) {
+        cartIcon.addEventListener('click', function(e) {
+          // Laisser le lien naturel fonctionner
+          console.log('Navigation vers le panier');
+        });
+      }
+
+      // Initialiser le défilement automatique
+      initAutoScroll();
+
       // Gestion du menu mobile
       const mobileMenuBtn = document.getElementById('mobileMenuBtn');
       if (mobileMenuBtn) {
         mobileMenuBtn.addEventListener('click', toggleMobileMenu);
       }
-     
-      // Fermer le menu en cliquant à l'extérieur
-      document.addEventListener('click', function(e) {
-        const navLinks = document.getElementById('navLinks');
-        const searchBar = document.getElementById('searchBar');
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-       
-        if (navLinks.classList.contains('active') &&
-            !navLinks.contains(e.target) &&
-            !mobileMenuBtn.contains(e.target)) {
-          navLinks.classList.remove('active');
-        }
-       
-        if (searchBar.classList.contains('active') &&
-            !searchBar.contains(e.target) &&
-            !document.querySelector('.mobile-search-btn').contains(e.target)) {
-          searchBar.classList.remove('active');
-        }
+
+      // Gestion des boutons "Ajouter au panier" horizontaux
+      document.querySelectorAll('.add-to-cart-horizontal').forEach(button => {
+        button.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          const productId = this.getAttribute('data-product-id');
+          const productName = this.getAttribute('data-product-name');
+          const productPrice = this.getAttribute('data-product-price');
+          
+          console.log('Ajout au panier - Horizontal:', productId, productName, productPrice);
+          addToCartHorizontal(productId, productName, productPrice, this);
+        });
       });
-     
+
+      // Arrêter le défilement automatique quand l'utilisateur interagit
+      const horizontalScroll = document.getElementById('horizontalScroll');
+      if (horizontalScroll) {
+        horizontalScroll.addEventListener('mouseenter', stopAutoScroll);
+        horizontalScroll.addEventListener('mouseleave', startAutoScroll);
+        horizontalScroll.addEventListener('touchstart', stopAutoScroll);
+        horizontalScroll.addEventListener('touchend', () => {
+          setTimeout(startAutoScroll, 3000);
+        });
+      }
+
+      // Gestion des formulaires d'ajout au panier classiques
       const forms = document.querySelectorAll('.add-to-cart-form');
-     
       forms.forEach(form => {
         form.addEventListener('submit', function(e) {
           e.preventDefault();
@@ -1988,6 +2547,9 @@
           const productName = this.querySelector('input[name="produitNom"]').value;
           const productPrice = this.querySelector('input[name="produitPrix"]').value;
           const submitBtn = this.querySelector('.add-to-cart-btn');
+         
+          // Vérification de sécurité
+          if (!submitBtn) return;
          
           // Désactiver le bouton pendant la requête
           submitBtn.disabled = true;
@@ -2028,7 +2590,26 @@
           });
         });
       });
-     
+
+      // Fermer le menu en cliquant à l'extérieur
+      document.addEventListener('click', function(e) {
+        const navLinks = document.getElementById('navLinks');
+        const searchBar = document.getElementById('searchBar');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+       
+        if (navLinks && navLinks.classList.contains('active') &&
+            !navLinks.contains(e.target) &&
+            (!mobileMenuBtn || !mobileMenuBtn.contains(e.target))) {
+          navLinks.classList.remove('active');
+        }
+       
+        if (searchBar && searchBar.classList.contains('active') &&
+            !searchBar.contains(e.target) &&
+            !document.querySelector('.mobile-search-btn').contains(e.target)) {
+          searchBar.classList.remove('active');
+        }
+      });
+
       // Smooth scroll pour les ancres
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -2042,10 +2623,13 @@
            
             // Fermer le menu mobile après le clic
             const navLinks = document.getElementById('navLinks');
-            navLinks.classList.remove('active');
+            if (navLinks) {
+              navLinks.classList.remove('active');
+            }
           }
         });
       });
+
       // Animation des produits au scroll
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -2055,13 +2639,15 @@
           }
         });
       }, { threshold: 0.1 });
+
       document.querySelectorAll('.produit-card').forEach(card => {
         observer.observe(card);
       });
+
       // Navigation au clavier pour la galerie
       document.addEventListener('keydown', function(e) {
         const modal = document.getElementById('galleryModal');
-        if (modal.style.display === 'block') {
+        if (modal && modal.style.display === 'block') {
           if (e.key === 'Escape') {
             closeGallery();
           } else if (e.key === 'ArrowLeft') {
@@ -2071,24 +2657,31 @@
           }
         }
       });
+
       // Fermer la galerie en cliquant à l'extérieur
-      document.getElementById('galleryModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-          closeGallery();
-        }
-      });
+      const galleryModal = document.getElementById('galleryModal');
+      if (galleryModal) {
+        galleryModal.addEventListener('click', function(e) {
+          if (e.target === this) {
+            closeGallery();
+          }
+        });
+      }
+
       // Support du swipe pour la galerie sur mobile
       let touchStartX = 0;
       let touchEndX = 0;
      
-      document.getElementById('galleryModal').addEventListener('touchstart', function(e) {
-        touchStartX = e.changedTouches[0].screenX;
-      });
-     
-      document.getElementById('galleryModal').addEventListener('touchend', function(e) {
-        touchEndX = e.changedTouches[0].screenX;
-        handleSwipe();
-      });
+      if (galleryModal) {
+        galleryModal.addEventListener('touchstart', function(e) {
+          touchStartX = e.changedTouches[0].screenX;
+        });
+       
+        galleryModal.addEventListener('touchend', function(e) {
+          touchEndX = e.changedTouches[0].screenX;
+          handleSwipe();
+        });
+      }
      
       function handleSwipe() {
         const swipeThreshold = 50;
@@ -2104,6 +2697,7 @@
           }
         }
       }
+
       // Effet de parallaxe sur le défilement (désactivé sur mobile pour les performances)
       if (window.innerWidth > 768) {
         window.addEventListener('scroll', function() {
@@ -2119,14 +2713,28 @@
           }
         });
       }
+
       // Réinitialiser les animations lors du redimensionnement
       window.addEventListener('resize', function() {
         // Recréer les étoiles et particules
-        document.getElementById('starsContainer').innerHTML = '';
-        document.getElementById('cosmicParticles').innerHTML = '';
+        const starsContainer = document.getElementById('starsContainer');
+        const particlesContainer = document.getElementById('cosmicParticles');
+        
+        if (starsContainer) starsContainer.innerHTML = '';
+        if (particlesContainer) particlesContainer.innerHTML = '';
+        
         createStars();
         createCosmicParticles();
       });
+
+      // Debug: Vérifier que les boutons sont bien attachés
+      console.log('Boutons horizontaux attachés:', document.querySelectorAll('.add-to-cart-horizontal').length);
+      console.log('Formulaires classiques attachés:', document.querySelectorAll('.add-to-cart-form').length);
+    });
+
+    // Gestion des erreurs globales
+    window.addEventListener('error', function(e) {
+      console.error('Erreur globale:', e.error);
     });
   </script>
 </body>
