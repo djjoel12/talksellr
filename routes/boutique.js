@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
+const uploadTemp = require('../config/storage-temp'); // 👈 NOUVEAU
 const path = require('path');
 const slugify = require('slugify');
 const Produit = require('../models/Product');
@@ -186,52 +187,215 @@ router.get('/vendeur/dashboard', estVendeur, async (req, res) => {
 });
 
 // Route publique boutique par slug
+// Dans votre fichier de routes (boutique.js ou produit.js)
+// 🔥 DÉPLACER CES FONCTIONS AVANT LA ROUTE
+
+// 🔥 NOUVELLE FONCTION : Catégorisation IA des produits
+async function categoriserProduitsParIA(produits) {
+  const produitsAvecCategories = [];
+  
+  for (const produit of produits) {
+    try {
+      let categorieIA = produit.categorie_ia;
+      
+      // Si pas de catégorie IA, analyser le nom et description
+      if (!categorieIA || categorieIA === 'Divers' || categorieIA === 'Équipement professionnel') {
+        categorieIA = await analyserCategorieProduit(produit);
+        
+        // Mettre à jour le produit en base de données
+        await Produit.findByIdAndUpdate(produit._id, {
+          categorie_ia: categorieIA,
+          categorie: categorieIA // Mettre aussi dans la catégorie principale
+        });
+      }
+      
+      produitsAvecCategories.push({
+        ...produit.toObject(),
+        categorie_finale: categorieIA,
+        sous_categorie: produit.sous_categorie_ia || 'Collection'
+      });
+      
+    } catch (error) {
+      console.error(`Erreur catégorisation produit ${produit.nom}:`, error);
+      // Fallback : utiliser la catégorie existante
+      produitsAvecCategories.push({
+        ...produit.toObject(),
+        categorie_finale: produit.categorie || 'Collection Exclusive',
+        sous_categorie: 'Collection'
+      });
+    }
+  }
+  
+  return produitsAvecCategories;
+}
+
+// 🔥 NOUVELLE FONCTION : Analyse IA pour déterminer la catégorie
+async function analyserCategorieProduit(produit) {
+  try {
+    const texteAAnalyser = `${produit.nom} ${produit.description || ''} ${produit.tags_ia ? produit.tags_ia.join(' ') : ''}`.toLowerCase();
+    
+    // Règles de catégorisation basées sur le contenu
+    if (texteAAnalyser.includes('pomp') || texteAAnalyser.includes('motor') || 
+        texteAAnalyser.includes('pump') || texteAAnalyser.includes('moteur')) {
+      return 'Outillage Industriel';
+    }
+    
+    if (texteAAnalyser.includes('zara') || texteAAnalyser.includes('fashion') || 
+        texteAAnalyser.includes('cloth') || texteAAnalyser.includes('vetement') ||
+        texteAAnalyser.includes('mode') || texteAAnalyser.includes('style')) {
+      return 'Mode & Vêtements';
+    }
+    
+    if (texteAAnalyser.includes('basket') || texteAAnalyser.includes('chaussure') ||
+        texteAAnalyser.includes('shoe') || texteAAnalyser.includes('sneaker')) {
+      return 'Chaussures';
+    }
+    
+    if (texteAAnalyser.includes('tech') || texteAAnalyser.includes('electronique') ||
+        texteAAnalyser.includes('smart') || texteAAnalyser.includes('digital')) {
+      return 'Électronique';
+    }
+    
+    if (texteAAnalyser.includes('maquillage') || texteAAnalyser.includes('beauté') ||
+        texteAAnalyser.includes('cosmétique') || texteAAnalyser.includes('parfum')) {
+      return 'Beauté & Cosmétiques';
+    }
+    
+    if (texteAAnalyser.includes('maison') || texteAAnalyser.includes('déco') ||
+        texteAAnalyser.includes('meuble') || texteAAnalyser.includes('décoration')) {
+      return 'Maison & Déco';
+    }
+    
+    if (texteAAnalyser.includes('sport') || texteAAnalyser.includes('fitness') ||
+        texteAAnalyser.includes('training') || texteAAnalyser.includes('gym')) {
+      return 'Sport & Fitness';
+    }
+    
+    // Fallback basé sur le prix
+    if (produit.prix > 500) {
+      return 'Luxe & Premium';
+    }
+    
+    if (produit.prix < 100) {
+      return 'Accessoires';
+    }
+    
+    return 'Collection Exclusive';
+    
+  } catch (error) {
+    console.error('Erreur analyse catégorie:', error);
+    return 'Collection Exclusive';
+  }
+}
+
+// 🔥 NOUVELLE FONCTION : Organiser les produits par catégories
+function organiserParCategories(produits) {
+  const categories = {};
+  
+  produits.forEach(produit => {
+    const categorie = produit.categorie_finale || 'Collection Exclusive';
+    
+    if (!categories[categorie]) {
+      categories[categorie] = {
+        nom: categorie,
+        produits: [],
+        icone: getIconeCategorie(categorie)
+      };
+    }
+    
+    categories[categorie].produits.push(produit);
+  });
+  
+  return categories;
+}
+
+// 🔥 NOUVELLE FONCTION : Icônes pour chaque catégorie
+function getIconeCategorie(categorie) {
+  const icones = {
+    'Mode & Vêtements': '👕',
+    'Chaussures': '👟',
+    'Accessoires': '👜',
+    'Beauté & Cosmétiques': '💄',
+    'Maison & Déco': '🏠',
+    'Électronique': '📱',
+    'Sport & Fitness': '⚽',
+    'Outillage Industriel': '🔧',
+    'Luxe & Premium': '💎',
+    'Collection Exclusive': '⭐'
+  };
+  
+  return icones[categorie] || '📦';
+}
+
+// 🔥 FONCTION : Descriptions pour chaque catégorie
+function getDescriptionCategorie(nomCategorie) {
+  const descriptions = {
+    'Mode & Vêtements': 'Découvrez notre collection de vêtements tendance et élégants',
+    'Chaussures': 'Des chaussures confortables et stylées pour toutes les occasions',
+    'Accessoires': 'Complétez votre look avec nos accessoires sélectionnés',
+    'Beauté & Cosmétiques': 'Produits de beauté et cosmétiques pour sublimer votre routine',
+    'Maison & Déco': 'Élégance et design pour votre intérieur',
+    'Électronique': 'Technologie innovante et design moderne',
+    'Sport & Fitness': 'Équipement sportif pour performance et style',
+    'Outillage Industriel': 'Outils professionnels de qualité supérieure',
+    'Luxe & Premium': 'Pièces exclusives et raffinées',
+    'Collection Exclusive': 'Nos créations les plus prestigieuses'
+  };
+  return descriptions[nomCategorie] || 'Découvrez notre sélection de produits soigneusement choisis';
+}
+
+// MAINTENANT LA ROUTE
 router.get('/:slug', async (req, res) => {
   try {
     const boutique = await Boutique.findOne({ slug: req.params.slug });
     if (!boutique) {
-      return res.status(404).send('Boutique non trouvée');
+      return res.status(404).render('boutiques_templates/standard', { 
+        title: 'Boutique non trouvée',
+        message: 'Cette boutique n\'existe pas'
+      });
     }
 
-    const produits = await Produit.find({ boutique: boutique._id });
+    const produits = await Produit.find({ boutique: boutique._id })
+      .sort({ dateCreation: -1 });
 
-    req.session.boutiqueActuelle = boutique.slug;
+    const produitsAvecCategories = await categoriserProduitsParIA(produits);
+    const produitsParCategorie = organiserParCategories(produitsAvecCategories);
+
+    // CHOISIR LE TEMPLATE SELON LE NOM/STYLE DE LA BOUTIQUE
+    let template = 'boutiques_templates/standard'; // template par défaut
     
-    console.log('💾 Boutique visitée stockée en session:', {
-      slug: boutique.slug,
-      nom: boutique.nom,
-      action: 'simple visite'
-    });
+    // Mapping des templates selon le nom de la boutique
+    const nomBoutique = boutique.nom.toLowerCase();
+    
+    if (nomBoutique.includes('dior') || nomBoutique.includes('luxe') || nomBoutique.includes('premium')) {
+      template = 'boutiques_templates/dior';
+    } else if (nomBoutique.includes('nike') || nomBoutique.includes('sport') || nomBoutique.includes('athletic')) {
+      template = 'boutiques_templates/nike';
+    } else if (nomBoutique.includes('zara') || nomBoutique.includes('fashion') || nomBoutique.includes('mode')) {
+      template = 'boutiques_templates/zara';
+    }
 
-    req.session.save((err) => {
-      if (err) console.error('Erreur sauvegarde session:', err);
-      
-      let templatePath;
-      let templateData = {
-        boutique, 
-        produits,
-        slug: boutique.slug,
-        user: req.session.user
-      };
+    console.log(`🎨 Utilisation du template: ${template} pour la boutique: ${boutique.nom}`);
 
-      if (boutique.template && boutique.template !== 'standard') {
-        templatePath = `boutiques_templates/${boutique.template}`;
-      } else if (boutique.template === 'standard') {
-        templatePath = 'boutiques_templates/standard';
-      } else {
-        templatePath = 'boutique_publique';
-      }
-
-      console.log('Template utilisé:', templatePath);
-      res.render(templatePath, templateData);
+    res.render(template, {
+      title: boutique.nom,
+      boutique,
+      produits: produitsAvecCategories,
+      produitsParCategorie,
+      user: req.session.user,
+      panierCount: req.session.panier ? req.session.panier.length : 0,
+      getDescriptionCategorie // 🔥 AJOUTER LA FONCTION AU TEMPLATE
     });
 
   } catch (error) {
-    console.error('Erreur serveur:', error);
-    res.status(500).send('Erreur serveur : ' + error.message);
+    console.error('Erreur chargement boutique:', error);
+    // 🔥 CORRECTION : Ne pas utiliser boutique dans le rendu d'erreur
+    res.status(500).render('boutiques_templates/standard', {
+      title: 'Erreur',
+      message: 'Une erreur est survenue lors du chargement de la boutique'
+    });
   }
 });
-
 // Page d'accueil publique
 router.get('/', async (req, res) => {
   try {
@@ -382,7 +546,64 @@ router.get('/mon/modifier', estVendeur, async (req, res) => {
     res.status(500).send('Erreur chargement boutique : ' + err.message);
   }
 });
+// Route : afficher un produit par ID
+// Route : afficher un produit par ID
+router.get('/produit/:id', async (req, res) => {
+  try {
+    const produit = await Produit.findById(req.params.id)
+      .populate('vendeur', 'nom telephone')
+      .populate('boutique', 'nom slug');
 
+    if (!produit) {
+      return res.status(404).render('404', {
+        title: 'Produit non trouvé',
+        message: 'Le produit que vous recherchez n\'existe pas.'
+      });
+    }
+
+    // Récupérer d'autres produits du même vendeur
+    const produitsVendeur = await Produit.find({ 
+      vendeur: produit.vendeur._id,
+      _id: { $ne: produit._id } // Exclure le produit actuel
+    }).limit(4);
+
+    // Récupérer le panier depuis la session
+    const panier = req.session.panier || [];
+    let totalPanier = 0;
+    let totalArticles = 0;
+
+    // Calculer le total du panier et le nombre total d'articles
+    if (panier.length > 0) {
+      const produitsIds = panier.map(item => item.produitId);
+      const produitsPanier = await Produit.find({ _id: { $in: produitsIds } });
+      
+      totalPanier = panier.reduce((total, item) => {
+        const produit = produitsPanier.find(p => p._id.toString() === item.produitId);
+        return total + (produit ? produit.prix * item.quantite : 0);
+      }, 0);
+
+      // Calcul du nombre total d'articles (somme des quantités)
+      totalArticles = panier.reduce((total, item) => total + item.quantite, 0);
+    }
+
+    res.render('produit_detail', {
+      produit,
+      produitsVendeur,
+      boutique: produit.boutique,
+      panier: panier,
+      totalPanier: totalPanier,
+      totalArticles: totalArticles, // <-- N'oublions pas de passer cette variable
+      user: req.session.user
+    });
+
+  } catch (error) {
+    console.error('❌ Erreur affichage produit:', error);
+    res.status(500).render('error', {
+      title: 'Erreur serveur',
+      message: 'Une erreur est survenue lors du chargement du produit.'
+    });
+  }
+});
 router.post('/mon/modifier', estVendeur, upload.single('logo'), async (req, res) => {
   try {
     const boutique = await Boutique.findOne({ proprietaire: req.session.user.id });

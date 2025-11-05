@@ -2,68 +2,109 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Import Produits en Masse</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Import Auto - L'IA fait tout</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
       --primary: #3498db;
-      --secondary: #2c3e50;
-      --success: #27ae60;
-      --warning: #f39c12;
+      --primary-dark: #2980b9;
+      --success: #2ecc71;
       --danger: #e74c3c;
-      --light: #ecf0f1;
-      --dark: #34495e;
+      --warning: #f39c12;
+      --light: #f8f9fa;
+      --dark: #343a40;
+      --gray: #6c757d;
+      --border: #dee2e6;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f8f9fa;
-      color: var(--dark);
+      background-color: #f5f7fa;
+      color: #333;
       line-height: 1.6;
       padding: 20px;
     }
 
     .container {
-      max-width: 1000px;
+      max-width: 1200px;
       margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 20px;
       background: white;
       border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      overflow: hidden;
+      box-shadow: var(--shadow);
     }
 
-    .header {
-      background: var(--secondary);
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      color: var(--primary);
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: var(--gray);
+      margin-bottom: 20px;
+    }
+
+    .process-flow {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .process-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0 15px;
+    }
+
+    .step-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--primary);
       color: white;
-      padding: 30px;
-      text-align: center;
-    }
-
-    .header h1 {
-      font-size: 2.2rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
       margin-bottom: 10px;
     }
 
-    .header p {
-      opacity: 0.9;
-      font-size: 1.1rem;
+    .step-text {
+      font-weight: 600;
+      color: var(--dark);
     }
 
-    .content {
-      padding: 30px;
+    .step-arrow {
+      font-size: 1.5rem;
+      color: var(--gray);
+      margin: 0 10px;
     }
 
-    .produit-row {
-      background: var(--light);
+    .produit-simple {
+      background: white;
       padding: 25px;
+      margin: 20px 0;
       border-radius: 12px;
-      margin-bottom: 25px;
-      border: 2px solid #ddd;
+      box-shadow: var(--shadow);
+      border-left: 4px solid var(--primary);
     }
 
     .produit-header {
@@ -71,187 +112,208 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
-      padding-bottom: 15px;
-      border-bottom: 2px solid #ccc;
     }
 
-    .produit-number {
-      font-weight: bold;
-      color: var(--primary);
-      font-size: 1.3rem;
+    .produit-title {
+      font-size: 1.5rem;
+      color: var(--dark);
     }
 
-    .btn-remove {
+    .delete-btn {
       background: var(--danger);
       color: white;
       border: none;
-      padding: 8px 16px;
+      padding: 8px 15px;
       border-radius: 6px;
       cursor: pointer;
-      font-weight: bold;
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin-bottom: 20px;
-    }
-
-    .grid-3 {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-
-    .grid-4 {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
       font-weight: 600;
-      color: var(--secondary);
+      transition: background 0.3s;
     }
 
-    .form-control {
-      width: 100%;
-      padding: 12px;
-      border: 2px solid var(--light);
+    .delete-btn:hover {
+      background: #c0392b;
+    }
+
+    .photo-zone {
+      border: 2px dashed var(--primary);
+      padding: 25px;
+      text-align: center;
+      margin: 15px 0;
       border-radius: 8px;
-      font-size: 1rem;
-      transition: border-color 0.3s ease;
+      background: #f8fafc;
+      transition: all 0.3s;
     }
 
-    .form-control:focus {
-      outline: none;
-      border-color: var(--primary);
+    .photo-zone:hover {
+      background: #e8f4fd;
     }
 
-    /* Section Photos */
-    .photos-section {
-      margin: 25px 0;
+    .photo-zone.drag-over {
+      background: #d1ecf1;
+      border-color: var(--success);
     }
 
-    .photos-section h4 {
-      margin-bottom: 15px;
-      color: var(--secondary);
-      font-size: 1.1rem;
-    }
-
-    .photos-upload {
-      display: flex;
-      gap: 15px;
-      align-items: start;
-      margin-bottom: 20px;
-    }
-
-    .upload-btn {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .upload-btn:hover {
-      background: #2980b9;
-    }
-
-    .photos-preview {
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
-      min-height: 120px;
-      padding: 15px;
-      background: white;
-      border-radius: 8px;
-      border: 2px dashed #ccc;
-    }
-
-    .photo-item {
-      position: relative;
-      width: 100px;
-      height: 100px;
-    }
-
-    .photo-preview {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 8px;
-      border: 2px solid var(--primary);
-    }
-
-    .photo-remove {
-      position: absolute;
-      top: -8px;
-      right: -8px;
-      background: var(--danger);
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      cursor: pointer;
-      font-size: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* Section Vidéo */
-    .video-section {
-      margin: 25px 0;
-    }
-
-    .video-section h4 {
-      margin-bottom: 15px;
-      color: var(--secondary);
-      font-size: 1.1rem;
-    }
-
-    .video-upload {
-      display: flex;
-      gap: 15px;
-      align-items: center;
-    }
-
-    .video-preview {
-      width: 200px;
-      height: 120px;
-      border-radius: 8px;
-      border: 2px solid var(--primary);
+    .photo-input {
       display: none;
     }
 
-    /* Boutons */
-    .btn {
-      padding: 12px 24px;
-      border: none;
+    .photo-label {
+      display: inline-block;
+      padding: 12px 25px;
+      background: var(--primary);
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+
+    .photo-label:hover {
+      background: var(--primary-dark);
+    }
+
+    .apercus-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .apercu-img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .prix-devise-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .prix-input-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .prix-input {
+      font-size: 1.2rem;
+      padding: 12px 15px;
+      width: 150px;
+      text-align: center;
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      transition: border-color 0.3s;
+    }
+
+    .prix-input:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
+
+    .devise-select-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .devise-select {
+      padding: 12px 45px 12px 15px;
+      font-size: 1rem;
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      background-color: white;
+      cursor: pointer;
+      appearance: none;
+      transition: border-color 0.3s;
+      min-width: 120px;
+    }
+
+    .devise-select:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
+
+    .devise-select-icon {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: var(--gray);
+    }
+
+    .devise-flag {
+      display: inline-block;
+      width: 20px;
+      height: 15px;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    .preview-ia {
+      background: #f8f9fa;
+      padding: 20px;
       border-radius: 8px;
+      margin-top: 20px;
+      border-left: 4px solid var(--warning);
+    }
+
+    .preview-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+      color: var(--dark);
+    }
+
+    .preview-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    .preview-item {
+      background: white;
+      padding: 12px;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .preview-label {
+      font-size: 0.85rem;
+      color: var(--gray);
+      margin-bottom: 5px;
+    }
+
+    .preview-value {
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .actions-container {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 30px 0;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 14px 25px;
       font-size: 1rem;
       font-weight: 600;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
-      transition: all 0.3s ease;
-      text-decoration: none;
-      display: inline-flex;
+      transition: all 0.3s;
+      display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
 
     .btn-primary {
@@ -260,13 +322,26 @@
     }
 
     .btn-primary:hover {
-      background: #2980b9;
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #27ae60;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     }
 
     .btn-outline {
       background: transparent;
-      border: 2px solid var(--primary);
       color: var(--primary);
+      border: 2px solid var(--primary);
     }
 
     .btn-outline:hover {
@@ -274,506 +349,537 @@
       color: white;
     }
 
-    .actions {
+    .devise-info {
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: var(--gray);
       display: flex;
-      gap: 15px;
-      margin-top: 30px;
-      flex-wrap: wrap;
+      align-items: center;
+      gap: 5px;
     }
 
-    .produit-count {
-      background: var(--primary);
-      color: white;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 1rem;
-      margin-left: 10px;
-    }
-
-    .message {
+    .stats-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
       padding: 15px;
+      background: white;
       border-radius: 8px;
-      margin-bottom: 20px;
+      box-shadow: var(--shadow);
     }
 
-    .message.success {
-      background: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
+    .stat-item {
+      text-align: center;
     }
 
-    .message.error {
-      background: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
     }
 
-    .message.warning {
-      background: #fff3cd;
-      color: #856404;
-      border: 1px solid #ffeaa7;
-    }
-
-    .file-input {
-      display: none;
-    }
-
-    .prix-ttc {
-      font-size: 0.9em;
-      color: var(--dark);
-      margin-top: 5px;
-      font-style: italic;
-    }
-
-    .photo-inputs-container {
-      margin-bottom: 15px;
-    }
-
-    .file-input-single {
-      margin-bottom: 10px;
-    }
-
-    .btn-small {
-      padding: 8px 16px;
+    .stat-label {
       font-size: 0.9rem;
+      color: var(--gray);
+    }
+
+    @media (max-width: 768px) {
+      .process-flow {
+        flex-direction: column;
+      }
+      
+      .step-arrow {
+        transform: rotate(90deg);
+        margin: 10px 0;
+      }
+      
+      .prix-devise-container {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .preview-content {
+        grid-template-columns: 1fr;
+      }
+      
+      .stats-container {
+        flex-direction: column;
+        gap: 15px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="header">
-      <h1>📦 Import de Produits en Masse</h1>
-      <p>Ajoutez jusqu'à 10 produits simultanément</p>
-    </div>
+    <header>
+      <h1><i class="fas fa-robot"></i> Import Auto - L'IA fait tout</h1>
+      <p class="subtitle">L'importation de produits simplifiée grâce à l'intelligence artificielle</p>
+      
+      <div class="process-flow">
+        <div class="process-step">
+          <div class="step-icon"><i class="fas fa-camera"></i></div>
+          <div class="step-text">Ajoutez les photos</div>
+        </div>
+        <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="process-step">
+          <div class="step-icon"><i class="fas fa-euro-sign"></i></div>
+          <div class="step-text">Définissez prix & devise</div>
+        </div>
+        <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="process-step">
+          <div class="step-icon"><i class="fas fa-magic"></i></div>
+          <div class="step-text">L'IA complète automatiquement</div>
+        </div>
+        <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="process-step">
+          <div class="step-icon"><i class="fas fa-check"></i></div>
+          <div class="step-text">Produits en ligne !</div>
+        </div>
+      </div>
+    </header>
 
-    <div class="content">
-      <!-- Messages -->
-      <div id="messages"></div>
-
-      <div class="actions">
-        <button class="btn btn-outline" onclick="addProduct()">
-          ➕ Ajouter un produit
-        </button>
-        <span class="produit-count" id="product-count">0 produit(s)</span>
+    <form id="import-simple-form" enctype="multipart/form-data">
+      <div id="produits-container">
+        <!-- Produits ajoutés ici -->
       </div>
 
-      <form id="import-form" enctype="multipart/form-data">
-        <div id="products-container">
-          <!-- Les produits seront ajoutés ici dynamiquement -->
-        </div>
+      <div class="actions-container">
+        <button type="button" class="btn btn-primary" onclick="ajouterProduit()">
+          <i class="fas fa-plus"></i> Ajouter un produit
+        </button>
+        <button type="button" class="btn btn-success" onclick="importerAuto()">
+          <i class="fas fa-rocket"></i> Lancer l'import auto
+        </button>
+        <button type="button" class="btn btn-outline" onclick="exporterDonnees()">
+          <i class="fas fa-file-export"></i> Exporter les données
+        </button>
+      </div>
+    </form>
 
-        <div class="actions">
-          <button type="button" class="btn btn-primary" onclick="submitImport()">
-            🚀 Importer tous les produits
-          </button>
-          <a href="/produits/mes" class="btn btn-outline">
-            ← Retour aux produits
-          </a>
-        </div>
-      </form>
+    <div class="stats-container">
+      <div class="stat-item">
+        <div class="stat-value" id="total-produits">0</div>
+        <div class="stat-label">Produits ajoutés</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="total-photos">0</div>
+        <div class="stat-label">Photos ajoutées</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="devise-principale">EUR</div>
+        <div class="stat-label">Devise principale</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="valeur-totale">0</div>
+        <div class="stat-label">Valeur totale</div>
+      </div>
     </div>
   </div>
 
   <script>
-    let productCount = 0;
-    const maxProducts = 10;
+    let produitCount = 0;
+    const devises = [
+      { code: 'EUR', nom: 'Euro', symbole: '€', drapeau: '🇪🇺' },
+      { code: 'USD', nom: 'Dollar US', symbole: '$', drapeau: '🇺🇸' },
+      { code: 'GBP', nom: 'Livre Sterling', symbole: '£', drapeau: '🇬🇧' },
+      { code: 'JPY', nom: 'Yen Japonais', symbole: '¥', drapeau: '🇯🇵' },
+      { code: 'CAD', nom: 'Dollar Canadien', symbole: 'C$', drapeau: '🇨🇦' },
+      { code: 'AUD', nom: 'Dollar Australien', symbole: 'A$', drapeau: '🇦🇺' },
+      { code: 'CHF', nom: 'Franc Suisse', symbole: 'CHF', drapeau: '🇨🇭' },
+      { code: 'CNY', nom: 'Yuan Chinois', symbole: '¥', drapeau: '🇨🇳' },
+      { code: 'INR', nom: 'Roupie Indienne', symbole: '₹', drapeau: '🇮🇳' },
+      { code: 'BRL', nom: 'Real Brésilien', symbole: 'R$', drapeau: '🇧🇷' },
+      { code: 'RUB', nom: 'Rouble Russe', symbole: '₽', drapeau: '🇷🇺' },
+      { code: 'MXN', nom: 'Peso Mexicain', symbole: '$', drapeau: '🇲🇽' },
+      { code: 'XOF', nom: 'Franc CFA', symbole: 'CFA', drapeau: '🌍' }
+    ];
 
-    // Initialisation
-    document.addEventListener('DOMContentLoaded', function() {
-      addProduct(); // Ajouter le premier produit
-    });
-
-    function addProduct() {
-      if (productCount >= maxProducts) {
-        showMessage('Maximum ' + maxProducts + ' produits autorisés', 'warning');
-        return;
-      }
-
-      productCount++;
-      updateProductCount();
-
-      const productHTML = `
-        <div class="produit-row" id="product-${productCount}">
+    function ajouterProduit() {
+      produitCount++;
+      
+      const html = `
+        <div class="produit-simple" id="produit-${produitCount}">
           <div class="produit-header">
-            <span class="produit-number">Produit #${productCount}</span>
-            <button type="button" class="btn-remove" onclick="removeProduct(${productCount})">
-              ✕ Supprimer
+            <h3 class="produit-title">Produit #${produitCount}</h3>
+            <button type="button" class="delete-btn" onclick="supprimerProduit(${produitCount})">
+              <i class="fas fa-trash"></i> Supprimer
             </button>
           </div>
           
-          <!-- Informations de base -->
-          <div class="grid-2">
-            <div class="form-group">
-              <label>Nom du produit *</label>
-              <input type="text" name="nom-${productCount}" class="form-control" placeholder="Ex: iPhone 13 Pro" required>
-            </div>
-            <div class="form-group">
-              <label>Description du produit</label>
-              <textarea name="description-${productCount}" class="form-control" rows="2" placeholder="Décrivez votre produit..."></textarea>
-            </div>
+          <!-- ZONE PHOTOS -->
+          <div class="photo-zone" id="photo-zone-${produitCount}" 
+               ondragover="gererDragOver(event)" 
+               ondragleave="gererDragLeave(event)" 
+               ondrop="gererDrop(event, ${produitCount})">
+            <input type="file" id="photos-${produitCount}" class="photo-input" 
+                   name="photos-${produitCount}" multiple 
+                   accept="image/*" onchange="afficherApercus(this, ${produitCount})">
+            <label for="photos-${produitCount}" class="photo-label">
+              <i class="fas fa-camera"></i> Choisir des photos
+            </label>
+            <p>ou glissez-déposez vos images ici</p>
+            <div id="apercus-${produitCount}" class="apercus-container"></div>
           </div>
-          
-          <div class="grid-4">
-            <div class="form-group">
-              <label>Prix *</label>
-              <input type="number" name="prix-${productCount}" step="0.01" class="form-control" placeholder="Ex: 999.99" required 
-                     oninput="calculerPrixTTC(this, ${productCount})">
-              <div class="prix-ttc" id="prix-ttc-${productCount}"></div>
+
+          <!-- ZONE PRIX ET DEVISE -->
+          <div class="prix-devise-container">
+            <div class="prix-input-container">
+              <label><strong>💰 VOTRE PRIX :</strong></label>
+              <input type="number" step="0.01" class="prix-input" 
+                     name="prix-${produitCount}" placeholder="Ex: 29.99" required
+                     onchange="mettreAJourStats()">
             </div>
-            <div class="form-group">
-              <label>Devise *</label>
-              <select name="devise-${productCount}" class="form-control" required onchange="calculerPrixTTC(document.querySelector('[name=\"prix-${productCount}\"]'), ${productCount})">
-                <option value="EUR">€ Euro</option>
-                <option value="USD">$ Dollar US</option>
-                <option value="XOF">CFA Franc</option>
-                <option value="GBP">£ Livre Sterling</option>
-                <option value="JPY">¥ Yen Japonais</option>
-                <option value="CAD">$ Dollar Canadien</option>
-                <option value="CHF">CHF Franc Suisse</option>
-                <option value="CNY">¥ Yuan Chinois</option>
+            
+            <div class="devise-select-container">
+              <select class="devise-select" name="devise-${produitCount}" onchange="mettreAJourStats()">
+                ${devises.map(devise => `
+                  <option value="${devise.code}" ${devise.code === 'EUR' ? 'selected' : ''}>
+                    <span class="devise-flag">${devise.drapeau}</span> ${devise.code} - ${devise.nom}
+                  </option>
+                `).join('')}
               </select>
-            </div>
-            <div class="form-group">
-              <label>Catégorie</label>
-              <input type="text" name="categorie-${productCount}" class="form-control" placeholder="Ex: Électronique">
-            </div>
-            <div class="form-group">
-              <label>Stock disponible</label>
-              <input type="number" name="stock-${productCount}" class="form-control" value="1" min="0">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label>Référence (SKU)</label>
-            <input type="text" name="sku-${productCount}" class="form-control" placeholder="Ex: PROD-${Date.now()}">
-          </div>
-
-          <!-- Section Photos - Version avec inputs multiples -->
-          <div class="photos-section">
-            <h4>📸 Photos du produit</h4>
-            <div class="photos-upload">
-              <button type="button" class="upload-btn btn-small" onclick="addPhotoInput(${productCount})">
-                📁 Ajouter une photo
-              </button>
-              <button type="button" class="upload-btn btn-small" onclick="addMultiplePhotos(${productCount})">
-                📷 Ajouter plusieurs photos
-              </button>
-              <small>Utilisez "Ajouter plusieurs photos" pour sélectionner plusieurs images à la fois</small>
+              <div class="devise-select-icon"><i class="fas fa-chevron-down"></i></div>
             </div>
             
-            <!-- Conteneur pour les inputs de photos -->
-            <div id="photo-inputs-${productCount}" class="photo-inputs-container">
-              <!-- Les inputs seront ajoutés ici dynamiquement -->
-            </div>
-            
-            <div class="photos-preview" id="photos-preview-${productCount}">
-              <!-- Les aperçus de photos apparaîtront ici -->
+            <div class="devise-info">
+              <i class="fas fa-info-circle"></i>
+              <span id="info-devise-${produitCount}">1 EUR ≈ 1.08 USD</span>
             </div>
           </div>
 
-          <!-- Section Vidéo -->
-          <div class="video-section">
-            <h4>🎥 Vidéo du produit (optionnel)</h4>
-            <div class="video-upload">
-              <button type="button" class="upload-btn" onclick="document.getElementById('video-${productCount}').click()">
-                🎬 Choisir une vidéo
-              </button>
-              <input type="file" id="video-${productCount}" class="file-input" accept="video/*" 
-                     onchange="handleVideo(this, ${productCount})">
-              <video id="video-preview-${productCount}" class="video-preview" controls></video>
+          <!-- ZONE PRÉVISUALISATION IA -->
+          <div id="preview-ia-${produitCount}" class="preview-ia" style="display: none;">
+            <div class="preview-title">
+              <i class="fas fa-brain"></i>
+              <h4>Ce que l'IA va détecter :</h4>
+            </div>
+            <div class="preview-content" id="infos-ia-${produitCount}">
+              <!-- Contenu généré par l'IA -->
             </div>
           </div>
         </div>
       `;
 
-      document.getElementById('products-container').insertAdjacentHTML('beforeend', productHTML);
+      document.getElementById('produits-container').innerHTML += html;
+      mettreAJourStats();
       
-      // Ajouter un input photo initial
-      addPhotoInput(productCount);
+      // Initialiser les infos de conversion de devise
+      mettreAJourInfoDevise(produitCount);
     }
 
-    function removeProduct(productId) {
-      if (productCount <= 1) {
-        showMessage('Au moins un produit est requis', 'warning');
-        return;
+    function supprimerProduit(id) {
+      const produit = document.getElementById(`produit-${id}`);
+      if (produit) {
+        produit.remove();
+        mettreAJourStats();
       }
-
-      document.getElementById(`product-${productId}`).remove();
-      productCount--;
-      updateProductCount();
     }
 
-    function updateProductCount() {
-      document.getElementById('product-count').textContent = productCount + ' produit(s)';
+    function gererDragOver(e) {
+      e.preventDefault();
+      e.currentTarget.classList.add('drag-over');
     }
 
-    function calculerPrixTTC(input, productId) {
-      const prix = parseFloat(input.value);
-      const deviseSelect = document.querySelector(`[name="devise-${productId}"]`);
-      const devise = deviseSelect ? deviseSelect.value : 'EUR';
-      const prixTtcElement = document.getElementById(`prix-ttc-${productId}`);
+    function gererDragLeave(e) {
+      e.preventDefault();
+      e.currentTarget.classList.remove('drag-over');
+    }
 
-      if (isNaN(prix) || prix <= 0) {
-        prixTtcElement.textContent = '';
-        return;
+    function gererDrop(e, produitId) {
+      e.preventDefault();
+      e.currentTarget.classList.remove('drag-over');
+      
+      const files = e.dataTransfer.files;
+      const input = document.getElementById(`photos-${produitId}`);
+      
+      // Créer un nouveau DataTransfer pour mettre à jour l'input
+      const dataTransfer = new DataTransfer();
+      
+      // Ajouter les fichiers existants
+      if (input.files) {
+        for (let i = 0; i < input.files.length; i++) {
+          dataTransfer.items.add(input.files[i]);
+        }
       }
-
-      let tauxTVA = 0;
-      let symbole = '';
       
-      switch (devise) {
-        case 'EUR': 
-          tauxTVA = 0.20; 
-          symbole = '€';
-          break;
-        case 'USD': 
-          tauxTVA = 0.07; 
-          symbole = '$';
-          break;
-        case 'XOF': 
-          tauxTVA = 0.18; 
-          symbole = 'CFA';
-          break;
-        case 'GBP': 
-          tauxTVA = 0.20; 
-          symbole = '£';
-          break;
-        case 'JPY': 
-          tauxTVA = 0.10; 
-          symbole = '¥';
-          break;
-        case 'CAD': 
-          tauxTVA = 0.13; 
-          symbole = '$';
-          break;
-        case 'CHF': 
-          tauxTVA = 0.08; 
-          symbole = 'CHF';
-          break;
-        case 'CNY': 
-          tauxTVA = 0.13; 
-          symbole = '¥';
-          break;
-        default: 
-          tauxTVA = 0;
-          symbole = '';
+      // Ajouter les nouveaux fichiers
+      for (let i = 0; i < files.length; i++) {
+        if (files[i].type.startsWith('image/')) {
+          dataTransfer.items.add(files[i]);
+        }
       }
-
-      const prixTTC = prix * (1 + tauxTVA);
-      prixTtcElement.textContent = `Prix TTC estimé : ${prixTTC.toFixed(2)} ${symbole}`;
+      
+      // Mettre à jour l'input
+      input.files = dataTransfer.files;
+      
+      // Déclencher l'événement change pour afficher les aperçus
+      const event = new Event('change', { bubbles: true });
+      input.dispatchEvent(event);
     }
 
-    // Fonction pour ajouter un input photo simple
-    function addPhotoInput(productId) {
-      const container = document.getElementById(`photo-inputs-${productId}`);
-      const inputCount = container.children.length;
+    function afficherApercus(input, produitId) {
+      const apercusDiv = document.getElementById(`apercus-${produitId}`);
+      apercusDiv.innerHTML = '';
       
-      const newInput = document.createElement('input');
-      newInput.type = 'file';
-      newInput.name = `photos-${productCount}`; // Même nom pour tous les inputs
-      newInput.className = 'form-control file-input-single';
-      newInput.accept = 'image/*';
-      newInput.style.marginBottom = '10px';
-      newInput.onchange = function() { handleSinglePhoto(this, productId); };
+      Array.from(input.files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.className = 'apercu-img';
+          apercusDiv.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      });
+
+      // Montrer la zone de prévisualisation IA
+      document.getElementById(`preview-ia-${produitId}`).style.display = 'block';
       
-      container.appendChild(newInput);
+      // Simuler l'analyse IA (dans un vrai scénario, cela appellerait votre API)
+      simulerAnalyseIA(produitId);
+      
+      mettreAJourStats();
     }
 
-    // Fonction pour ajouter un input photo multiple
-    function addMultiplePhotos(productId) {
-      const container = document.getElementById(`photo-inputs-${productId}`);
+    function simulerAnalyseIA(produitId) {
+      // Simulation des données détectées par l'IA
+      const categories = ['Vêtements', 'Électronique', 'Maison', 'Sport', 'Beauté'];
+      const marques = ['ZARA', 'Nike', 'Samsung', 'Apple', 'Sony', 'Adidas'];
+      const etats = ['Neuf', 'Très bon état', 'Bon état', 'État correct'];
+      const materiaux = ['Coton', 'Polyester', 'Cuir', 'Métal', 'Plastique', 'Bois'];
       
-      const newInput = document.createElement('input');
-      newInput.type = 'file';
-      newInput.name = `photos-${productCount}`; // Même nom pour tous les inputs
-      newInput.className = 'form-control file-input-single';
-      newInput.accept = 'image/*';
-      newInput.multiple = true;
-      newInput.style.marginBottom = '10px';
-      newInput.onchange = function() { handleMultiplePhotos(this, productId); };
-      
-      container.appendChild(newInput);
-    }
-
-    // Fonction pour gérer une photo unique
-    function handleSinglePhoto(input, productId) {
-      const previewContainer = document.getElementById(`photos-preview-${productId}`);
-      const file = input.files[0];
-      
-      if (!file) return;
-      
-      const reader = new FileReader();
-      
-      reader.onload = function(e) {
-        const photoItem = document.createElement('div');
-        photoItem.className = 'photo-item';
-        photoItem.setAttribute('data-filename', file.name);
-        photoItem.innerHTML = `
-          <img src="${e.target.result}" class="photo-preview" alt="Aperçu photo">
-          <button type="button" class="photo-remove" onclick="removePhotoAndInput(this, ${productId})">×</button>
-        `;
-        previewContainer.appendChild(photoItem);
+      const donneesIA = {
+        nom: `Produit ${produitId} de qualité`,
+        description: 'Produit de haute qualité avec design soigné et fonctionnalités avancées.',
+        categorie: categories[Math.floor(Math.random() * categories.length)],
+        marque: marques[Math.floor(Math.random() * marques.length)],
+        etat: etats[Math.floor(Math.random() * etats.length)],
+        materiau: materiaux[Math.floor(Math.random() * materiaux.length)],
+        couleurs: ['Noir', 'Blanc', 'Bleu'].slice(0, 1 + Math.floor(Math.random() * 2)),
+        style: 'Moderne',
+        tags: ['qualité', 'design', 'professionnel']
       };
       
-      reader.readAsDataURL(file);
+      const infosIADiv = document.getElementById(`infos-ia-${produitId}`);
+      infosIADiv.innerHTML = `
+        <div class="preview-item">
+          <div class="preview-label">Nom du produit</div>
+          <div class="preview-value">${donneesIA.nom}</div>
+        </div>
+        <div class="preview-item">
+          <div class="preview-label">Catégorie</div>
+          <div class="preview-value">${donneesIA.categorie}</div>
+        </div>
+        <div class="preview-item">
+          <div class="preview-label">Marque</div>
+          <div class="preview-value">${donneesIA.marque}</div>
+        </div>
+        <div class="preview-item">
+          <div class="preview-label">État</div>
+          <div class="preview-value">${donneesIA.etat}</div>
+        </div>
+        <div class="preview-item">
+          <div class="preview-label">Couleurs</div>
+          <div class="preview-value">${donneesIA.couleurs.join(', ')}</div>
+        </div>
+        <div class="preview-item">
+          <div class="preview-label">Matériau</div>
+          <div class="preview-value">${donneesIA.materiau}</div>
+        </div>
+      `;
     }
 
-    // Fonction pour gérer plusieurs photos
-    function handleMultiplePhotos(input, productId) {
-      const previewContainer = document.getElementById(`photos-preview-${productId}`);
-      const files = input.files;
+    function mettreAJourStats() {
+      const totalProduits = document.querySelectorAll('.produit-simple').length;
+      const totalPhotos = document.querySelectorAll('.apercu-img').length;
       
-      console.log(`📸 Produit ${productId}: ${files.length} photos sélectionnées`);
+      // Calculer la devise principale (celle la plus utilisée)
+      const devisesUtilisees = {};
+      let devisePrincipale = 'EUR';
+      let maxCount = 0;
       
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const reader = new FileReader();
+      document.querySelectorAll('.devise-select').forEach(select => {
+        const devise = select.value;
+        devisesUtilisees[devise] = (devisesUtilisees[devise] || 0) + 1;
+        if (devisesUtilisees[devise] > maxCount) {
+          maxCount = devisesUtilisees[devise];
+          devisePrincipale = devise;
+        }
+      });
+      
+      // Calculer la valeur totale (approximative en devise principale)
+      let valeurTotale = 0;
+      document.querySelectorAll('.prix-input').forEach(input => {
+        if (input.value) {
+          const prix = parseFloat(input.value);
+          const deviseSelect = input.closest('.prix-devise-container').querySelector('.devise-select');
+          const devise = deviseSelect.value;
+          
+          // Conversion simplifiée (dans un vrai scénario, utiliser un service de conversion)
+          if (devise === 'EUR') valeurTotale += prix;
+          else if (devise === 'USD') valeurTotale += prix * 0.93;
+          else if (devise === 'GBP') valeurTotale += prix * 1.17;
+          else if (devise === 'JPY') valeurTotale += prix * 0.0062;
+          else valeurTotale += prix; // Fallback
+        }
+      });
+      
+      document.getElementById('total-produits').textContent = totalProduits;
+      document.getElementById('total-photos').textContent = totalPhotos;
+      document.getElementById('devise-principale').textContent = devisePrincipale;
+      document.getElementById('valeur-totale').textContent = valeurTotale.toFixed(2);
+    }
+
+    function mettreAJourInfoDevise(produitId) {
+      // Simulation des taux de change (dans un vrai scénario, récupérer depuis une API)
+      const tauxChange = {
+        'EUR': 1,
+        'USD': 1.08,
+        'GBP': 0.85,
+        'JPY': 163.42,
+        'CAD': 1.47,
+        'AUD': 1.64,
+        'CHF': 0.96,
+        'CNY': 7.83,
+        'INR': 90.12,
+        'BRL': 5.41,
+        'RUB': 98.76,
+        'MXN': 18.23,
+        'XOF': 655.96
+      };
+      
+      const select = document.querySelector(`[name="devise-${produitId}"]`);
+      const infoSpan = document.getElementById(`info-devise-${produitId}`);
+      
+      if (select && infoSpan) {
+        const deviseSelectionnee = select.value;
+        let texteInfo = '';
         
-        reader.onload = function(e) {
-          const photoItem = document.createElement('div');
-          photoItem.className = 'photo-item';
-          photoItem.setAttribute('data-filename', file.name);
-          photoItem.innerHTML = `
-            <img src="${e.target.result}" class="photo-preview" alt="Aperçu photo ${i + 1}">
-            <button type="button" class="photo-remove" onclick="removePhoto(this, ${productId})">×</button>
-          `;
-          previewContainer.appendChild(photoItem);
-        };
+        if (deviseSelectionnee === 'EUR') {
+          texteInfo = `1 EUR ≈ ${tauxChange['USD'].toFixed(2)} USD`;
+        } else {
+          texteInfo = `1 ${deviseSelectionnee} ≈ ${(1 / tauxChange[deviseSelectionnee]).toFixed(2)} EUR`;
+        }
         
-        reader.readAsDataURL(file);
+        infoSpan.textContent = texteInfo;
       }
     }
 
-    // Fonction pour supprimer une photo et son input
-    function removePhotoAndInput(button, productId) {
-      const photoItem = button.parentElement;
-      const filename = photoItem.getAttribute('data-filename');
-      photoItem.remove();
-      
-      // Supprimer également l'input correspondant si possible
-      const inputs = document.querySelectorAll(`#photo-inputs-${productId} input`);
-      inputs.forEach(input => {
-        if (input.files[0] && input.files[0].name === filename) {
-          input.remove();
-        }
-      });
-    }
-
-    // Fonction pour supprimer seulement la photo
-    function removePhoto(button, productId) {
-      button.parentElement.remove();
-    }
-
-    function handleVideo(input, productId) {
-      const preview = document.getElementById(`video-preview-${productId}`);
-      const file = input.files[0];
-      
-      if (file) {
-        const url = URL.createObjectURL(file);
-        preview.src = url;
-        preview.style.display = 'block';
-      } else {
-        preview.style.display = 'none';
-      }
-    }
-
-    function showMessage(message, type = 'info') {
-      const messagesDiv = document.getElementById('messages');
-      const messageHTML = `<div class="message ${type}">${message}</div>`;
-      messagesDiv.innerHTML = messageHTML;
-      
-      setTimeout(() => {
-        messagesDiv.innerHTML = '';
-      }, 5000);
-    }
-
-    async function submitImport() {
-      const form = document.getElementById('import-form');
-      const formData = new FormData(form);
-      
-      // Récupérer les données des produits
-      const products = [];
-      const productElements = document.querySelectorAll('.produit-row');
-      
-      let hasError = false;
-
-      productElements.forEach((element, index) => {
-        const productNumber = index + 1;
-        const nomInput = document.querySelector(`[name="nom-${productNumber}"]`);
-        const prixInput = document.querySelector(`[name="prix-${productNumber}"]`);
-        const deviseSelect = document.querySelector(`[name="devise-${productNumber}"]`);
-        
-        const productData = {
-          nom: nomInput.value,
-          description: document.querySelector(`[name="description-${productNumber}"]`).value,
-          prix: prixInput.value,
-          devise: deviseSelect.value,
-          categorie: document.querySelector(`[name="categorie-${productNumber}"]`).value,
-          stock: document.querySelector(`[name="stock-${productNumber}"]`).value,
-          sku: document.querySelector(`[name="sku-${productNumber}"]`).value
-        };
-        
-        // Validation
-        if (!productData.nom || !productData.prix || !productData.devise) {
-          showMessage(`Le produit #${productNumber} doit avoir un nom, un prix et une devise`, 'error');
-          hasError = true;
-          return;
-        }
-        
-        products.push(productData);
-
-        // Ajouter toutes les photos pour ce produit
-        const photoInputs = document.querySelectorAll(`#photo-inputs-${productNumber} input`);
-        photoInputs.forEach(input => {
-          if (input.files) {
-            for (let i = 0; i < input.files.length; i++) {
-              formData.append(`photos-${productNumber}`, input.files[i]);
-            }
-          }
-        });
-
-        // Ajouter la vidéo pour ce produit
-        const videoFile = document.querySelector(`#video-${productNumber}`).files[0];
-        if (videoFile) {
-          formData.append(`video-${productNumber}`, videoFile);
-        }
-      });
-
-      if (hasError) {
+    async function importerAuto() {
+      if (produitCount === 0) {
+        alert('Veuillez ajouter au moins un produit avant de lancer l\'import.');
         return;
       }
+      
+      const formData = new FormData();
+      const prixProduits = {};
+      const devisesProduits = {};
 
-      // Ajouter les produits au FormData
-      formData.append('produits', JSON.stringify(products));
+      // Récupérer tous les prix et devises
+      for (let i = 1; i <= produitCount; i++) {
+        const prixInput = document.querySelector(`[name="prix-${i}"]`);
+        const deviseSelect = document.querySelector(`[name="devise-${i}"]`);
+        
+        if (prixInput && prixInput.value && deviseSelect) {
+          prixProduits[i] = prixInput.value;
+          devisesProduits[i] = deviseSelect.value;
+        }
+      }
+
+      // Ajouter les photos
+      const photoInputs = document.querySelectorAll('input[type="file"]');
+      photoInputs.forEach(input => {
+        if (input.files) {
+          for (let i = 0; i < input.files.length; i++) {
+            formData.append(input.name, input.files[i]);
+          }
+        }
+      });
+
+      formData.append('prixProduits', JSON.stringify(prixProduits));
+      formData.append('devisesProduits', JSON.stringify(devisesProduits));
+
+      // Afficher un indicateur de chargement
+      const btnImport = document.querySelector('.btn-success');
+      const texteOriginal = btnImport.innerHTML;
+      btnImport.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Import en cours...';
+      btnImport.disabled = true;
 
       try {
-        showMessage('⏳ Import en cours...', 'warning');
-        
-        const response = await fetch('/produits/import-masse', {
+        // Envoyer à l'API
+        const response = await fetch('/produits/import-masse-simple', {
           method: 'POST',
           body: formData
         });
 
         const result = await response.json();
-
+        
         if (result.success) {
-          let message = result.message;
-          if (result.erreurs && result.erreurs.length > 0) {
-            message += '<br>Erreurs: ' + result.erreurs.join(', ');
-          }
-          showMessage(message, 'success');
-          
-          // Redirection après succès
-          setTimeout(() => {
-            window.location.href = '/produits/mes';
-          }, 3000);
+          alert(`✅ ${result.message}`);
+          window.location.href = '/produits/mes';
         } else {
-          showMessage(result.message, 'error');
+          alert(`❌ ${result.message}`);
         }
       } catch (error) {
-        showMessage('Erreur lors de l\'import: ' + error.message, 'error');
+        console.error('Erreur lors de l\'import:', error);
+        alert('❌ Une erreur est survenue lors de l\'import. Veuillez réessayer.');
+      } finally {
+        // Restaurer le bouton
+        btnImport.innerHTML = texteOriginal;
+        btnImport.disabled = false;
       }
     }
+
+    function exporterDonnees() {
+      const produits = [];
+      
+      for (let i = 1; i <= produitCount; i++) {
+        const produitElement = document.getElementById(`produit-${i}`);
+        if (!produitElement) continue;
+        
+        const prixInput = document.querySelector(`[name="prix-${i}"]`);
+        const deviseSelect = document.querySelector(`[name="devise-${i}"]`);
+        const photosCount = document.querySelectorAll(`#apercus-${i} .apercu-img`).length;
+        
+        if (prixInput && prixInput.value && deviseSelect) {
+          produits.push({
+            id: i,
+            prix: prixInput.value,
+            devise: deviseSelect.value,
+            photos: photosCount
+          });
+        }
+      }
+      
+      const dataStr = JSON.stringify(produits, null, 2);
+      const dataBlob = new Blob([dataStr], {type: 'application/json'});
+      
+      const url = URL.createObjectURL(dataBlob);
+      const link = document.createElement('a');
+      link.download = `produits-import-${new Date().toISOString().split('T')[0]}.json`;
+      link.href = url;
+      link.click();
+      
+      URL.revokeObjectURL(url);
+    }
+
+    // Initialiser la page
+    document.addEventListener('DOMContentLoaded', () => {
+      ajouterProduit();
+      
+      // Mettre à jour les infos de devise lorsqu'on change la sélection
+      document.addEventListener('change', (e) => {
+        if (e.target.classList.contains('devise-select')) {
+          const produitId = e.target.name.split('-')[1];
+          mettreAJourInfoDevise(produitId);
+          mettreAJourStats();
+        }
+        
+        if (e.target.classList.contains('prix-input')) {
+          mettreAJourStats();
+        }
+      });
+    });
   </script>
 </body>
 </html>

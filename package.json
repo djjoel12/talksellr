@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@types/node": "^22.13.11",
     "bcryptjs": "^3.0.2",
     "cloudinary": "^1.41.3",

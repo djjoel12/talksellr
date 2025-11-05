@@ -2,23 +2,92 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Panier</title>
+  <title>Panier - <%= boutique ? boutique.nom : 'Boutique' %></title>
   <style>
     .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
     
-    /* Styles pour le panier */
     .panier-item { 
       display: flex; 
       align-items: center; 
       padding: 15px; 
       border-bottom: 1px solid #eee;
       gap: 20px;
+      background: white;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-    .produit-image { width: 100px; height: 100px; object-fit: cover; border-radius: 8px; }
+    .produit-image { 
+      width: 100px; 
+      height: 100px; 
+      object-fit: cover; 
+      border-radius: 8px; 
+      border: 1px solid #ddd;
+    }
+    .placeholder-image {
+      width: 100px;
+      height: 100px;
+      background: #f5f5f5;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #999;
+      border: 1px dashed #ddd;
+    }
     .produit-info { flex: 1; }
-    .produit-nom { font-weight: bold; margin-bottom: 5px; }
-    .produit-prix { color: #e60000; font-weight: bold; }
-    .quantite-controls { display: flex; align-items: center; gap: 10px; }
+    .produit-nom { 
+      font-weight: bold; 
+      margin-bottom: 5px; 
+      font-size: 1.1rem;
+      color: #333;
+    }
+    .produit-prix { 
+      color: #e60000; 
+      font-weight: bold; 
+      font-size: 1.2rem;
+    }
+    
+    .quantite-controls { 
+      display: flex; 
+      align-items: center; 
+      gap: 10px; 
+    }
+    .quantite-btn {
+      background: #f0f0f0;
+      border: 1px solid #ddd;
+      width: 35px;
+      height: 35px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    .quantite-btn:hover:not(:disabled) {
+      background: #e0e0e0;
+    }
+    .quantite-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .quantite-input {
+      width: 60px;
+      text-align: center;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      -moz-appearance: textfield;
+    }
+    .quantite-input::-webkit-outer-spin-button,
+    .quantite-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    
     .total-section { 
       background: #f9f9f9; 
       padding: 20px; 
@@ -35,44 +104,87 @@
       border-radius: 4px;
       cursor: pointer;
       display: inline-block;
-    }
-    .btn-danger { background: #dc3545; }
-    .btn-success { background: #28a745; }
-    .empty-cart { text-align: center; padding: 40px; }
-    .commande-form { margin-top: 20px; padding: 20px; background: #f0f8ff; border-radius: 8px; }
-
-    /* Modal pour images agrandies */
-    .modal-image {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.9);
-      justify-content: center;
-      align-items: center;
-    }
-    .modal-image-content {
-      max-width: 90%;
-      max-height: 90%;
-      border-radius: 8px;
-    }
-    .close-modal {
-      position: absolute;
-      top: 20px;
-      right: 35px;
-      color: white;
-      font-size: 40px;
       font-weight: bold;
-      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .btn-danger { 
+      background: #dc3545; 
+    }
+    .btn-danger:hover:not(:disabled) {
+      background: #c82333;
+    }
+    .btn-success { 
+      background: #28a745; 
+    }
+    .btn-success:hover:not(:disabled) {
+      background: #218838;
+    }
+    .empty-cart { 
+      text-align: center; 
+      padding: 40px; 
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .commande-form { 
+      margin-top: 20px; 
+      padding: 20px; 
+      background: #f0f8ff; 
+      border-radius: 8px; 
+    }
+
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #28a745;
+      color: white;
+      padding: 15px 20px;
+      border-radius: 5px;
+      z-index: 1001;
+      display: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      font-weight: 500;
+    }
+
+    .notification.error {
+      background: #dc3545;
+    }
+
+    .sous-total {
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: #333;
+    }
+
+    .stock-info {
+      font-size: 0.9em;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    .produit-vendeur {
+      color: #666;
+      font-size: 0.9em;
+      margin-top: 5px;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>🛒 Mon Panier</h1>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
 
     <!-- Section Panier -->
     <% if (panier.length === 0) { %>
@@ -81,7 +193,6 @@
         <p>Découvrez nos produits et ajoutez-les à votre panier !</p>
         
         <% 
-        // DÉTERMINATION INTELLIGENTE DE L'URL DE RETOUR
         let returnUrl = '/';
         if (slug) {
             returnUrl = `/boutique/${slug}`;
@@ -90,59 +201,87 @@
         }
         %>
         
-        <a href="<%= returnUrl %>" class="btn">← Retour à l'accueil</a>
+        <a href="<%= returnUrl %>" class="btn">← Retour à la boutique</a>
       </div>
     <% } else { %>
 
       <div class="panier-items">
         <% panier.forEach(item => { %>
-          <div class="panier-item">
-            <% if (item.produit && item.produit.image) { %>
-              <img src="<%= item.produit.image %>" alt="<%= item.produit.nom %>" class="produit-image">
+          <div class="panier-item" id="panier-item-<%= item.produit ? item.produit._id : '' %>">
+            <% 
+              let imageUrl = '';
+              let produitNom = 'Produit non disponible';
+              let produitPrix = 0;
+              let produitDevise = 'EUR';
+              let produitStock = 10;
+              let vendeurNom = 'N/A';
+              
+              if (item.produit) {
+                produitNom = item.produit.nom || 'Produit';
+                produitPrix = item.produit.prix || 0;
+                produitDevise = item.produit.devise || 'EUR';
+                produitStock = parseInt(item.produit.stock) || 10;
+                vendeurNom = item.produit.vendeur ? item.produit.vendeur.nom : 'N/A';
+                
+                if (item.produit.image) {
+                  imageUrl = item.produit.image;
+                } else if (item.produit.imagesGallery && item.produit.imagesGallery.length > 0) {
+                  imageUrl = item.produit.imagesGallery[0].url;
+                }
+              }
+            %>
+            
+            <% if (imageUrl) { %>
+              <img src="<%= imageUrl %>" alt="<%= produitNom %>" class="produit-image">
+            <% } else { %>
+              <div class="placeholder-image">
+                <i class="fas fa-image"></i>
+              </div>
             <% } %>
             
             <div class="produit-info">
-              <div class="produit-nom">
-                <%= item.produit ? item.produit.nom : 'Produit non disponible' %>
-              </div>
-              <div class="produit-prix">
-                <%= item.produit ? item.produit.prix : '0' %> <%= item.produit ? item.produit.devise : '' %>
-              </div>
-              <div class="produit-vendeur">
-                Vendeur: <%= item.produit && item.produit.vendeur ? item.produit.vendeur.nom : 'N/A' %>
+              <div class="produit-nom"><%= produitNom %></div>
+              <div class="produit-prix"><%= produitPrix %> <%= produitDevise %></div>
+              <div class="produit-vendeur">Vendeur: <%= vendeurNom %></div>
+              <div class="stock-info" id="stock-<%= item.produit ? item.produit._id : '' %>">
+                Stock disponible: <%= produitStock %>
               </div>
             </div>
 
+            <!-- Contrôles de quantité -->
             <div class="quantite-controls">
-              <span>Quantité: <%= item.quantite %></span>
+              <button class="quantite-btn" onclick="changeQuantity('<%= item.produit ? item.produit._id : '' %>', -1)">-</button>
+              <input 
+                type="number" 
+                id="quantite-<%= item.produit ? item.produit._id : '' %>" 
+                value="<%= item.quantite %>" 
+                min="1" 
+                max="<%= produitStock %>" 
+                class="quantite-input"
+                onchange="updateQuantity('<%= item.produit ? item.produit._id : '' %>', this.value)"
+              >
+              <button class="quantite-btn" onclick="changeQuantity('<%= item.produit ? item.produit._id : '' %>', 1)">+</button>
             </div>
 
-            <div class="sous-total">
-              <strong>
-                <%= item.produit ? (item.produit.prix * item.quantite).toFixed(2) : '0.00' %> 
-                <%= item.produit ? item.produit.devise : '' %>
-              </strong>
+            <div class="sous-total" id="sous-total-<%= item.produit ? item.produit._id : '' %>">
+              <strong><%= (produitPrix * item.quantite).toFixed(2) %> <%= produitDevise %></strong>
             </div>
 
-            <% if (item.produit) { %>
-              <form action="/panier/supprimer/<%= item.produit._id %>" method="POST" style="display: inline;">
-                <button type="submit" class="btn btn-danger">🗑 Supprimer</button>
-              </form>
-            <% } %>
+            <button type="button" class="btn btn-danger" onclick="supprimerDuPanier('<%= item.produit ? item.produit._id : '' %>')">
+              🗑 Supprimer
+            </button>
           </div>
         <% }) %>
       </div>
 
       <div class="total-section">
-        <h2>
-          Total: 
-          <% if (typeof total !== 'undefined') { %>
-            <%= total.toFixed(2) %> 
-          <% } else { %>
-            0.00
-          <% } %>
-          <%= panier[0] && panier[0].produit ? panier[0].produit.devise : '' %>
+        <h2 id="total-panier">
+          Total: <%= typeof total !== 'undefined' ? total.toFixed(2) : '0.00' %>
+          <%= panier[0] && panier[0].produit ? (panier[0].produit.devise || 'EUR') : 'EUR' %>
         </h2>
+        <div id="total-articles" style="font-size: 0.9em; color: #666;">
+          <%= panier.reduce((total, item) => total + item.quantite, 0) %> article(s)
+        </div>
       </div>
 
       <!-- Formulaire de commande -->
@@ -151,22 +290,21 @@
         <form action="/commandes/valider" method="POST">
           <div style="margin-bottom: 15px;">
             <label><strong>Nom complet :</strong></label><br>
-            <input type="text" name="nom" required style="width: 100%; padding: 10px; margin-top: 5px;" placeholder="Votre nom complet">
+            <input type="text" name="nom" required style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px;">
           </div>
           
           <div style="margin-bottom: 15px;">
-            <label><strong>Téléphone (WhatsApp) :</strong></label><br>
-            <input type="text" name="telephone" required style="width: 100%; padding: 10px; margin-top: 5px;" placeholder="Votre numéro WhatsApp">
+            <label><strong>Téléphone :</strong></label><br>
+            <input type="text" name="telephone" required style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px;">
           </div>
           
           <div style="margin-bottom: 20px;">
-            <label><strong>Adresse de livraison :</strong></label><br>
-            <textarea name="adresse" required rows="3" style="width: 100%; padding: 10px; margin-top: 5px;" placeholder="Votre adresse complète de livraison"></textarea>
+            <label><strong>Adresse :</strong></label><br>
+            <textarea name="adresse" required rows="3" style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px;"></textarea>
           </div>
 
           <div style="display: flex; gap: 10px;">
             <% 
-            // DÉTERMINATION INTELLIGENTE DE L'URL POUR CONTINUER LES ACHATS
             let continueShoppingUrl = '/';
             if (slug) {
                 continueShoppingUrl = `/boutique/${slug}`;
@@ -177,49 +315,166 @@
             }
             %>
             
-            <a href="<%= continueShoppingUrl %>" class="btn">← Continuer mes achats</a>
+            <a href="<%= continueShoppingUrl %>" class="btn" style="background: #6c757d;">← Continuer mes achats</a>
             <button type="submit" class="btn btn-success">✅ Valider ma commande</button>
           </div>
         </form>
       </div>
 
     <% } %>
-
   </div>
 
-  <!-- Modal pour images agrandies -->
-  <div id="imageModal" class="modal-image">
-    <span class="close-modal" onclick="fermerModal()">&times;</span>
-    <img class="modal-image-content" id="modalImage">
-  </div>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
   <script>
-    // Fonctions pour les images
-    function agrandirImage(element) {
-      const modal = document.getElementById('imageModal');
-      const modalImg = document.getElementById('modalImage');
-      modal.style.display = 'flex';
-      modalImg.src = element.src;
-      modalImg.alt = element.alt;
+    // Fonction pour afficher les notifications
+    function showNotification(message, type = 'success') {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.className = 'notification' + (type === 'error' ? ' error' : '');
+      notification.style.display = 'block';
+      
+      setTimeout(() => {
+        notification.style.display = 'none';
+      }, 3000);
     }
 
-    function fermerModal() {
-      const modal = document.getElementById('imageModal');
-      modal.style.display = 'none';
+    // Changer la quantité avec les boutons +/-
+    function changeQuantity(produitId, change) {
+      const input = document.getElementById(`quantite-${produitId}`);
+      if (!input) return;
+      
+      let value = parseInt(input.value) + change;
+      const max = parseInt(input.max) || 999;
+      const min = parseInt(input.min) || 1;
+      
+      if (value < min) value = min;
+      if (value > max) value = max;
+      
+      input.value = value;
+      
+      // Mettre à jour automatiquement la quantité
+      updateQuantity(produitId, value);
     }
 
-    // Fermer le modal en cliquant à l'extérieur
-    document.getElementById('imageModal').addEventListener('click', function(e) {
-      if (e.target === this) {
-        fermerModal();
-      }
-    });
+    // Mettre à jour la quantité via AJAX
+    async function updateQuantity(produitId, nouvelleQuantite) {
+      try {
+        const response = await fetch(`/panier/modifier-quantite/${produitId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: `quantite=${nouvelleQuantite}`
+        });
 
-    // Fermer le modal avec la touche Échap
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        fermerModal();
+        const data = await response.json();
+
+        if (data.success) {
+          // Mettre à jour le sous-total
+          const sousTotalElement = document.getElementById(`sous-total-${produitId}`);
+          if (sousTotalElement && data.sousTotal !== undefined) {
+            sousTotalElement.innerHTML = `<strong>${data.sousTotal.toFixed(2)} ${data.devise || 'EUR'}</strong>`;
+          }
+
+          // Mettre à jour le total du panier
+          const totalPanierElement = document.getElementById('total-panier');
+          if (totalPanierElement && data.totalPanier !== undefined) {
+            totalPanierElement.innerHTML = `Total: ${data.totalPanier.toFixed(2)} ${data.devise || 'EUR'}`;
+          }
+
+          // Mettre à jour le nombre d'articles
+          const totalArticlesElement = document.getElementById('total-articles');
+          if (totalArticlesElement && data.totalArticles !== undefined) {
+            totalArticlesElement.textContent = `${data.totalArticles} article(s)`;
+          }
+
+          // Mettre à jour le stock affiché
+          const stockElement = document.getElementById(`stock-${produitId}`);
+          if (stockElement && data.stockRestant !== undefined) {
+            stockElement.textContent = `Stock disponible: ${data.stockRestant}`;
+            
+            // Mettre à jour la quantité maximale
+            const quantiteInput = document.getElementById(`quantite-${produitId}`);
+            if (quantiteInput) {
+              quantiteInput.max = data.stockRestant;
+            }
+          }
+
+          showNotification('✅ Quantité mise à jour');
+          
+        } else {
+          showNotification('❌ ' + data.message, 'error');
+        }
+      } catch (error) {
+        console.error('Erreur:', error);
+        showNotification('❌ Erreur de connexion', 'error');
       }
+    }
+
+    // Supprimer un produit du panier
+    async function supprimerDuPanier(produitId) {
+      if (!confirm('Êtes-vous sûr de vouloir supprimer ce produit du panier ?')) {
+        return;
+      }
+
+      try {
+        const response = await fetch(`/panier/supprimer/${produitId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          // Supprimer l'élément du DOM
+          const element = document.getElementById(`panier-item-${produitId}`);
+          if (element) {
+            element.remove();
+          }
+          
+          showNotification('✅ Produit supprimé du panier');
+          
+          // Recharger la page si le panier est vide
+          setTimeout(() => {
+            if (document.querySelectorAll('.panier-item').length === 0) {
+              location.reload();
+            }
+          }, 1000);
+        } else {
+          showNotification('❌ ' + data.message, 'error');
+        }
+      } catch (error) {
+        console.error('Erreur:', error);
+        showNotification('❌ Erreur de connexion', 'error');
+      }
+    }
+
+    // Gestion de la saisie manuelle
+    document.addEventListener('DOMContentLoaded', function() {
+      const quantityInputs = document.querySelectorAll('.quantite-input');
+      quantityInputs.forEach(input => {
+        input.addEventListener('blur', function() {
+          const produitId = this.id.replace('quantite-', '');
+          const value = parseInt(this.value);
+          const max = parseInt(this.max) || 999;
+          const min = parseInt(this.min) || 1;
+          
+          if (value < min) {
+            this.value = min;
+          } else if (value > max) {
+            this.value = max;
+          }
+        });
+        
+        input.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            const produitId = this.id.replace('quantite-', '');
+            updateQuantity(produitId, this.value);
+          }
+        });
+      });
     });
   </script>
 </body>

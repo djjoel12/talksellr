@@ -39,7 +39,7 @@
       position: relative; 
     }
 
-    /* Header Louis Vuitton */
+    /* Header */
     header {
       background: var(--lv-white);
       border-bottom: 1px solid var(--lv-border);
@@ -122,7 +122,7 @@
       justify-content: center;
     }
 
-    /* Détail Produit LV */
+    /* Détail Produit */
     .produit-detail { 
       display: grid; 
       grid-template-columns: 1fr 1fr;
@@ -142,19 +142,46 @@
       object-fit: cover;
       border-radius: 0;
       margin-bottom: 1rem;
+      transition: opacity 0.3s ease;
     }
 
-    .gallery-badge {
-      position: absolute;
-      top: 1rem;
-      left: 1rem;
-      background: var(--lv-gold);
+    .placeholder-image {
+      width: 100%;
+      height: 600px;
+      background: var(--lv-beige);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       color: var(--lv-dark);
-      padding: 0.5rem 1rem;
-      font-size: 0.7rem;
-      font-weight: 500;
+      opacity: 0.5;
+      font-size: 0.8rem;
       letter-spacing: 1px;
-      text-transform: uppercase;
+      border: 1px solid var(--lv-border);
+    }
+
+    .gallery-thumbnails {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .thumbnail {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+      opacity: 0.7;
+    }
+
+    .thumbnail:hover,
+    .thumbnail.active {
+      opacity: 1;
+      border-color: var(--lv-gold);
+      transform: scale(1.05);
     }
 
     /* Informations Produit */
@@ -197,7 +224,7 @@
       opacity: 0.8;
     }
 
-    /* Sélecteur Quantité LV */
+    /* Sélecteur Quantité */
     .quantite-selector { 
       margin: 2rem 0; 
       display: flex;
@@ -229,9 +256,14 @@
       font-size: 1rem;
     }
 
-    .quantite-btn:hover {
+    .quantite-btn:hover:not(:disabled) {
       background: var(--lv-gold);
       color: var(--lv-dark);
+    }
+
+    .quantite-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
     .quantite-input {
@@ -250,7 +282,7 @@
       margin: 0;
     }
 
-    /* Boutons LV */
+    /* Boutons */
     .btn { 
       display: inline-flex;
       align-items: center;
@@ -277,23 +309,18 @@
       color: var(--lv-white);
     }
 
-    .btn-primary:hover { 
+    .btn-primary:hover:not(:disabled) { 
       background: var(--lv-gold); 
       border-color: var(--lv-gold);
       color: var(--lv-dark);
       transform: translateY(-2px);
     }
 
-    .btn-outline {
-      background: transparent;
-      color: var(--lv-dark);
-      border: 2px solid var(--lv-dark);
-    }
-
-    .btn-outline:hover {
-      background: var(--lv-dark);
-      color: var(--lv-white);
-      transform: translateY(-2px);
+    .btn-primary:disabled {
+      background: #ccc;
+      border-color: #ccc;
+      cursor: not-allowed;
+      transform: none;
     }
 
     .btn-whatsapp {
@@ -358,295 +385,29 @@
       color: var(--lv-dark);
     }
 
-    .vendeur-boutique {
-      font-size: 1rem;
-      color: var(--lv-gold);
-      margin-bottom: 1rem;
-      font-weight: 300;
-      letter-spacing: 1px;
-    }
-
     .vendeur-contact {
       font-size: 0.9rem;
       color: var(--lv-text);
       opacity: 0.8;
     }
 
-    /* Produits Similaires LV */
-    .produits-similaires { 
-      margin-top: 6rem; 
-      padding-top: 4rem; 
-      border-top: 1px solid var(--lv-border); 
-    }
-
-    .section-title {
-      text-align: center; 
-      margin-bottom: 3rem; 
-      font-size: 2rem;
-      font-weight: 300;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--lv-dark);
-      position: relative;
-    }
-
-    .section-title::after {
-      content: '';
-      position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60px;
-      height: 1px;
-      background: var(--lv-gold);
-    }
-
-    .produits-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-      margin-top: 2rem;
-    }
-
-    .produit-card {
-      background: var(--lv-white);
-      border: 1px solid var(--lv-border);
-      transition: all 0.4s var(--transition-luxe);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .produit-card:hover {
-      transform: translateY(-8px);
-      border-color: var(--lv-gold);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-    }
-
-    .produit-card-image {
-      height: 250px; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center;
-      overflow: hidden;
-      background: var(--lv-beige);
-    }
-
-    .produit-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover; 
-      transition: transform 0.6s var(--transition-luxe);
-    }
-
-    .produit-card:hover img {
-      transform: scale(1.05);
-    }
-
-    .produit-card-content {
-      padding: 1.5rem;
-    }
-
-    .produit-card h3 {
-      font-size: 1rem; 
-      margin: 0 0 0.5rem 0; 
-      color: var(--lv-dark); 
-      font-weight: 400;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      line-height: 1.3;
-    }
-
-    .produit-card-prix {
-      font-size: 1.1rem;
-      font-weight: 300;
-      color: var(--lv-dark);
-      margin: 0.5rem 0;
-      letter-spacing: 1px;
-    }
-
-    .produit-card-boutique {
-      font-size: 0.8rem;
-      color: var(--lv-gold);
-      margin-bottom: 1rem;
-      font-weight: 300;
-      letter-spacing: 0.5px;
-    }
-
-    .produit-card-actions {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .btn-card {
-      flex: 1;
-      padding: 0.8rem 1rem;
-      font-size: 0.7rem;
-      text-align: center;
-    }
-
-    .placeholder-image {
-      width: 100%;
-      height: 100%;
-      background: var(--lv-beige);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--lv-dark);
-      opacity: 0.5;
-      font-size: 0.8rem;
-      letter-spacing: 1px;
-    }
-
-    /* Panier Latéral LV */
-    .panier-lateral {
+    /* Notification */
+    .notification {
       position: fixed;
-      top: 0;
-      right: -400px;
-      width: 380px;
-      height: 100vh;
-      background: var(--lv-white);
-      border-left: 1px solid var(--lv-border);
-      box-shadow: -5px 0 30px rgba(0,0,0,0.1);
-      z-index: 1001;
-      transition: right 0.4s var(--transition-luxe);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .panier-lateral.open {
-      right: 0;
-    }
-
-    .panier-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 2rem;
-      border-bottom: 1px solid var(--lv-border);
-      background: var(--lv-dark);
-      color: var(--lv-white);
-    }
-
-    .panier-title {
-      font-size: 1.2rem;
-      font-weight: 300;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-
-    .btn-close-panier {
-      background: none;
-      border: none;
-      color: var(--lv-white);
-      font-size: 1.5rem;
-      cursor: pointer;
-      padding: 0.5rem;
-      transition: color 0.3s ease;
-    }
-
-    .btn-close-panier:hover {
-      color: var(--lv-gold);
-    }
-
-    .panier-content {
-      flex: 1;
-      overflow-y: auto;
-      padding: 2rem;
-    }
-
-    .panier-item {
-      display: flex;
-      align-items: center;
-      padding: 1rem 0;
-      border-bottom: 1px solid var(--lv-border);
-      gap: 1rem;
-    }
-
-    .panier-item-image {
-      width: 60px;
-      height: 60px;
-      object-fit: cover;
-      flex-shrink: 0;
-    }
-
-    .panier-item-info {
-      flex: 1;
-    }
-
-    .panier-item-nom {
-      font-size: 0.9rem;
-      font-weight: 400;
-      margin-bottom: 0.3rem;
-      color: var(--lv-dark);
-    }
-
-    .panier-item-details {
-      font-size: 0.8rem;
-      color: var(--lv-text);
-      opacity: 0.7;
-    }
-
-    .panier-item-prix {
-      color: var(--lv-dark);
+      top: 20px;
+      right: 20px;
+      background: #28a745;
+      color: white;
+      padding: 15px 20px;
+      border-radius: 5px;
+      z-index: 10000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       font-weight: 500;
+      display: none;
     }
 
-    .panier-footer {
-      padding: 2rem;
-      border-top: 1px solid var(--lv-border);
-      background: var(--lv-beige);
-    }
-
-    .panier-total {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-      font-size: 1.1rem;
-      font-weight: 500;
-    }
-
-    .panier-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-    }
-
-    .btn-panier {
-      width: 100%;
-      text-align: center;
-    }
-
-    .empty-panier {
-      text-align: center;
-      padding: 3rem 2rem;
-      color: var(--lv-text);
-      opacity: 0.6;
-    }
-
-    .empty-panier i {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      opacity: 0.3;
-    }
-
-    /* Overlay */
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 1000;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-    }
-
-    .overlay.active {
-      opacity: 1;
-      visibility: visible;
+    .notification.error {
+      background: #dc3545;
     }
 
     /* Responsive */
@@ -676,290 +437,137 @@
         width: 100%;
         justify-content: center;
       }
-
-      .produits-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .panier-lateral {
-        width: 100%;
-        right: -100%;
-      }
-
-      .nav-links {
-        display: none;
-      }
     }
   </style>
 </head>
 <body>
+  <%
+  const safePanierCount = typeof panierCount !== 'undefined' ? panierCount : 0;
+  const stockProduit = parseInt(produit.stock) || 10;
+  const prixProduit = parseFloat(produit.prix) || 0;
+  const deviseProduit = produit.devise || 'EUR';
+  %>
+
+  <!-- Notification -->
+  <div class="notification" id="notification"></div>
+
   <!-- Header -->
   <header>
     <div class="header-container">
-      <a href="/" class="logo"><%= boutique.nom %></a>
+      <a href="/boutique/<%= produit.boutique.slug %>" class="logo"><%= boutique.nom %></a>
       
       <nav class="nav-links">
-        <a href="/">ACCUEIL</a>
-        <a href="#produits-similaires">PRODUITS SIMILAIRES</a>
         <a href="/boutique/<%= produit.boutique.slug %>">BOUTIQUE</a>
         <a href="/contact">CONTACT</a>
       </nav>
       
       <div class="header-actions">
-        <button class="icon-btn">
-          <i class="fas fa-search"></i>
-        </button>
-        <button class="icon-btn" onclick="togglePanier()" style="position: relative;">
+        <a href="/panier" class="icon-btn" style="position: relative;">
           <i class="fas fa-shopping-bag"></i>
-          <% if (panier && panier.length > 0) { %>
-            <span class="cart-badge"><%= panier.reduce((total, item) => total + item.quantite, 0) %></span>
+          <% if (safePanierCount > 0) { %>
+            <span class="cart-badge"><%= safePanierCount %></span>
           <% } %>
-        </button>
-        <button class="icon-btn">
-          <i class="fas fa-user"></i>
-        </button>
+        </a>
       </div>
     </div>
   </header>
 
-  <!-- Overlay -->
-  <div class="overlay" id="overlay" onclick="togglePanier()"></div>
-
-  <!-- Panier Latéral -->
-  <div class="panier-lateral" id="panierLateral">
-    <div class="panier-header">
-      <h3 class="panier-title">MON PANIER</h3>
-      <button class="btn-close-panier" onclick="togglePanier()">×</button>
-    </div>
-    
-    <div class="panier-content">
-      <% if (!panier || panier.length === 0) { %>
-        <div class="empty-panier">
-          <i class="fas fa-shopping-bag"></i>
-          <p>Votre panier est vide</p>
-          <p style="font-size: 0.9em; margin-top: 0.5rem; opacity: 0.6;">Ajoutez des produits pour les voir ici</p>
-        </div>
-      <% } else { %>
-        <% 
-        let totalArticles = 0;
-        panier.forEach((item, index) => { 
-          totalArticles += item.quantite;
-        %>
-          <div class="panier-item">
-            <% if (item.produit && item.produit.image) { %>
-              <img src="<%= item.produit.image %>" alt="<%= item.produit.nom %>" class="panier-item-image">
-            <% } else { %>
-              <div class="placeholder-image" style="width: 60px; height: 60px; font-size: 0.6em;">
-                IMG
-              </div>
-            <% } %>
-            
-            <div class="panier-item-info">
-              <div class="panier-item-nom">
-                <%= item.produit ? item.produit.nom.substring(0, 30) + (item.produit.nom.length > 30 ? '...' : '') : 'Produit' %>
-              </div>
-              <div class="panier-item-details">
-                <%= item.quantite %> × 
-                <span class="panier-item-prix">
-                  <%= item.produit ? item.produit.prix : '0' %> <%= item.produit ? item.produit.devise : 'EUR' %>
-                </span>
-              </div>
-            </div>
-            
-            <form action="/panier/supprimer/<%= item.produit ? item.produit._id : '' %>" method="POST" style="margin: 0;">
-              <button type="submit" style="background: none; border: none; color: #dc3545; cursor: pointer; padding: 5px;" title="Supprimer">
-                <i class="fas fa-trash"></i>
-              </button>
-            </form>
-          </div>
-        <% }) %>
-      <% } %>
-    </div>
-    
-    <% if (panier && panier.length > 0) { %>
-      <div class="panier-footer">
-        <div class="panier-total">
-          <span>Total:</span>
-          <strong><%= totalPanier.toFixed(2) %> <%= panier[0] && panier[0].produit ? panier[0].produit.devise : 'EUR' %></strong>
-        </div>
-        <div style="text-align: center; font-size: 0.8em; color: var(--lv-text); opacity: 0.7; margin-bottom: 1rem;">
-          <%= totalArticles %> article(s)
-        </div>
-        <div class="panier-actions">
-          <a href="/panier" class="btn btn-outline btn-panier">Voir le panier complet</a>
-          <a href="/commandes/valider" class="btn btn-primary btn-panier">Passer la commande</a>
-        </div>
-      </div>
-    <% } %>
-  </div>
-
   <div class="container">
-    <!-- Détails du produit principal -->
     <div class="produit-detail">
       <div class="produit-gallery">
-        <!-- Image principale -->
-        <img src="<%= produit.image %>" alt="<%= produit.nom %>" class="gallery-main">
+        <% 
+          let mainImage = '';
+          if (produit.image) {
+            mainImage = produit.image;
+          } else if (produit.imagesGallery && produit.imagesGallery.length > 0) {
+            mainImage = produit.imagesGallery[0].url;
+          }
+        %>
         
-        <!-- Badge -->
-        <div class="gallery-badge">NOUVEAU</div>
-
-        <!-- Vidéo du produit -->
-        <% if (produit.videoUrl) { %>
-          <div style="margin-top: 2rem;">
-            <video controls width="100%" style="border: 1px solid var(--lv-border);">
-              <source src="<%= produit.videoUrl %>" type="video/mp4">
-              Votre navigateur ne supporte pas la vidéo.
-            </video>
+        <% if (mainImage) { %>
+          <img src="<%= mainImage %>" alt="<%= produit.nom %>" class="gallery-main">
+        <% } else { %>
+          <div class="placeholder-image">
+            <i class="fas fa-image fa-3x"></i>
+            <span style="margin-top: 10px;">Image non disponible</span>
           </div>
         <% } %>
       </div>
       
       <div class="produit-info">
-        <div class="produit-category">COLLECTION EXCLUSIVE</div>
+        <div class="produit-category">PRODUIT</div>
         <h1 class="produit-nom"><%= produit.nom %></h1>
-        <div class="produit-prix"><%= produit.prix %> <%= produit.devise %></div>
+        <div class="produit-prix"><%= prixProduit %> <%= deviseProduit %></div>
         
         <!-- Informations stock -->
         <div class="stock-info">
           <div class="stock-status">
             <strong>Disponibilité :</strong> 
-            <% if (produit.stock > 10) { %>
-              <span class="stock-available">✓ En stock</span>
-            <% } else if (produit.stock > 0) { %>
-              <span class="stock-low">⚠ Stock limité (<%= produit.stock %> restants)</span>
+            <% if (stockProduit > 10) { %>
+              <span class="stock-available">✓ En stock (<%= stockProduit %> disponibles)</span>
+            <% } else if (stockProduit > 0) { %>
+              <span class="stock-low">⚠ Stock limité (<%= stockProduit %> restants)</span>
             <% } else { %>
               <span class="stock-out">✗ Rupture de stock</span>
             <% } %>
           </div>
-          <% if (produit.sku) { %>
-            <div style="margin-top: 0.5rem; font-size: 0.9em; color: var(--lv-text); opacity: 0.7;">
-              Référence: <%= produit.sku %>
-            </div>
-          <% } %>
         </div>
         
         <div class="produit-description">
           <%= produit.description %>
         </div>
 
-        <!-- Formulaire d'ajout au panier -->
-        <form action="/panier/ajouter/<%= produit._id %>" method="POST" id="form-ajout-panier">
-          <div class="quantite-selector">
-            <span class="quantite-label">Quantité:</span>
-            <div class="quantite-controls">
-              <button type="button" class="quantite-btn" onclick="changeQuantity(-1)">-</button>
-              <input type="number" name="quantite" id="quantite" value="1" min="1" max="<%= produit.stock || 10 %>" class="quantite-input">
-              <button type="button" class="quantite-btn" onclick="changeQuantity(1)">+</button>
-            </div>
+        <!-- Sélecteur de quantité -->
+        <div class="quantite-selector">
+          <span class="quantite-label">Quantité:</span>
+          <div class="quantite-controls">
+            <button type="button" class="quantite-btn" onclick="changeQuantity(-1)" 
+                    <%= stockProduit === 0 ? 'disabled' : '' %>>-</button>
+            <input type="number" id="quantite" value="1" min="1" max="<%= stockProduit %>" class="quantite-input"
+                   <%= stockProduit === 0 ? 'disabled' : '' %>>
+            <button type="button" class="quantite-btn" onclick="changeQuantity(1)" 
+                    <%= stockProduit === 0 ? 'disabled' : '' %>>+</button>
           </div>
-          
-          <div class="action-buttons">
-            <button type="submit" class="btn btn-primary" 
-                    <%= produit.stock === 0 ? 'disabled style="background: #ccc; border-color: #ccc;"' : '' %>>
+        </div>
+        
+        <div class="action-buttons">
+          <!-- Bouton ajouter au panier -->
+          <% if (stockProduit > 0) { %>
+            <button type="button" class="btn btn-primary" onclick="ajouterAuPanier()" id="btn-ajouter">
               <i class="fas fa-shopping-bag"></i>
-              <%= produit.stock === 0 ? 'RUPTURE DE STOCK' : 'AJOUTER AU PANIER' %>
+              AJOUTER AU PANIER
             </button>
+          <% } else { %>
+            <button type="button" class="btn btn-primary" disabled>
+              <i class="fas fa-times-circle"></i>
+              RUPTURE DE STOCK
+            </button>
+          <% } %>
 
-            <!-- Lien direct WhatsApp -->
-            <% if (produit.vendeur.telephone) { %>
-              <a href="https://wa.me/<%= produit.vendeur.telephone.replace(/\D/g, '') %>?text=Bonjour! Je suis intéressé par le produit: <%= encodeURIComponent(produit.nom) %> (<%= encodeURIComponent(produit.prix + ' ' + produit.devise) %>)" 
-                 target="_blank" 
-                 class="btn btn-whatsapp">
-                <i class="fab fa-whatsapp"></i>
-                CONTACTER
-              </a>
-            <% } %>
-          </div>
-        </form>
-
-        <!-- Informations vendeur -->
-        <div class="vendeur-info">
-          <div class="vendeur-name"><%= produit.vendeur.nom %></div>
-          <div class="vendeur-boutique"><%= produit.boutique.nom %></div>
-          <% if (produit.vendeur.telephone) { %>
-            <div class="vendeur-contact">
-              <i class="fas fa-phone"></i> <%= produit.vendeur.telephone %>
-            </div>
+          <!-- Lien WhatsApp -->
+          <% if (produit.vendeur && produit.vendeur.telephone) { %>
+            <a href="https://wa.me/<%= produit.vendeur.telephone.replace(/\D/g, '') %>?text=Bonjour! Je suis intéressé par le produit: <%= encodeURIComponent(produit.nom) %> (<%= encodeURIComponent(prixProduit + ' ' + deviseProduit) %>)" 
+               target="_blank" 
+               class="btn btn-whatsapp">
+              <i class="fab fa-whatsapp"></i>
+              CONTACTER
+            </a>
           <% } %>
         </div>
+
+        <!-- Informations vendeur -->
+        <% if (produit.vendeur) { %>
+          <div class="vendeur-info">
+            <div class="vendeur-name"><%= produit.vendeur.nom %></div>
+            <% if (produit.vendeur.telephone) { %>
+              <div class="vendeur-contact">
+                <i class="fas fa-phone"></i> <%= produit.vendeur.telephone %>
+              </div>
+            <% } %>
+          </div>
+        <% } %>
       </div>
     </div>
-
-    <!-- Section : Autres produits du vendeur -->
-    <% if (typeof produitsVendeur !== 'undefined' && produitsVendeur.length > 0) { %>
-      <div class="produits-similaires" id="produits-similaires">
-        <h2 class="section-title">
-          AUTRES PRODUITS DE <%= produit.vendeur.nom.toUpperCase() %>
-        </h2>
-        
-        <div class="produits-grid">
-          <% produitsVendeur.forEach(produitSimilaire => { %>
-            <div class="produit-card">
-              <a href="/boutique/produit/<%= produitSimilaire._id %>" style="text-decoration: none; color: inherit;">
-                <div class="produit-card-image">
-                  <% if (produitSimilaire.image) { %>
-                    <img src="<%= produitSimilaire.image %>" 
-                         alt="<%= produitSimilaire.nom %>">
-                  <% } else { %>
-                    <div class="placeholder-image">
-                      <i class="fas fa-image"></i>
-                    </div>
-                  <% } %>
-                </div>
-                
-                <div class="produit-card-content">
-                  <h3><%= produitSimilaire.nom %></h3>
-                  
-                  <div class="produit-card-prix">
-                    <%= produitSimilaire.prix %> <%= produitSimilaire.devise %>
-                  </div>
-                  
-                  <% if (produitSimilaire.boutique && produitSimilaire.boutique.nom) { %>
-                    <div class="produit-card-boutique">
-                      <%= produitSimilaire.boutique.nom %>
-                    </div>
-                  <% } %>
-                  
-                  <div class="produit-card-actions">
-                    <a href="/boutique/produit/<%= produitSimilaire._id %>" class="btn btn-outline btn-card">
-                      VOIR
-                    </a>
-                    <form action="/panier/ajouter/<%= produitSimilaire._id %>" method="POST" style="flex: 1;">
-                      <input type="hidden" name="quantite" value="1">
-                      <button type="submit" class="btn btn-primary btn-card">
-                        <i class="fas fa-shopping-bag"></i>
-                      </button>
-                    </form>
-                  </div>
-                </div>
-              </a>
-            </div>
-          <% }); %>
-        </div>
-        
-        <!-- Lien vers toute la boutique -->
-        <div style="text-align: center; margin-top: 3rem;">
-          <a href="/boutique/<%= produit.boutique.slug %>" class="btn btn-outline">
-            <i class="fas fa-store"></i>
-            VISITER LA BOUTIQUE <%= produit.boutique.nom.toUpperCase() %>
-          </a>
-        </div>
-      </div>
-    <% } else { %>
-      <!-- Message si aucun autre produit du vendeur -->
-      <div class="produits-similaires">
-        <h2 class="section-title">
-          DÉCOUVREZ NOTRE UNIVERS
-        </h2>
-        <div style="text-align: center; color: var(--lv-text); opacity: 0.6; padding: 3rem;">
-          <p>Ce vendeur n'a pas d'autres produits pour le moment.</p>
-          <a href="/boutique/<%= produit.boutique.slug %>" class="btn btn-outline" style="margin-top: 1.5rem;">
-            <i class="fas fa-store"></i>
-            DÉCOUVRIR LA BOUTIQUE
-          </a>
-        </div>
-      </div>
-    <% } %>
   </div>
 
   <script>
@@ -976,206 +584,81 @@
       input.value = value;
     }
 
-    // Gestion du panier latéral
-    function togglePanier() {
-      const panier = document.getElementById('panierLateral');
-      const overlay = document.getElementById('overlay');
+    // Fonction pour ajouter au panier
+    async function ajouterAuPanier() {
+      const quantite = document.getElementById('quantite').value;
+      const btnAjouter = document.getElementById('btn-ajouter');
       
-      panier.classList.toggle('open');
-      overlay.classList.toggle('active');
-      
-      // Empêcher le défilement du body quand le panier est ouvert
-      document.body.style.overflow = panier.classList.contains('open') ? 'hidden' : '';
+      if (!quantite || quantite < 1) {
+        showNotification('Veuillez sélectionner une quantité valide', 'error');
+        return;
+      }
+
+      // Désactiver le bouton pendant la requête
+      btnAjouter.disabled = true;
+      const originalText = btnAjouter.innerHTML;
+      btnAjouter.innerHTML = '<i class="fas fa-spinner fa-spin"></i> AJOUT EN COURS...';
+
+      try {
+        const response = await fetch('/panier/ajouter/<%= produit._id %>', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: `quantite=${quantite}`
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          showNotification('✅ Produit ajouté au panier !');
+          
+          // Effet de confirmation
+          btnAjouter.innerHTML = '<i class="fas fa-check"></i> AJOUTÉ !';
+          btnAjouter.style.background = '#28a745';
+          btnAjouter.style.borderColor = '#28a745';
+          
+          setTimeout(() => {
+            btnAjouter.disabled = false;
+            btnAjouter.innerHTML = originalText;
+            btnAjouter.style.background = '';
+            btnAjouter.style.borderColor = '';
+          }, 2000);
+        } else {
+          throw new Error(data.message || 'Erreur lors de l\'ajout au panier');
+        }
+      } catch (error) {
+        console.error('Erreur AJAX:', error);
+        
+        // Réactiver le bouton
+        btnAjouter.disabled = false;
+        btnAjouter.innerHTML = originalText;
+        
+        showNotification('❌ ' + error.message, 'error');
+      }
     }
 
-    // Notification d'ajout au panier
-    function showAddToCartNotification() {
-      const notification = document.createElement('div');
-      notification.style.cssText = `
-        position: fixed;
-        top: 100px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: var(--lv-gold);
-        color: var(--lv-dark);
-        padding: 1rem 2rem;
-        border-radius: 0;
-        z-index: 1002;
-        font-weight: 500;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        font-size: 0.8rem;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-      `;
-      notification.innerHTML = '<i class="fas fa-check" style="margin-right: 0.5rem;"></i> Produit ajouté au panier !';
-      document.body.appendChild(notification);
+    // Fonction de notification
+    function showNotification(message, type = 'success') {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.className = 'notification' + (type === 'error' ? ' error' : '');
+      notification.style.display = 'block';
       
       setTimeout(() => {
-        notification.style.transition = 'all 0.3s ease';
-        notification.style.opacity = '0';
-        notification.style.transform = 'translateX(-50%) translateY(-20px)';
-        setTimeout(() => notification.remove(), 300);
-      }, 2000);
+        notification.style.display = 'none';
+      }, 3000);
     }
 
-    // Fonction pour mettre à jour le badge du panier
-    function updateCartBadge(count) {
-      const badge = document.querySelector('.cart-badge');
-      const cartIcon = document.querySelector('.icon-btn .fa-shopping-bag').parentNode;
-      
-      if (badge) {
-        badge.textContent = count;
-      } else {
-        const newBadge = document.createElement('span');
-        newBadge.className = 'cart-badge';
-        newBadge.textContent = count;
-        cartIcon.appendChild(newBadge);
-      }
-    }
-
-    // Gestion de l'ajout au panier avec AJAX
+    // Empêcher la soumission du formulaire avec Enter
     document.addEventListener('DOMContentLoaded', function() {
-      // FORMULAIRE PRINCIPAL DU PRODUIT
-      const mainForm = document.getElementById('form-ajout-panier');
-      if (mainForm) {
-        mainForm.addEventListener('submit', async function(e) {
-          e.preventDefault(); // IMPORTANT: Empêcher la soumission normale
-          
-          const submitBtn = this.querySelector('button[type="submit"]');
-          const quantite = document.getElementById('quantite').value;
-          
-          // Désactiver le bouton pendant la requête
-          submitBtn.disabled = true;
-          const originalText = submitBtn.innerHTML;
-          submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> AJOUT EN COURS...';
-
-          try {
-            const response = await fetch(this.action, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-              },
-              body: `quantite=${quantite}`
-            });
-
-            if (!response.ok) {
-              throw new Error('Erreur réseau');
-            }
-
-            const data = await response.json();
-
-            if (data.success) {
-              showAddToCartNotification();
-              updateCartBadge(data.panierCount);
-              
-              // Effet de confirmation
-              submitBtn.innerHTML = '<i class="fas fa-check"></i> AJOUTÉ !';
-              submitBtn.style.background = '#28a745';
-              submitBtn.style.borderColor = '#28a745';
-              
-              setTimeout(() => {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalText;
-                submitBtn.style.background = '';
-                submitBtn.style.borderColor = '';
-              }, 2000);
-            } else {
-              throw new Error(data.message || 'Erreur lors de l\'ajout au panier');
-            }
-          } catch (error) {
-            console.error('Erreur AJAX:', error);
-            
-            // Réactiver le bouton
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = originalText;
-            
-            // NE PAS soumettre le formulaire normalement
-            alert('Erreur: ' + error.message);
-          }
-        });
-      }
-
-      // FORMULAIRES DES PRODUITS SIMILAIRES
-      const similarForms = document.querySelectorAll('form[action*="/panier/ajouter/"]');
-      similarForms.forEach(form => {
-        if (form.id !== 'form-ajout-panier') { // Éviter le formulaire principal
-          form.addEventListener('submit', async function(e) {
-            e.preventDefault(); // IMPORTANT: Empêcher la soumission normale
-            
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const quantite = this.querySelector('input[name="quantite"]').value;
-            
-            // Désactiver le bouton pendant la requête
-            submitBtn.disabled = true;
-            const originalHTML = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-
-            try {
-              const response = await fetch(this.action, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `quantite=${quantite}`
-              });
-
-              if (!response.ok) {
-                throw new Error('Erreur réseau');
-              }
-
-              const data = await response.json();
-
-              if (data.success) {
-                showAddToCartNotification();
-                updateCartBadge(data.panierCount);
-                
-                // Effet de confirmation
-                submitBtn.innerHTML = '<i class="fas fa-check"></i>';
-                submitBtn.style.background = '#28a745';
-                submitBtn.style.borderColor = '#28a745';
-                
-                setTimeout(() => {
-                  submitBtn.disabled = false;
-                  submitBtn.innerHTML = originalHTML;
-                  submitBtn.style.background = '';
-                  submitBtn.style.borderColor = '';
-                }, 2000);
-              } else {
-                throw new Error(data.message || 'Erreur lors de l\'ajout au panier');
-              }
-            } catch (error) {
-              console.error('Erreur AJAX:', error);
-              
-              // Réactiver le bouton
-              submitBtn.disabled = false;
-              submitBtn.innerHTML = originalHTML;
-              
-              // NE PAS soumettre le formulaire normalement
-              alert('Erreur: ' + error.message);
-            }
-          });
+      document.getElementById('quantite').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          ajouterAuPanier();
         }
       });
-
-      // Désactiver le formulaire si rupture de stock
-      <% if (produit.stock === 0) { %>
-        const form = document.getElementById('form-ajout-panier');
-        const quantiteInput = document.getElementById('quantite');
-        if (form && quantiteInput) {
-          quantiteInput.disabled = true;
-        }
-      <% } %>
-    });
-
-    // Fermer le panier avec la touche Échap
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        const panier = document.getElementById('panierLateral');
-        if (panier.classList.contains('open')) {
-          togglePanier();
-        }
-      }
     });
   </script>
 </body>
-</html>  
+</html>

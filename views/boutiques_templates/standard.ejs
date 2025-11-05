@@ -300,6 +300,146 @@
       transform: scale(1.2);
     }
 
+    /* ========== STYLES POUR LA NAVIGATION PAR CATÉGORIES ========== */
+    .categories-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      justify-content: center;
+      margin-bottom: 3rem;
+      padding: 0 1rem;
+    }
+
+    .category-tab {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.2rem;
+      background: var(--zara-white);
+      border: 1.5px solid var(--zara-border);
+      color: var(--zara-dark-gray);
+      font-size: 0.8rem;
+      font-weight: 400;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-radius: 25px;
+      white-space: nowrap;
+    }
+
+    .category-tab:hover {
+      border-color: var(--zara-black);
+      color: var(--zara-black);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .category-tab.active {
+      background: var(--zara-black);
+      border-color: var(--zara-black);
+      color: var(--zara-white);
+    }
+
+    .category-icon {
+      font-size: 1rem;
+    }
+
+    .category-name {
+      font-weight: 500;
+    }
+
+    .product-count {
+      font-size: 0.7rem;
+      opacity: 0.7;
+      font-weight: 300;
+    }
+
+    /* Contenu des catégories */
+    .categories-content {
+      position: relative;
+    }
+
+    .category-content {
+      display: none;
+      animation: fadeInUp 0.6s ease;
+    }
+
+    .category-content.active {
+      display: block;
+    }
+
+    .category-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      padding: 0 1rem;
+    }
+
+    .category-title {
+      font-size: 1.4rem;
+      font-weight: 300;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+      color: var(--zara-black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+    }
+
+    .category-description {
+      color: var(--zara-dark-gray);
+      font-size: 0.9rem;
+      font-weight: 300;
+      letter-spacing: 1px;
+      line-height: 1.5;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .empty-category {
+      text-align: center;
+      padding: 3rem 1rem;
+      background: var(--zara-light-gray);
+      border-radius: 8px;
+    }
+
+    .empty-category i {
+      font-size: 2.5rem;
+      color: var(--zara-dark-gray);
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    .empty-category h4 {
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--zara-black);
+      margin-bottom: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .empty-category p {
+      color: var(--zara-dark-gray);
+      font-size: 0.85rem;
+      font-weight: 300;
+      letter-spacing: 1px;
+    }
+
+    /* Animation pour le changement de catégorie */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     /* CORRECTION : Icône panier toujours cliquable */
     .cart-icon-link {
       position: relative;
@@ -852,12 +992,46 @@
       line-height: 1.5;
     }
    
-    /* Produits Grid - Optimisé Mobile */
+    /* ========== PRODUITS GRID - RESPONSIVE ADAPTATIF ========== */
     .produits-grid {
       display: grid;
-      grid-template-columns: 1fr;
       gap: 1.5rem;
       margin-top: 1rem;
+    }
+
+    /* Mobile: 2 colonnes */
+    .produits-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Tablettes: 3 colonnes */
+    @media (min-width: 768px) {
+      .produits-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+      }
+    }
+
+    /* Desktop: 4 colonnes */
+    @media (min-width: 1024px) {
+      .produits-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2.5rem;
+      }
+    }
+
+    /* Grands écrans: 5 colonnes */
+    @media (min-width: 1440px) {
+      .produits-grid {
+        grid-template-columns: repeat(5, 1fr);
+      }
+    }
+
+    /* Très petits mobiles: 1 colonne */
+    @media (max-width: 360px) {
+      .produits-grid {
+        grid-template-columns: 1fr;
+      }
     }
    
     .produit-card {
@@ -879,6 +1053,26 @@
       height: 300px;
       overflow: hidden;
     }
+
+    /* Hauteur adaptative des images */
+    @media (max-width: 480px) {
+      .produit-gallery {
+        height: 250px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .produit-gallery {
+        height: 350px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .produit-gallery {
+        height: 400px;
+      }
+    }
+    
     .gallery-main {
       width: 100%;
       height: 100%;
@@ -962,6 +1156,13 @@
     .produit-content {
       padding: 1.5rem;
     }
+
+    /* Adaptation du contenu pour mobile */
+    @media (max-width: 480px) {
+      .produit-content {
+        padding: 1rem;
+      }
+    }
    
     .produit-category {
       font-size: 0.65rem;
@@ -981,6 +1182,13 @@
       letter-spacing: 1px;
       line-height: 1.3;
     }
+
+    /* Adaptation du texte pour mobile */
+    @media (max-width: 480px) {
+      .produit-name {
+        font-size: 0.8rem;
+      }
+    }
    
     .produit-prix {
       font-size: 1rem;
@@ -989,12 +1197,25 @@
       margin-bottom: 1rem;
       letter-spacing: 0.8px;
     }
+
+    @media (max-width: 480px) {
+      .produit-prix {
+        font-size: 0.9rem;
+      }
+    }
    
     /* AMÉLIORATION DES BOUTONS - BIEN VISIBLES */
     .produit-actions {
       display: flex;
       gap: 0.8rem;
       flex-direction: column;
+    }
+
+    /* Adaptation des boutons pour mobile */
+    @media (max-width: 480px) {
+      .produit-actions {
+        gap: 0.5rem;
+      }
     }
    
     .btn {
@@ -1017,6 +1238,16 @@
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+
+    /* Adaptation des boutons pour mobile */
+    @media (max-width: 480px) {
+      .btn {
+        padding: 1rem 1rem;
+        font-size: 0.8rem;
+        min-height: 48px;
+        letter-spacing: 1.5px;
+      }
     }
    
     .btn-primary {
@@ -1064,6 +1295,20 @@
    
     .btn-outline:hover::before {
       left: 100%;
+    }
+
+    /* Adaptation des boutons en ligne sur desktop */
+    @media (min-width: 768px) {
+      .produit-actions {
+        flex-direction: row;
+      }
+     
+      .btn {
+        width: auto;
+        flex: 1;
+        font-size: 0.8rem;
+        padding: 1rem 1.2rem;
+      }
     }
    
     /* Modal pour la galerie - Optimisé Mobile */
@@ -1196,6 +1441,13 @@
     .newsletter-input::placeholder {
       color: var(--zara-dark-gray);
     }
+
+    /* Adaptation du formulaire newsletter */
+    @media (min-width: 768px) {
+      .newsletter-form {
+        flex-direction: row;
+      }
+    }
    
     /* Empty State Premium */
     .empty-state {
@@ -1242,6 +1494,21 @@
       grid-template-columns: 1fr;
       gap: 2rem;
       margin-bottom: 2rem;
+    }
+
+    /* Adaptation du footer */
+    @media (min-width: 768px) {
+      .footer-content {
+        grid-template-columns: 2fr 1fr 1fr;
+        gap: 2.5rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .footer-content {
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: 3rem;
+      }
     }
    
     .footer-column h3 {
@@ -1412,43 +1679,18 @@
         font-size: 1.8rem;
       }
      
-      .produits-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 2rem;
-      }
-     
-      .produit-gallery {
-        height: 350px;
-      }
-     
-      .produit-actions {
-        flex-direction: row;
-      }
-     
-      .btn {
-        width: auto;
-        flex: 1;
-        font-size: 0.8rem;
-        padding: 1rem 1.2rem;
-      }
-     
-      .footer-content {
-        grid-template-columns: 2fr 1fr 1fr;
-        gap: 2.5rem;
-      }
-     
-      .newsletter-form {
-        flex-direction: row;
-      }
-     
-      .cart-notification {
-        right: 20px;
-        left: auto;
-        max-width: 350px;
-      }
-
       .carousel-controls {
         margin-top: 1.5rem;
+      }
+
+      /* Responsive pour les catégories */
+      .categories-nav {
+        gap: 1rem;
+      }
+      
+      .category-tab {
+        flex: none;
+        min-width: auto;
       }
     }
    
@@ -1495,36 +1737,6 @@
       .section-title {
         font-size: 2rem;
       }
-     
-      .produits-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 2.5rem;
-      }
-     
-      .produit-gallery {
-        height: 400px;
-      }
-     
-      .footer-content {
-        grid-template-columns: 2fr 1fr 1fr 1fr;
-        gap: 3rem;
-      }
-     
-      .cart-notification {
-        right: 30px;
-        max-width: 380px;
-      }
-    }
-   
-    /* Media Queries pour les grands écrans */
-    @media (min-width: 1200px) {
-      .produits-grid {
-        grid-template-columns: repeat(4, 1fr);
-      }
-     
-      .hero h1 {
-        font-size: 4.5rem;
-      }
     }
    
     /* Support pour l'orientation paysage sur mobile */
@@ -1547,10 +1759,6 @@
       .cta-button {
         padding: 0.8rem 2rem;
         font-size: 0.75rem;
-      }
-     
-      .produit-gallery {
-        height: 250px;
       }
     }
    
@@ -1598,6 +1806,11 @@
       .product-card-horizontal:hover {
         transform: none;
       }
+
+      .category-tab:hover {
+        transform: none;
+        box-shadow: none;
+      }
     }
    
     /* Optimisations pour les écrans très petits */
@@ -1634,25 +1847,27 @@
         padding: 1rem 2rem;
         font-size: 0.75rem;
       }
-     
-      .produit-content {
-        padding: 1rem;
-      }
-     
-      .produit-actions {
-        gap: 0.5rem;
-      }
-     
-      .btn {
-        padding: 1rem 1rem;
-        font-size: 0.8rem;
-        min-height: 48px;
-      }
 
       .carousel-btn {
         width: 30px;
         height: 30px;
         font-size: 0.6rem;
+      }
+
+      /* Responsive pour les catégories sur très petits écrans */
+      .categories-nav {
+        gap: 0.3rem;
+        padding: 0 0.5rem;
+      }
+      
+      .category-tab {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.7rem;
+        min-width: calc(50% - 0.3rem);
+      }
+      
+      .category-icon {
+        font-size: 0.8rem;
       }
     }
 
@@ -1696,16 +1911,48 @@
         height: 200px;
       }
     }
+
+    /* Responsive pour les catégories */
+    @media (max-width: 768px) {
+      .categories-nav {
+        gap: 0.5rem;
+        padding: 0 0.5rem;
+      }
+      
+      .category-tab {
+        padding: 0.6rem 1rem;
+        font-size: 0.75rem;
+        flex: 1;
+        min-width: calc(50% - 0.5rem);
+        justify-content: center;
+      }
+      
+      .category-icon {
+        font-size: 0.9rem;
+      }
+      
+      .category-title {
+        font-size: 1.2rem;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .category-tab {
+        min-width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
+  <!-- Le reste du code HTML reste exactement le même -->
   <!-- Notification Panier -->
   <div id="cartNotification" class="cart-notification">
     <div class="notification-content">
       <div class="notification-icon"></div>
       <div class="notification-text">
         <div class="notification-title"></div>
-        <!-- CORRECTION : Ajout de l'ID manquant -->
         <div class="notification-message" id="notificationMessage"></div>
       </div>
     </div>
@@ -1799,7 +2046,7 @@
       <div class="hero-content">
         <h1><%= boutique.nom %></h1>
         <p><%= boutique.description %></p>
-        <a href="#produits" class="cta-button">
+        <a href="#categories" class="cta-button">
           <span>DÉCOUVRIR LA COLLECTION</span>
         </a>
       </div>
@@ -1810,7 +2057,7 @@
     </section>
 
     <!-- ========== SECTION COLLECTION HORIZONTALE (Images réduites + Barre indicateur + Défilement auto) ========== -->
-    <section class="collection-horizontal" id="collection-horizontale">
+    <section class="collection-horizontal" id="produits">
       <div class="collection-header">
         <h2 class="collection-title">NOUVELLES CRÉATIONS</h2>
         <p class="collection-subtitle">Pièces exclusives réinterprétant les codes de la marque avec modernité</p>
@@ -1866,85 +2113,209 @@
       </div>
     </section>
 
-    <!-- Produits Section (Grille classique) -->
-    <section class="section" id="produits">
+    <!-- ========== SECTION CATÉGORIES AVEC CLASSIFICATION IA ========== -->
+    <section class="section" id="categories">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">TOUTE LA COLLECTION</h2>
-          <p class="section-subtitle">Découvrez l'ensemble de nos créations et pièces exclusives</p>
+          <h2 class="section-title">NOS COLLECTIONS</h2>
+          <p class="section-subtitle">Découvrez nos produits organisés par univers</p>
         </div>
-       
-        <% if (produits && produits.length > 0) { %>
-          <div class="produits-grid">
-            <% produits.forEach((produit, index) => { %>
-              <div class="produit-card loading" style="animation-delay: <%= index * 0.1 %>s" data-product-index="<%= index %>">
-                <!-- Galerie de photos -->
-                <div class="produit-gallery">
-                  <% if (produit.imagesGallery && produit.imagesGallery.length > 0) { %>
-                    <img src="<%= produit.imagesGallery[0].url %>"
-                         alt="<%= produit.nom %>"
-                         class="gallery-main"
-                         data-product-index="<%= index %>"
-                         data-current-image="0">
-                   
-                    <div class="gallery-counter">
-                      <span class="current-image">1</span> / <%= produit.imagesGallery.length %>
-                    </div>
-                    <% if (produit.imagesGallery.length > 1) { %>
-                      <div class="gallery-thumbnails">
-                        <% produit.imagesGallery.forEach((image, imgIndex) => { %>
-                          <img src="<%= image.url %>"
-                               alt="Miniature <%= imgIndex + 1 %>"
-                               class="thumbnail <%= imgIndex === 0 ? 'active' : '' %>"
-                               data-product-index="<%= index %>"
-                               data-image-index="<%= imgIndex %>"
-                               onclick="changeMainImage(<%= index %>, <%= imgIndex %>)">
-                        <% }); %>
+        
+        <!-- Navigation par Catégories -->
+        <div class="categories-nav" id="categoriesNav">
+          <% if (produitsParCategorie && Object.keys(produitsParCategorie).length > 0) { %>
+            <% Object.values(produitsParCategorie).forEach((categorie, index) => { %>
+              <button class="category-tab <%= index === 0 ? 'active' : '' %>" 
+                      data-category="<%= categorie.nom %>"
+                      onclick="changerCategorie('<%= categorie.nom %>')">
+                <span class="category-icon"><%= categorie.icone %></span>
+                <span class="category-name"><%= categorie.nom %></span>
+                <span class="product-count">(<%= categorie.produits.length %>)</span>
+              </button>
+            <% }); %>
+          <% } else { %>
+            <button class="category-tab active" data-category="tous" onclick="changerCategorie('tous')">
+              <span class="category-icon">📦</span>
+              <span class="category-name">TOUS LES PRODUITS</span>
+              <span class="product-count">(<%= produits.length %>)</span>
+            </button>
+          <% } %>
+        </div>
+        
+        <!-- Contenu des Catégories -->
+        <div class="categories-content">
+          <% if (produitsParCategorie && Object.keys(produitsParCategorie).length > 0) { %>
+            <% Object.values(produitsParCategorie).forEach((categorie, index) => { %>
+              <div class="category-content <%= index === 0 ? 'active' : '' %>" 
+                   id="category-<%= categorie.nom.replace(/[^a-zA-Z0-9]/g, '-') %>">
+                
+                <!-- En-tête de catégorie -->
+                <div class="category-header">
+                  <h3 class="category-title">
+                    <span class="category-icon"><%= categorie.icone %></span>
+                    <%= categorie.nom %>
+                  </h3>
+                  <p class="category-description">
+                    <%= getDescriptionCategorie(categorie.nom) %>
+                  </p>
+                </div>
+                
+                <!-- Produits de la catégorie - CORRECTION ICI -->
+                <div class="produits-grid">
+                  <% categorie.produits.forEach((produit, produitIndex) => { %>
+                    <div class="produit-card loading" 
+                         style="animation-delay: <%= produitIndex * 0.1 %>s" 
+                         data-product-id="<%= produit._id %>">  <!-- ← Utiliser l'ID au lieu de l'index -->
+                      
+                      <!-- Galerie de photos - CORRECTION ICI -->
+                      <div class="produit-gallery">
+                        <% if (produit.imagesGallery && produit.imagesGallery.length > 0) { %>
+                          <img src="<%= produit.imagesGallery[0].url %>"
+                               alt="<%= produit.nom %>"
+                               class="gallery-main"
+                               data-product-id="<%= produit._id %>"  <!-- ← Utiliser l'ID au lieu de l'index -->
+                               data-current-image="0">
+                          
+                          <div class="gallery-counter">
+                            <span class="current-image">1</span> / <%= produit.imagesGallery.length %>
+                          </div>
+                          
+                          <% if (produit.imagesGallery.length > 1) { %>
+                            <div class="gallery-thumbnails">
+                              <% produit.imagesGallery.forEach((image, imgIndex) => { %>
+                                <img src="<%= image.url %>"
+                                     alt="Miniature <%= imgIndex + 1 %>"
+                                     class="thumbnail <%= imgIndex === 0 ? 'active' : '' %>"
+                                     data-product-id="<%= produit._id %>"  <!-- ← Utiliser l'ID au lieu de l'index -->
+                                     data-image-index="<%= imgIndex %>"
+                                     onclick="changeMainImage('<%= produit._id %>', <%= imgIndex %>)">  <!-- ← Utiliser l'ID au lieu de l'index -->
+                              <% }); %>
+                            </div>
+                          <% } %>
+                          
+                          <button class="gallery-btn" onclick="openGallery('<%= produit._id %>')">  <!-- ← Utiliser l'ID au lieu de l'index -->
+                            🖼️ Voir galerie
+                          </button>
+                          
+                        <% } else if (produit.image) { %>
+                          <img src="<%= produit.image %>" alt="<%= produit.nom %>" class="gallery-main">
+                        <% } else { %>
+                          <div style="background: #f0f0f0; height: 100%; display: flex; align-items: center; justify-content: center; color: #999; font-size: 0.8rem;">
+                            📷 Aucune image
+                          </div>
+                        <% } %>
+                        
+                        <div class="produit-badge">NOUVEAU</div>
                       </div>
-                    <% } %>
-                    <button class="gallery-btn" onclick="openGallery(<%= index %>)">
-                      🖼️ Voir galerie
-                    </button>
-                  <% } else if (produit.image) { %>
-                    <img src="<%= produit.image %>" alt="<%= produit.nom %>" class="gallery-main">
-                  <% } else { %>
-                    <div style="background: #f0f0f0; height: 100%; display: flex; align-items: center; justify-content: center; color: #999; font-size: 0.8rem;">
-                      📷 Aucune image
+                      
+                      <!-- Contenu du produit -->
+                      <div class="produit-content">
+                        <div class="produit-category"><%= produit.sous_categorie || 'COLLECTION' %></div>
+                        <h3 class="produit-name"><%= produit.nom %></h3>
+                        <p class="produit-prix"><%= produit.prix %> <%= produit.devise %></p>
+                        <div class="produit-actions">
+                          <form action="/panier/ajouter/<%= produit._id %>" method="POST" style="display: inline; width: 100%;" class="add-to-cart-form">
+                            <input type="hidden" name="produitNom" value="<%= produit.nom %>">
+                            <input type="hidden" name="produitPrix" value="<%= produit.prix %>">
+                            <button type="submit" class="btn btn-primary add-to-cart-btn">
+                              AJOUTER AU PANIER
+                            </button>
+                          </form>
+                          <a href="/boutique/produit/<%= produit._id %>" class="btn btn-outline">
+                            VOIR LES DÉTAILS
+                          </a>
+                        </div>
+                      </div>
                     </div>
-                  <% } %>
-                 
-                  <div class="produit-badge">NOUVEAU</div>
+                  <% }) %>
                 </div>
-                <div class="produit-content">
-                  <div class="produit-category">COLLECTION EXCLUSIVE</div>
-                  <h3 class="produit-name"><%= produit.nom %></h3>
-                  <p class="produit-prix"><%= produit.prix %> <%= produit.devise %></p>
-                  <div class="produit-actions">
-                    <form action="/panier/ajouter/<%= produit._id %>" method="POST" style="display: inline; width: 100%;" class="add-to-cart-form">
-                      <input type="hidden" name="produitNom" value="<%= produit.nom %>">
-                      <input type="hidden" name="produitPrix" value="<%= produit.prix %>">
-                      <button type="submit" class="btn btn-primary add-to-cart-btn">
-                        AJOUTER AU PANIER
-                      </button>
-                    </form>
-                    <a href="/boutique/produit/<%= produit._id %>" class="btn btn-outline">
-                      VOIR LES DÉTAILS
-                    </a>
+                
+                <!-- Message si catégorie vide -->
+                <% if (categorie.produits.length === 0) { %>
+                  <div class="empty-category">
+                    <i class="fas fa-box-open"></i>
+                    <h4>Aucun produit dans cette catégorie</h4>
+                    <p>De nouvelles arrivées sont prévues prochainement.</p>
                   </div>
-                </div>
+                <% } %>
               </div>
-            <% }) %>
-          </div>
-        <% } else { %>
-          <div class="empty-state">
-            <i class="fas fa-gem"></i>
-            <h3>COLLECTION À VENIR</h3>
-            <p>Notre nouvelle collection sera bientôt disponible. Inscrivez-vous pour être informé du lancement.</p>
-            <a href="#" class="btn btn-primary">
-              ÊTRE INFORMÉ
-            </a>
-          </div>
-        <% } %>
+            <% }); %>
+          <% } else { %>
+            <!-- Fallback si pas de catégorisation - CORRECTION ICI AUSSI -->
+            <div class="category-content active" id="category-tous">
+              <div class="category-header">
+                <h3 class="category-title">
+                  <span class="category-icon">📦</span>
+                  TOUS LES PRODUITS
+                </h3>
+                <p class="category-description">
+                  Découvrez l'ensemble de notre collection exclusive
+                </p>
+              </div>
+              
+              <div class="produits-grid">
+                <% produits.forEach((produit, index) => { %>
+                  <div class="produit-card loading" style="animation-delay: <%= index * 0.1 %>s" data-product-id="<%= produit._id %>">  <!-- ← Utiliser l'ID -->
+                    <!-- Galerie de photos - CORRECTION ICI -->
+                    <div class="produit-gallery">
+                      <% if (produit.imagesGallery && produit.imagesGallery.length > 0) { %>
+                        <img src="<%= produit.imagesGallery[0].url %>"
+                             alt="<%= produit.nom %>"
+                             class="gallery-main"
+                             data-product-id="<%= produit._id %>"  <!-- ← Utiliser l'ID -->
+                             data-current-image="0">
+                       
+                        <div class="gallery-counter">
+                          <span class="current-image">1</span> / <%= produit.imagesGallery.length %>
+                        </div>
+                        <% if (produit.imagesGallery.length > 1) { %>
+                          <div class="gallery-thumbnails">
+                            <% produit.imagesGallery.forEach((image, imgIndex) => { %>
+                              <img src="<%= image.url %>"
+                                   alt="Miniature <%= imgIndex + 1 %>"
+                                   class="thumbnail <%= imgIndex === 0 ? 'active' : '' %>"
+                                   data-product-id="<%= produit._id %>"  <!-- ← Utiliser l'ID -->
+                                   data-image-index="<%= imgIndex %>"
+                                   onclick="changeMainImage('<%= produit._id %>', <%= imgIndex %>)">  <!-- ← Utiliser l'ID -->
+                            <% }); %>
+                          </div>
+                        <% } %>
+                        <button class="gallery-btn" onclick="openGallery('<%= produit._id %>')">  <!-- ← Utiliser l'ID -->
+                          🖼️ Voir galerie
+                        </button>
+                      <% } else if (produit.image) { %>
+                        <img src="<%= produit.image %>" alt="<%= produit.nom %>" class="gallery-main">
+                      <% } else { %>
+                        <div style="background: #f0f0f0; height: 100%; display: flex; align-items: center; justify-content: center; color: #999; font-size: 0.8rem;">
+                          📷 Aucune image
+                        </div>
+                      <% } %>
+                     
+                      <div class="produit-badge">NOUVEAU</div>
+                    </div>
+                    <div class="produit-content">
+                      <div class="produit-category">COLLECTION EXCLUSIVE</div>
+                      <h3 class="produit-name"><%= produit.nom %></h3>
+                      <p class="produit-prix"><%= produit.prix %> <%= produit.devise %></p>
+                      <div class="produit-actions">
+                        <form action="/panier/ajouter/<%= produit._id %>" method="POST" style="display: inline; width: 100%;" class="add-to-cart-form">
+                          <input type="hidden" name="produitNom" value="<%= produit.nom %>">
+                          <input type="hidden" name="produitPrix" value="<%= produit.prix %>">
+                          <button type="submit" class="btn btn-primary add-to-cart-btn">
+                            AJOUTER AU PANIER
+                          </button>
+                        </form>
+                        <a href="/boutique/produit/<%= produit._id %>" class="btn btn-outline">
+                          VOIR LES DÉTAILS
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                <% }) %>
+              </div>
+            </div>
+          <% } %>
+        </div>
       </div>
     </section>
 
@@ -1985,7 +2356,7 @@
           <ul class="footer-links">
             <li><a href="#accueil">Accueil</a></li>
             <li><a href="#produits">Nouveautés</a></li>
-            <li><a href="#collection-horizontale">Collection Exclusive</a></li>
+            <li><a href="#categories">Collections</a></li>
             <li><a href="#">Lookbook</a></li>
           </ul>
         </div>
@@ -2021,8 +2392,166 @@
     // Stocker les données des produits globalement
     const produitsData = <%- JSON.stringify(produits) %>;
     // Variables globales pour la galerie
-    let currentGallery = null;
+    let currentGalleryId = null;
     let currentImageIndex = 0;
+
+    // ========== FONCTIONS CORRIGÉES POUR LA GALERIE ==========
+
+    // Fonction pour trouver un produit par son ID
+    function findProductById(productId) {
+      return produitsData.find(produit => produit._id === productId);
+    }
+
+    // Fonction pour changer l'image principale - CORRIGÉE
+    function changeMainImage(productId, imageIndex) {
+      const productCard = document.querySelector(`[data-product-id="${productId}"]`);
+      if (!productCard) return;
+     
+      const mainImage = productCard.querySelector('.gallery-main');
+      const thumbnails = productCard.querySelectorAll('.thumbnail');
+      const counter = productCard.querySelector('.current-image');
+     
+      if (!mainImage) return;
+     
+      // Animation de fondu
+      mainImage.style.opacity = '0';
+     
+      setTimeout(() => {
+        // Mettre à jour l'image principale
+        const produit = findProductById(productId);
+        if (produit && produit.imagesGallery && produit.imagesGallery[imageIndex]) {
+          mainImage.src = produit.imagesGallery[imageIndex].url;
+          mainImage.setAttribute('data-current-image', imageIndex);
+         
+          // Animation de fondu
+          mainImage.style.opacity = '1';
+         
+          // Mettre à jour les miniatures actives
+          thumbnails.forEach((thumb, index) => {
+            thumb.classList.toggle('active', index === imageIndex);
+          });
+         
+          // Mettre à jour le compteur
+          if (counter) {
+            counter.textContent = imageIndex + 1;
+          }
+        }
+      }, 150);
+    }
+
+    // Fonction pour ouvrir la galerie complète - CORRIGÉE
+    function openGallery(productId) {
+      currentGalleryId = productId;
+      currentImageIndex = 0;
+     
+      const produit = findProductById(productId);
+      const modal = document.getElementById('galleryModal');
+      const modalImage = document.getElementById('modalImage');
+      const modalCounter = document.getElementById('modalCounter');
+     
+      if (produit && produit.imagesGallery && produit.imagesGallery.length > 0 && modal && modalImage && modalCounter) {
+        modalImage.src = produit.imagesGallery[0].url;
+        modalImage.alt = produit.nom;
+        modalCounter.textContent = `1 / ${produit.imagesGallery.length}`;
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+       
+        // Empêcher le défilement de l'arrière-plan sur mobile
+        document.documentElement.style.overflow = 'hidden';
+      }
+    }
+
+    // Fonction pour fermer la galerie
+    function closeGallery() {
+      const modal = document.getElementById('galleryModal');
+      if (modal) {
+        modal.style.display = 'none';
+      }
+      document.body.style.overflow = 'auto';
+      document.documentElement.style.overflow = 'auto';
+      currentGalleryId = null;
+    }
+
+    // Fonction pour changer d'image dans le modal - CORRIGÉE
+    function changeModalImage(direction) {
+      if (currentGalleryId === null) return;
+     
+      const produit = findProductById(currentGalleryId);
+      const images = produit.imagesGallery;
+      const modalImage = document.getElementById('modalImage');
+      const modalCounter = document.getElementById('modalCounter');
+     
+      if (!modalImage || !modalCounter) return;
+     
+      currentImageIndex += direction;
+     
+      // Gérer le défilement circulaire
+      if (currentImageIndex < 0) {
+        currentImageIndex = images.length - 1;
+      } else if (currentImageIndex >= images.length) {
+        currentImageIndex = 0;
+      }
+     
+      // Animation de fondu
+      modalImage.style.opacity = '0';
+     
+      setTimeout(() => {
+        modalImage.src = images[currentImageIndex].url;
+        modalImage.alt = produit.nom;
+        modalCounter.textContent = `${currentImageIndex + 1} / ${images.length}`;
+        modalImage.style.opacity = '1';
+      }, 200);
+    }
+
+    // ========== FONCTIONS POUR LA CATÉGORISATION ==========
+    
+    // Fonction utilitaire pour les descriptions de catégories
+    function getDescriptionCategorie(nomCategorie) {
+      const descriptions = {
+        'Mode & Vêtements': 'Découvrez notre collection de vêtements tendance et élégants',
+        'Chaussures': 'Des chaussures confortables et stylées pour toutes les occasions',
+        'Accessoires': 'Complétez votre look avec nos accessoires sélectionnés',
+        'Beauté & Cosmétiques': 'Produits de beauté et cosmétiques pour sublimer votre routine',
+        'Maison & Déco': 'Élégance et design pour votre intérieur',
+        'Électronique': 'Technologie innovante et design moderne',
+        'Sport & Fitness': 'Équipement sportif pour performance et style',
+        'Outillage Industriel': 'Outils professionnels de qualité supérieure',
+        'Luxe & Premium': 'Pièces exclusives et raffinées',
+        'Collection Exclusive': 'Nos créations les plus prestigieuses'
+      };
+      
+      return descriptions[nomCategorie] || 'Découvrez notre sélection de produits soigneusement choisis';
+    }
+
+    // Fonction pour changer de catégorie
+    function changerCategorie(nomCategorie) {
+      // Mettre à jour les onglets actifs
+      document.querySelectorAll('.category-tab').forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.getAttribute('data-category') === nomCategorie) {
+          tab.classList.add('active');
+        }
+      });
+      
+      // Afficher le contenu de la catégorie
+      document.querySelectorAll('.category-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      const contentId = 'category-' + nomCategorie.replace(/[^a-zA-Z0-9]/g, '-');
+      const targetContent = document.getElementById(contentId);
+      if (targetContent) {
+        targetContent.classList.add('active');
+        
+        // Animation de scroll doux vers la section
+        setTimeout(() => {
+          document.getElementById('categories').scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }, 300);
+      }
+    }
 
     // ========== VARIABLES POUR LE DÉFILEMENT AUTOMATIQUE ==========
     let autoScrollInterval;
@@ -2377,107 +2906,6 @@
       }
     }
 
-    // Fonction pour changer l'image principale
-    function changeMainImage(productIndex, imageIndex) {
-      const productCard = document.querySelector(`[data-product-index="${productIndex}"]`);
-      if (!productCard) return;
-     
-      const mainImage = productCard.querySelector('.gallery-main');
-      const thumbnails = productCard.querySelectorAll('.thumbnail');
-      const counter = productCard.querySelector('.current-image');
-     
-      if (!mainImage) return;
-     
-      // Animation de fondu
-      mainImage.style.opacity = '0';
-     
-      setTimeout(() => {
-        // Mettre à jour l'image principale
-        const produit = produitsData[productIndex];
-        if (produit.imagesGallery && produit.imagesGallery[imageIndex]) {
-          mainImage.src = produit.imagesGallery[imageIndex].url;
-          mainImage.setAttribute('data-current-image', imageIndex);
-         
-          // Animation de fondu
-          mainImage.style.opacity = '1';
-         
-          // Mettre à jour les miniatures actives
-          thumbnails.forEach((thumb, index) => {
-            thumb.classList.toggle('active', index === imageIndex);
-          });
-         
-          // Mettre à jour le compteur
-          if (counter) {
-            counter.textContent = imageIndex + 1;
-          }
-        }
-      }, 150);
-    }
-
-    // Fonction pour ouvrir la galerie complète
-    function openGallery(productIndex) {
-      currentGallery = productIndex;
-      currentImageIndex = 0;
-     
-      const produit = produitsData[productIndex];
-      const modal = document.getElementById('galleryModal');
-      const modalImage = document.getElementById('modalImage');
-      const modalCounter = document.getElementById('modalCounter');
-     
-      if (produit.imagesGallery && produit.imagesGallery.length > 0 && modal && modalImage && modalCounter) {
-        modalImage.src = produit.imagesGallery[0].url;
-        modalImage.alt = produit.nom;
-        modalCounter.textContent = `1 / ${produit.imagesGallery.length}`;
-        modal.style.display = 'block';
-        document.body.style.overflow = 'hidden';
-       
-        // Empêcher le défilement de l'arrière-plan sur mobile
-        document.documentElement.style.overflow = 'hidden';
-      }
-    }
-
-    // Fonction pour fermer la galerie
-    function closeGallery() {
-      const modal = document.getElementById('galleryModal');
-      if (modal) {
-        modal.style.display = 'none';
-      }
-      document.body.style.overflow = 'auto';
-      document.documentElement.style.overflow = 'auto';
-      currentGallery = null;
-    }
-
-    // Fonction pour changer d'image dans le modal
-    function changeModalImage(direction) {
-      if (currentGallery === null) return;
-     
-      const produit = produitsData[currentGallery];
-      const images = produit.imagesGallery;
-      const modalImage = document.getElementById('modalImage');
-      const modalCounter = document.getElementById('modalCounter');
-     
-      if (!modalImage || !modalCounter) return;
-     
-      currentImageIndex += direction;
-     
-      // Gérer le défilement circulaire
-      if (currentImageIndex < 0) {
-        currentImageIndex = images.length - 1;
-      } else if (currentImageIndex >= images.length) {
-        currentImageIndex = 0;
-      }
-     
-      // Animation de fondu
-      modalImage.style.opacity = '0';
-     
-      setTimeout(() => {
-        modalImage.src = images[currentImageIndex].url;
-        modalImage.alt = produit.nom;
-        modalCounter.textContent = `${currentImageIndex + 1} / ${images.length}`;
-        modalImage.style.opacity = '1';
-      }, 200);
-    }
-
     function hideNotification() {
       const notification = document.getElementById('cartNotification');
       if (notification) {
@@ -2730,6 +3158,7 @@
       // Debug: Vérifier que les boutons sont bien attachés
       console.log('Boutons horizontaux attachés:', document.querySelectorAll('.add-to-cart-horizontal').length);
       console.log('Formulaires classiques attachés:', document.querySelectorAll('.add-to-cart-form').length);
+      console.log('Catégories disponibles:', document.querySelectorAll('.category-tab').length);
     });
 
     // Gestion des erreurs globales

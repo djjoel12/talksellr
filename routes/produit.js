@@ -1,12 +1,27 @@
 const express = require('express');
 const router = express.Router();
-const upload = require('../config/storage'); // Multer + Cloudinary
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 const Produit = require('../models/Product');
 const Boutique = require('../models/Boutique');
+const { analyzeImageComplet, geminiQueue } = require('../config/gemini');
 const cloudinary = require('../config/cloudinary');
 const estVendeur = require('../middlewares/estVendeur');
 
-// GET : formulaire d’ajout produit
+// Configuration multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+
+const upload = multer({ storage: storage });
+
+// GET : formulaire d'ajout produit
 router.get('/ajouter', estVendeur, (req, res) => {
   res.render('produit_ajouter');
 });
@@ -22,7 +37,8 @@ router.post(
   async (req, res) => {
     try {
       const boutique = await Boutique.findOne({ proprietaire: req.session.user.id });
-      if (!boutique) return res.send('Vous devez d’abord créer votre boutique.');
+      // 🔥 CORRECTION : Guillemets doubles
+      if (!boutique) return res.send("Vous devez d'abord créer votre boutique.");
 
       const imageFile = req.files['image'] ? req.files['image'][0] : null;
       const videoFile = req.files['video'] ? req.files['video'][0] : null;
@@ -37,7 +53,7 @@ router.post(
       }
 
       if (videoFile) {
-        // Compresser la vidéo automatiquement lors de l’upload sur Cloudinary
+        // Compresser la vidéo automatiquement lors de l'upload sur Cloudinary
         const videoCompressed = await cloudinary.uploader.upload(videoFile.path, {
           resource_type: 'video',
           folder: 'produits/videos',
@@ -71,18 +87,18 @@ router.post(
 );
 
 // GET : mes produits (affiche numéro vendeur)
-// GET : mes produits avec galerie
 router.get('/mes', estVendeur, async (req, res) => {
   try {
     const boutique = await Boutique.findOne({ proprietaire: req.session.user.id });
-    if (!boutique) return res.send('Vous devez d\'abord créer votre boutique.');
+    // 🔥 CORRECTION : Guillemets doubles
+    if (!boutique) return res.send("Vous devez d'abord créer votre boutique.");
 
     const produits = await Produit.find({ boutique: boutique._id })
       .populate('vendeur', 'nom telephone')
       .sort({ dateCreation: -1 });
 
     res.render('produit_mes', { 
-      produits: JSON.parse(JSON.stringify(produits)) // Pour sérialiser les données pour EJS
+      produits: JSON.parse(JSON.stringify(produits))
     });
   } catch (err) {
     console.error('Erreur affichage produits :', err);
@@ -149,24 +165,21 @@ router.post('/supprimer/:id', estVendeur, async (req, res) => {
     res.status(500).send('Erreur lors de la suppression : ' + err.message);
   }
 });
+
 // GET : Formulaire d'import en masse
 router.get('/import-masse', estVendeur, (req, res) => {
   res.render('produit_import_masse');
 });
 
-// POST : Import en masse avec plusieurs photos par produit
-// POST : Import en masse avec plusieurs photos par produit
-// POST : Import en masse avec galerie de photos
 // POST : Import en masse avec galerie de photos - VERSION CORRIGÉE
-// POST : Import en masse avec galerie de photos - VERSION CORRIGÉ
-// POST : Import en masse avec gestion correcte des fichiers multiples
 router.post('/import-masse', estVendeur, upload.any(), async (req, res) => {
   try {
     const boutique = await Boutique.findOne({ proprietaire: req.session.user.id });
     if (!boutique) {
       return res.status(400).json({ 
         success: false, 
-        message: 'Vous devez d\'abord créer votre boutique.' 
+        // 🔥 CORRECTION : Guillemets doubles
+        message: "Vous devez d'abord créer votre boutique." 
       });
     }
 
@@ -182,10 +195,9 @@ router.post('/import-masse', estVendeur, upload.any(), async (req, res) => {
     const fichiersParProduit = {};
     
     fichiers.forEach(file => {
-      // Extraire le numéro du produit du fieldname
       const match = file.fieldname.match(/(photos|video)-(\d+)/);
       if (match) {
-        const type = match[1]; // 'photos' ou 'video'
+        const type = match[1];
         const productNumber = match[2];
         
         if (!fichiersParProduit[productNumber]) {
@@ -200,7 +212,7 @@ router.post('/import-masse', estVendeur, upload.any(), async (req, res) => {
       }
     });
 
-    console.log('📊 Fichiers groupés par produit:', fichiersParProduit);
+    console.log('📊 Fichiers groupés par produit:', Object.keys(fichiersParProduit).length);
 
     for (let i = 0; i < produitsData.length; i++) {
       try {
@@ -289,55 +301,308 @@ router.post('/import-masse', estVendeur, upload.any(), async (req, res) => {
       }
     }
 
+    // Réponse JSON
     const result = {
       success: true,
-      message: `${produitsCrees.length} produit(s) créé(s) avec succès sur ${produitsData.length} tentatives`,
+      message: `${produitsCrees.length} produit(s) créé(s) avec succès`,
       produitsCrees: produitsCrees.length,
       erreurs: erreurs
     };
 
-    console.log('📊 Résultat import final:', result);
+    console.log('📊 Résultat import:', result);
+    res.json(result);
+
+  } catch (error) {
+    console.error('💥 Erreur globale import:', error);
+    res.status(500).json({
+      success: false,
+      message: "Erreur lors de l'import: " + error.message
+    });
+  }
+});
+
+// Route pour l'import simple
+router.post('/import-masse-simple', estVendeur, upload.any(), async (req, res) => {
+  let fichiersASupprimer = [];
+  let boutique = null;
+  
+  try {
+    boutique = await Boutique.findOne({ proprietaire: req.session.user.id });
+    if (!boutique) {
+      return res.status(400).json({ 
+        success: false, 
+        // 🔥 CORRECTION : Guillemets doubles
+        message: "Créez d'abord votre boutique." 
+      });
+    }
+
+    const { prixProduits } = req.body;
+    const fichiers = req.files || [];
+    const produitsCrees = [];
+    fichiersASupprimer = [];
+
+    console.log(`\n🚀 IMPORT MASSIVE - DÉBUT (100+ IMAGES SUPPORT)`);
+    console.log('💰 Prix reçus:', typeof prixProduits);
+    console.log('📸 Fichiers reçus:', fichiers.length);
+
+    // Grouper fichiers par produit
+    const fichiersParProduit = {};
+    fichiers.forEach(file => {
+      const match = file.fieldname.match(/(photos)-(\d+)/);
+      if (match) {
+        const productNumber = match[2];
+        if (!fichiersParProduit[productNumber]) {
+          fichiersParProduit[productNumber] = { photos: [] };
+        }
+        fichiersParProduit[productNumber].photos.push(file);
+        fichiersASupprimer.push(file.path);
+      }
+    });
+
+    const totalProduits = Object.keys(fichiersParProduit).length;
+    console.log('📊 Produits à traiter:', totalProduits);
+
+    // Traitement PARALLÈLE avec Promises
+    const traitementsProduits = [];
+
+    for (let i = 0; i < totalProduits; i++) {
+      const productNumber = i + 1;
+      const fichiersProduit = fichiersParProduit[productNumber] || { photos: [] };
+      
+      const traitement = traiterProduit(
+        productNumber, 
+        fichiersProduit, 
+        prixProduits, 
+        boutique, 
+        req.session.user.id
+      ).then(produit => {
+        if (produit) {
+          produitsCrees.push(produit);
+          console.log(`✅ Produit ${productNumber}/${totalProduits} terminé`);
+        }
+        return produit;
+      }).catch(error => {
+        console.error(`💥 Erreur produit ${productNumber}:`, error.message);
+        return null;
+      });
+
+      traitementsProduits.push(traitement);
+    }
+
+    // Attendre que TOUS les traitements finissent
+    console.log(`\n⏳ Attente de ${traitementsProduits.length} traitements...`);
+    await Promise.all(traitementsProduits);
+
+    // NETTOYAGE
+    console.log(`\n🧹 Nettoyage de ${fichiersASupprimer.length} fichiers temporaires...`);
+    await nettoyerFichiers(fichiersASupprimer);
+
+    const stats = geminiQueue ? geminiQueue.getStats() : { successful: 0, failed: 0, retries: 0, queueLength: 0 };
+    
+    const result = {
+      success: true,
+      message: `${produitsCrees.length}/${totalProduits} produits créés avec succès`,
+      produitsCrees: produitsCrees.length,
+      avecIA: produitsCrees.filter(p => p.nom_ia && p.nom_ia !== '').length,
+      statsIA: {
+        reussites: stats.successful,
+        echecs: stats.failed,
+        retrys: stats.retries,
+        queueRestante: stats.queueLength
+      }
+    };
+
+    console.log('\n📊 RÉSULTAT IMPORT MASSIVE:', result);
     res.json(result);
 
   } catch (err) {
-    console.error('❌ Erreur import masse:', err);
+    console.error('💥 ERREUR GLOBALE IMPORT:', err);
+    
+    if (fichiersASupprimer && fichiersASupprimer.length > 0) {
+      // 🔥 CORRECTION : Guillemets doubles
+      console.log("🧹 Nettoyage des fichiers en cas d'erreur...");
+      await nettoyerFichiers(fichiersASupprimer);
+    }
+    
     res.status(500).json({ 
       success: false, 
-      message: 'Erreur lors de l\'import: ' + err.message 
+      message: 'Erreur serveur: ' + err.message 
     });
   }
 });
-// POST : amélioration image Cloudinary
-router.post('/ameliorer/:id', estVendeur, async (req, res) => {
-  try {
-    const produit = await Produit.findById(req.params.id);
-    if (!produit) return res.status(404).json({ message: 'Produit non trouvé' });
 
-    if (produit.cloudinary_id) {
-      await cloudinary.uploader.destroy(produit.cloudinary_id);
+// FONCTION DE TRAITEMENT D'UN PRODUIT
+async function traiterProduit(productNumber, fichiersProduit, prixProduits, boutique, userId) {
+  console.log(`\n--- DÉBUT PRODUIT ${productNumber} ---`);
+  
+  try {
+    // RÉCUPÉRATION PRIX
+    let prix = null;
+    if (typeof prixProduits === 'string') {
+      try {
+        const prixObj = JSON.parse(prixProduits);
+        prix = prixObj[productNumber];
+      } catch (parseError) {
+        console.log(`❌ Erreur parsing prix ${productNumber}:`, parseError.message);
+      }
+    } else if (typeof prixProduits === 'object') {
+      prix = prixProduits[productNumber];
+    }
+    
+    if (!prix || isNaN(parseFloat(prix))) {
+      console.log(`❌ Prix invalide produit ${productNumber}:`, prix);
+      return null;
     }
 
-    const result = await cloudinary.uploader.upload(produit.image, {
-      folder: 'produits',
-      transformation: [
-        { width: 1000, height: 1000, crop: 'pad', background: 'white' },
-        { effect: 'flatten', background: 'white' },
-        { effect: 'auto_color' },
-        { effect: 'auto_contrast' },
-        { effect: 'sharpen', radius: 200, sigma: 1 },
-        { quality: 'auto' }
-      ],
+    const prixNumber = parseFloat(prix);
+    console.log(`✅ Prix ${productNumber} validé: ${prixNumber}€`);
+
+    let donneesIA = null;
+    const imagesGallery = [];
+
+    // ANALYSE IA AVEC QUEUE INTELLIGENTE
+    if (fichiersProduit.photos.length > 0) {
+      const premierePhoto = fichiersProduit.photos[0];
+      
+      if (fs.existsSync(premierePhoto.path)) {
+        try {
+          console.log(`🧠 Ajout à la queue IA: Produit ${productNumber}`);
+          const imageBuffer = fs.readFileSync(premierePhoto.path);
+          
+          // Utilisation de la queue intelligente
+          donneesIA = await analyzeImageComplet(imageBuffer, {
+            fileName: premierePhoto.originalname,
+            productNumber: productNumber
+          });
+          
+          if (donneesIA && donneesIA.nom) {
+            console.log(`✅ IA ${productNumber} réussie: ${donneesIA.nom}`);
+          } else {
+            console.log(`🔄 IA ${productNumber} - utilisation fallback`);
+          }
+          
+        } catch (iaError) {
+          console.error(`❌ Erreur IA ${productNumber}:`, iaError.message);
+        }
+      }
+    }
+
+    // UPLOAD CLOUDINARY PARALLÈLE
+    console.log(`☁️ Upload Cloudinary produit ${productNumber}...`);
+    const uploads = fichiersProduit.photos.map(async (photoFile, index) => {
+      try {
+        if (fs.existsSync(photoFile.path)) {
+          const result = await cloudinary.uploader.upload(photoFile.path, {
+            folder: 'produits/photos',
+            quality: 'auto',
+            fetch_format: 'auto',
+            transformation: [
+              { width: 800, height: 800, crop: 'limit' }
+            ]
+          });
+          
+          imagesGallery.push({
+            url: result.secure_url,
+            cloudinary_id: result.public_id,
+            ordre: index
+          });
+          console.log(`✅ Photo ${index+1} produit ${productNumber} uploadée`);
+        }
+      } catch (uploadError) {
+        console.error(`❌ Erreur upload ${productNumber}-${index}:`, uploadError.message);
+      }
     });
 
-    produit.image = result.secure_url;
-    produit.cloudinary_id = result.public_id;
-    await produit.save();
+    await Promise.all(uploads);
 
-    res.json({ message: 'Image améliorée avec succès', imageUrl: result.secure_url });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Erreur serveur' });
+    // DÉTERMINER LES DONNÉES FINALES
+    let nomProduit, descriptionProduit, categorieProduit;
+
+    if (donneesIA && donneesIA.nom) {
+      nomProduit = donneesIA.nom;
+      descriptionProduit = donneesIA.description || 'Produit de qualité professionnelle avec design soigné.';
+      categorieProduit = donneesIA.categorie || 'Équipement professionnel';
+      console.log(`🎯 Produit ${productNumber} - Données IA utilisées`);
+    } else {
+      const nomFichier = fichiersProduit.photos[0]?.originalname.toLowerCase() || '';
+      console.log(`🆘 Produit ${productNumber} - Mode secours: ${nomFichier}`);
+      
+      // Fallback intelligent basé sur le nom de fichier
+      if (nomFichier.includes('pomp') || nomFichier.includes('motor') || nomFichier.includes('pump')) {
+        nomProduit = 'Pompe motorisée ZARA professionnelle';
+        descriptionProduit = 'Pompe motorisée ZARA haute performance. Débit élevé, moteur puissant et silencieux.';
+        categorieProduit = 'Outillage industriel';
+      } else if (nomFichier.includes('zara') || nomFichier.includes('fashion') || nomFichier.includes('cloth')) {
+        nomProduit = 'Vêtement ZARA collection premium';
+        descriptionProduit = 'Vêtement ZARA de la dernière collection. Style moderne et tendance.';
+        categorieProduit = 'Mode et Vêtements';
+      } else {
+        nomProduit = 'Équipement professionnel de qualité';
+        descriptionProduit = 'Produit professionnel robuste et fiable.';
+        categorieProduit = 'Équipement professionnel';
+      }
+    }
+
+    // STOCK EXPLICITE
+    const stockProduit = 10;
+    console.log(`📦 Stock produit ${productNumber}: ${stockProduit}`);
+
+    // CRÉATION DU PRODUIT
+    const produit = new Produit({
+      prix: prixNumber,
+      devise: 'EUR',
+      nom: nomProduit,
+      description: descriptionProduit,
+      categorie: categorieProduit,
+      stock: stockProduit,
+      
+      // Données IA
+      nom_ia: donneesIA ? donneesIA.nom : '',
+      description_ia: donneesIA ? donneesIA.description : '',
+      categorie_ia: donneesIA ? donneesIA.categorie : '',
+      sous_categorie_ia: donneesIA ? donneesIA.sous_categorie : '',
+      tags_ia: donneesIA ? donneesIA.tags : ['professionnel', 'qualité', 'robuste'],
+      couleurs_ia: donneesIA ? donneesIA.couleurs : ['Noir', 'Gris métallisé'],
+      style_ia: donneesIA ? donneesIA.style : 'Professionnel',
+      materiau_ia: donneesIA ? donneesIA.materiau : 'Métal haute résistance',
+      etat_ia: donneesIA ? donneesIA.etat : 'Neuf',
+      marque_ia: donneesIA ? donneesIA.marque : 'ZARA',
+      
+      // Gallery
+      image: imagesGallery.length > 0 ? imagesGallery[0].url : '',
+      cloudinary_id: imagesGallery.length > 0 ? imagesGallery[0].cloudinary_id : '',
+      imagesGallery: imagesGallery,
+      
+      // Références
+      boutique: boutique._id,
+      vendeur: userId,
+      sku: `SKU-${Date.now()}-${productNumber}`
+    });
+
+    await produit.save();
+    console.log(`🎉 PRODUIT ${productNumber} CRÉÉ: "${produit.nom}" - ${prixNumber}€`);
+    
+    return produit;
+
+  } catch (error) {
+    console.error(`💥 ERREUR CRITIQUE produit ${productNumber}:`, error.message);
+    throw error;
   }
-});
+}
+
+// FONCTION DE NETTOYAGE
+async function nettoyerFichiers(fichiersASupprimer) {
+  const suppressions = fichiersASupprimer.map(async filePath => {
+    try {
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+    } catch (cleanError) {
+      console.error(`❌ Nettoyage ${filePath}:`, cleanError.message);
+    }
+  });
+  
+  await Promise.all(suppressions);
+}
 
 module.exports = router;
