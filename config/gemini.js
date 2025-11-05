@@ -133,7 +133,7 @@ CATÉGORIES AUTORISÉES (choisir la plus pertinente):
 INSTRUCTIONS:
 - Sois PRÉCIS dans la catégorie et sous-catégorie
 - Le NOM doit être court et vendeur (max 4-5 mots)
-- La DESCRIPTION doit être commerciale (1 phrase)
+- La DESCRIPTION doit être commerciale (3phrase seduisantes pour acheter)
 - Les COULEURS doivent être les couleurs dominantes
 - Utilise "Générique" si la marque n'est pas visible
 - IMPORTANT: Les chaussures doivent aller dans la catégorie "Chaussures", PAS dans "Vêtements"
