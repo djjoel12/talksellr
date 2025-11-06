@@ -24,6 +24,12 @@ const commandeSchema = new mongoose.Schema({
     devise: { type: String, default: 'EUR' },
     quantite: { type: Number, required: true },
     image: { type: String },
+    // ✅ AJOUTER CE CHAMP
+    imagesGallery: [{
+      url: String,
+      cloudinary_id: String,
+      ordre: Number
+    }],
     vendeurId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
   }],
   statut: {

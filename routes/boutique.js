@@ -374,7 +374,7 @@ router.get('/:slug', async (req, res) => {
 
     res.render(template, {
       title: boutique.nom,
-      boutique,
+     boutique: boutique, // ✅ BIEN DÉFINI 
       produits: produitsAvecCategories,
       produitsParCategorie,
       user: req.session.user,

@@ -888,35 +888,53 @@
                   <% commande.produits.forEach((produit, pIndex) => { %>
                     <div class="product-item">
                       <div class="product-info">
-                        <div class="product-image">
-                          <% 
-                            let imageUrl = '';
-                            if (produit.produitId && produit.produitId.image) {
-                              imageUrl = produit.produitId.image;
-                            } else if (produit.produitId && produit.produitId.imagesGallery && produit.produitId.imagesGallery.length > 0) {
-                              imageUrl = produit.produitId.imagesGallery[0].url;
-                            } else if (produit.image) {
-                              imageUrl = produit.image;
-                            }
-                          %>
-                          
-                          <% if (imageUrl) { %>
-                            <img src="<%= imageUrl %>" 
-                                 alt="<%= produit.produitId ? produit.produitId.nom : produit.nom %>"
-                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                            <div class="product-image-placeholder" style="display: none;">
-                              <i class="fas fa-box"></i>
-                            </div>
-                          <% } else { %>
-                            <div class="product-image-placeholder">
-                              <i class="fas fa-box"></i>
-                            </div>
-                          <% } %>
-                        </div>
+                        
+                          <div class="product-image">
+  <% 
+    let imageUrl = '';
+    let productName = '';
+    
+    // ✅ CORRECTION : Vérifier D'ABORD les images sauvegardées dans la commande
+    if (produit.imagesGallery && produit.imagesGallery.length > 0) {
+      // PRIORITÉ 1 : Images de la galerie sauvegardée dans la commande
+      imageUrl = produit.imagesGallery[0].url;
+      productName = produit.nom;
+    } else if (produit.image) {
+      // PRIORITÉ 2 : Image principale sauvegardée dans la commande
+      imageUrl = produit.image;
+      productName = produit.nom;
+    } else if (produit.produitId && produit.produitId.imagesGallery && produit.produitId.imagesGallery.length > 0) {
+      // PRIORITÉ 3 : Images de la galerie du produit
+      imageUrl = produit.produitId.imagesGallery[0].url;
+      productName = produit.produitId.nom;
+    } else if (produit.produitId && produit.produitId.image) {
+      // PRIORITÉ 4 : Image principale du produit
+      imageUrl = produit.produitId.image;
+      productName = produit.produitId.nom;
+    } else {
+      // Cas 5 : Aucune image disponible
+      imageUrl = '';
+      productName = produit.nom || 'Produit non disponible';
+    }
+  %>
+  
+  <% if (imageUrl && imageUrl !== '') { %>
+    <img src="<%= imageUrl %>" 
+         alt="<%= productName %>"
+         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+    <div class="product-image-placeholder" style="display: none;">
+      <i class="fas fa-box"></i>
+    </div>
+  <% } else { %>
+    <div class="product-image-placeholder">
+      <i class="fas fa-box"></i>
+    </div>
+  <% } %>
+</div>
                         
                         <div class="product-details">
                           <div class="product-name">
-                            <%= produit.produitId ? produit.produitId.nom : produit.nom %>
+                            <%= productName %>
                           </div>
                           <div class="product-meta">
                             <span>Quantité: <strong><%= produit.quantite %></strong></span>
@@ -925,6 +943,8 @@
                             <% } %>
                             <% if (produit.produitId && produit.produitId.sku) { %>
                               <span>• SKU: <%= produit.produitId.sku %></span>
+                            <% } else if (produit.sku) { %>
+                              <span>• SKU: <%= produit.sku %></span>
                             <% } %>
                           </div>
                         </div>
@@ -1125,6 +1145,14 @@
     document.addEventListener('DOMContentLoaded', function() {
       console.log('Tableau de bord des commandes chargé avec succès');
       console.log('Commandes affichées:', <%= commandes.length %>);
+      
+      // Debug: Afficher les données des produits dans la console
+      <% commandes.forEach((commande, index) => { %>
+        console.log('Commande <%= commande.numeroCommande %>:', {
+          produits: <%= JSON.stringify(commande.produits) %>,
+          totalProduits: <%= commande.produits.length %>
+        });
+      <% }) %>
     });
   </script>
 </body>

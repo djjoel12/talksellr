@@ -49,6 +49,7 @@ router.post('/valider', async (req, res) => {
           devise: produit.devise,
           quantite: item.quantite,
           image: produit.image,
+            imagesGallery: produit.imagesGallery || [], // ← CORRECTION IMPORTANTE
           vendeurId: produit.vendeur._id,
           boutiqueId: produit.boutique._id
         };
@@ -376,7 +377,46 @@ router.get('/debug-vendeur', estVendeur, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
+// Script de migration - à exécuter une fois
+router.get('/migrer-images-commandes', async (req, res) => {
+  try {
+    console.log('🔄 Début migration des images de commandes...');
+    
+    const commandes = await Commande.find({}).populate('produits.produitId');
+    let commandesModifiees = 0;
+    
+    for (const commande of commandes) {
+      let commandeModifiee = false;
+      
+      for (const produit of commande.produits) {
+        // Si le produit a des images dans la BDD mais pas dans la commande
+        if (produit.produitId && produit.produitId.imagesGallery && 
+            produit.produitId.imagesGallery.length > 0 && 
+            (!produit.imagesGallery || produit.imagesGallery.length === 0)) {
+          
+          produit.imagesGallery = produit.produitId.imagesGallery;
+          commandeModifiee = true;
+          console.log(`✅ Migration images pour produit: ${produit.nom}`);
+        }
+      }
+      
+      if (commandeModifiee) {
+        await commande.save();
+        commandesModifiees++;
+      }
+    }
+    
+    console.log(`🎉 Migration terminée: ${commandesModifiees} commandes mises à jour`);
+    res.json({ 
+      success: true, 
+      message: `${commandesModifiees} commandes mises à jour avec les images` 
+    });
+    
+  } catch (error) {
+    console.error('❌ Erreur migration:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
 // ✅ Route de débogage (à supprimer en production)
 router.get('/debug-all', async (req, res) => {
   try {

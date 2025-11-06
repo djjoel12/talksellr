@@ -1,4 +1,4 @@
-// geminiAPI.js - VERSION CORRIGÉE
+// geminiAPI.js - VERSION AMÉLIORÉE AVEC CATÉGORIE BIJOUX
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const axios = require('axios');
 
@@ -20,10 +20,11 @@ class IntelligentGeminiQueue {
       processing: 0
     };
 
-    // Catégories prédéfinies améliorées
+    // 🔥 CATÉGORIES PRÉDÉFINIES AMÉLIORÉES - AVEC CATÉGORIE BIJOUX
     this.categoriesPredefinies = {
-      "Vêtements": ["Chemises", "Pantalons", "Robes", "Vestes", "Sous-vêtements", "Accessoires", "Sport"],
-      "Chaussures": ["Baskets", "Sandales", "Bottes", "Talons", "Chaussures de sport", "Chaussures de ville", "Chaussures de sécurité"],
+      "Vêtements": ["Chemises", "Pantalons", "Robes", "Vestes", "Sous-vêtements", "Sport", "Maillots de bain"],
+      "Chaussures": ["Baskets", "Sandales", "Bottes", "Talons", "Chaussures de sport", "Chaussures de ville"],
+      "Bijoux": ["Colliers", "Bagues", "Bracelets", "Boucles d'oreilles", "Montres", "Chaînes", "Pendentifs"],
       "Électronique": ["Téléphones", "Ordinateurs", "Audio", "Gaming", "Accessoires", "Photo", "TV"],
       "Maison": ["Décoration", "Meubles", "Cuisine", "Jardin", "Électroménager", "Luminaire"],
       "Sport": ["Fitness", "Football", "Running", "Yoga", "Vélo", "Randonnée", "Natation"],
@@ -33,6 +34,9 @@ class IntelligentGeminiQueue {
       "Jouets": ["Éducatif", "Jeux société", "Poupées", "Véhicules", "Construction"],
       "Animaux": ["Chiens", "Chats", "Oiseaux", "Aquariophilie", "Équitation"],
       "Art": ["Tableaux", "Sculptures", "Artisanat", "Collections"]
+      "Sacs": ["Sacs a dos ", "Sacs pour femmes ", "", ""]
+      
+
     };
   }
 
@@ -85,7 +89,6 @@ class IntelligentGeminiQueue {
     }
   }
 
-  // 🔥 FONCTION : Télécharger l'image depuis Cloudinary
   async downloadImageFromCloudinary(imageUrl) {
     try {
       console.log(`📥 Téléchargement depuis Cloudinary: ${imageUrl}`);
@@ -108,7 +111,7 @@ class IntelligentGeminiQueue {
 
   async processWithRetry(item, modelType = 'primary') {
     try {
-      const modelName = "gemini-2.5-flash"; // 🔥 CORRECTION : modelName au lieu de modelini
+      const modelName = "gemini-2.5-flash";
       console.log(`🔄 Analyse IA avec ${modelName} (retry ${item.retryCount})`);
       
       const model = genAI.getGenerativeModel({ model: modelName });
@@ -117,9 +120,10 @@ class IntelligentGeminiQueue {
 
 Tu es un expert en analyse d'images pour site e-commerce. Analyse cette image et retourne UNIQUEMENT un JSON valide.
 
-CATÉGORIES AUTORISÉES (choisir la plus pertinente):
-- "Vêtements" (vêtements, accessoires mode - SANS CHAUSSURES)
+🔥 CATÉGORIES AUTORISÉES (choisir la plus pertinente):
+- "Vêtements" (vêtements, accessoires mode - SANS CHAUSSURES, SANS BIJOUX, SANS SACS)
 - "Chaussures" (tous types de chaussures, baskets, sandales, bottes)
+- "Bijoux" (colliers, bagues, bracelets, boucles d'oreilles, ceintures, montres, chaînes, pendentifs)
 - "Électronique" (appareils électroniques, tech)
 - "Maison" (décoration, meubles, cuisine)
 - "Sport" (équipement sportif, fitness)
@@ -129,14 +133,20 @@ CATÉGORIES AUTORISÉES (choisir la plus pertinente):
 - "Jouets" (jeux, jouets)
 - "Animaux" (produits pour animaux, équitation)
 - "Art" (œuvres d'art, artisanat)
+- "Sacs" (Sacs, tout types de sacs je siq tout types de sacs )
+
+🚨 RÈGLES IMPORTANTES:
+- Les BIJOUX (colliers, bagues, bracelets) vont dans la catégorie "Bijoux" et pas dans "Vêtements"
+- Les CHAUSSURES vont dans "Chaussures", PAS dans "Vêtements"
+- Les Sacs (sacs, ) vont dans "Sacs"
+- Les MONTRES vont dans "Bijoux"
 
 INSTRUCTIONS:
 - Sois PRÉCIS dans la catégorie et sous-catégorie
 - Le NOM doit être court et vendeur (max 4-5 mots)
-- La DESCRIPTION doit être commerciale (3phrase seduisantes pour acheter)
+- La DESCRIPTION doit être commerciale (3 phrases séduisantes pour pousser à acheter)
 - Les COULEURS doivent être les couleurs dominantes
 - Utilise "Générique" si la marque n'est pas visible
-- IMPORTANT: Les chaussures doivent aller dans la catégorie "Chaussures", PAS dans "Vêtements"
 
 FORMAT JSON STRICT:
 {
@@ -156,13 +166,11 @@ IMPORTANT: Réponds UNIQUEMENT avec le JSON, sans \`\`\`json ni commentaires.`;
 
       let imageBuffer = item.imageBuffer;
 
-      // 🔥 Si on a une URL Cloudinary, on télécharge l'image
       if (item.metadata && item.metadata.imageUrl) {
         console.log(`🌐 Téléchargement depuis Cloudinary: ${item.metadata.imageUrl}`);
         imageBuffer = await this.downloadImageFromCloudinary(item.metadata.imageUrl);
       }
 
-      // Si toujours pas d'image buffer, on utilise le fallback
       if (!imageBuffer) {
         console.log(`⚠️ Aucune image disponible, utilisation du fallback`);
         return this.getFallbackData(item.metadata);
@@ -267,14 +275,16 @@ IMPORTANT: Réponds UNIQUEMENT avec le JSON, sans \`\`\`json ni commentaires.`;
     const fileName = (metadata.fileName || '').toLowerCase();
     
     const correspondances = {
-      'Vêtements': ['chemise', 'pantalon', 'robe', 'veste', 't-shirt', 'vêtement', 'habillement', 'mode', 'fashion', 'vetement', 'tenue', 'habit', 'costume', 'uniforme'],
+      'Vêtements': ['chemise', 'pantalon', 'robe', 'veste', 't-shirt', 'vêtement', 'habillement', 'mode', 'fashion', 'vetement', 'tenue', 'habit', 'costume', 'uniforme', 'sweat', 'pull', 'hoodie'],
       'Chaussures': ['chaussure', 'basket', 'sneaker', 'sandale', 'botte', 'talon', 'escarpin', 'soulier', 'running', 'football', 'sport', 'ville', 'cuir'],
+      'Bijoux': ['collier', 'bague', 'bracelet', 'boucle', 'oreille', 'bijou', 'bijoux', 'montre', 'chaîne', 'chaîne', 'pendentif', 'or', 'argent', 'pierre précieuse', 'diamant'],
       'Électronique': ['phone', 'téléphone', 'smartphone', 'ordinateur', 'laptop', 'tablette', 'écran', 'audio', 'casque', 'tech', 'électronique', 'electronique', 'camera'],
       'Maison': ['maison', 'décoration', 'meuble', 'table', 'chaise', 'canapé', 'lit', 'cuisine', 'ustensile', 'déco', 'luminaire', 'rideau'],
       'Sport': ['sport', 'fitness', 'football', 'basket', 'tennis', 'running', 'course', 'yoga', 'vélo', 'cyclisme', 'équitation', 'cheval', 'cavalier'],
       'Beauté': ['beauté', 'cosmétique', 'maquillage', 'parfum', 'soin', 'crème', 'shampoing', 'beaute', 'cosmetique'],
       'Animaux': ['animal', 'chien', 'chat', 'oiseau', 'aquarium', 'nourriture', 'jouet', 'équitation', 'cheval', 'cavalier', 'équestre'],
       'Art': ['art', 'tableau', 'peinture', 'sculpture', 'photo', 'tableau', 'affiche', 'poster']
+      "Sacs": ["Sacs a dos ", "Sacs pour femmes ", "", ""]
     };
 
     for (const [categorie, mots] of Object.entries(correspondances)) {
@@ -293,6 +303,7 @@ IMPORTANT: Réponds UNIQUEMENT avec le JSON, sans \`\`\`json ni commentaires.`;
     const sousCategoriesParDefaut = {
       'Vêtements': 'Vêtements divers',
       'Chaussures': 'Chaussures de ville',
+      'Bijoux': 'Bijoux divers',
       'Électronique': 'Électronique générale', 
       'Maison': 'Décoration',
       'Sport': 'Équipement sportif',
@@ -303,6 +314,7 @@ IMPORTANT: Réponds UNIQUEMENT avec le JSON, sans \`\`\`json ni commentaires.`;
       'Animaux': 'Accessoires',
       'Art': 'Œuvres',
       'Autre': 'Divers'
+       'Sacs': 'Sacs',
     };
     
     return sousCategoriesParDefaut[categorie] || 'Divers';
@@ -314,7 +326,26 @@ IMPORTANT: Réponds UNIQUEMENT avec le JSON, sans \`\`\`json ni commentaires.`;
     
     console.log(`🔄 Utilisation fallback pour: ${fileName || imageUrl}`);
     
-    // Détection spécifique pour les chaussures
+    // 🔥 DÉTECTION AMÉLIORÉE POUR LES BIJOUX
+    if (fileName.includes('collier') || fileName.includes('bague') || fileName.includes('bracelet') || 
+        fileName.includes('bijou') || fileName.includes('montre') || fileName.includes('chaîne') ||
+        imageUrl.includes('collier') || imageUrl.includes('bague') || imageUrl.includes('bracelet') ||
+        imageUrl.includes('bijou') || imageUrl.includes('montre')) {
+      return {
+        nom: "Bijou élégant et raffiné",
+        description: "Bijou de qualité supérieure, parfait pour toutes les occasions",
+        categorie: "Bijoux",
+        sous_categorie: "Bijoux divers",
+        marque: "Générique",
+        couleurs: ["Or", "Argent", "Doré"],
+        style: "Élégant",
+        materiau: "Métal précieux",
+        etat: "Neuf",
+        tags: ["bijou", "élégant", "raffiné", "accessoire"]
+      };
+    }
+    
+    // Détection pour les chaussures
     if (fileName.includes('chaussure') || fileName.includes('basket') || fileName.includes('sneaker') || 
         fileName.includes('sandale') || fileName.includes('botte') || fileName.includes('talon') ||
         imageUrl.includes('chaussure') || imageUrl.includes('basket') || imageUrl.includes('sneaker')) {
@@ -378,7 +409,6 @@ IMPORTANT: Réponds UNIQUEMENT avec le JSON, sans \`\`\`json ni commentaires.`;
     };
   }
 
-  // MÉTHODE GETSTATS CORRIGÉE
   getStats() {
     return {
       ...this.stats,
