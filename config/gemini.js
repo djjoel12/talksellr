@@ -33,8 +33,8 @@ class IntelligentGeminiQueue {
       "Livres": ["Roman", "Éducation", "BD", "Professionnel", "Enfant"],
       "Jouets": ["Éducatif", "Jeux société", "Poupées", "Véhicules", "Construction"],
       "Animaux": ["Chiens", "Chats", "Oiseaux", "Aquariophilie", "Équitation"],
-      "Art": ["Tableaux", "Sculptures", "Artisanat", "Collections"]
-      "Sacs": ["Sacs a dos ", "Sacs pour femmes ", "", ""]
+     "Art": ["Tableaux", "Sculptures", "Artisanat", "Collections"], // ← VIRGULE AJOUTÉE ICI
+  "Sacs": ["Sacs a dos", "Sacs pour femmes", "Sacs à main", "Sacs de voyage"]
       
 
     };
@@ -283,8 +283,10 @@ IMPORTANT: Réponds UNIQUEMENT avec le JSON, sans \`\`\`json ni commentaires.`;
       'Sport': ['sport', 'fitness', 'football', 'basket', 'tennis', 'running', 'course', 'yoga', 'vélo', 'cyclisme', 'équitation', 'cheval', 'cavalier'],
       'Beauté': ['beauté', 'cosmétique', 'maquillage', 'parfum', 'soin', 'crème', 'shampoing', 'beaute', 'cosmetique'],
       'Animaux': ['animal', 'chien', 'chat', 'oiseau', 'aquarium', 'nourriture', 'jouet', 'équitation', 'cheval', 'cavalier', 'équestre'],
-      'Art': ['art', 'tableau', 'peinture', 'sculpture', 'photo', 'tableau', 'affiche', 'poster']
-      "Sacs": ["Sacs a dos ", "Sacs pour femmes ", "", ""]
+      
+// APRÈS :
+'Art': ['art', 'tableau', 'peinture', 'sculpture', 'photo', 'tableau', 'affiche', 'poster'],
+'Sac': ['sac', 'sacs', 'sac à dos', 'sac pour femmes', 'sac à main']
     };
 
     for (const [categorie, mots] of Object.entries(correspondances)) {
@@ -313,8 +315,9 @@ IMPORTANT: Réponds UNIQUEMENT avec le JSON, sans \`\`\`json ni commentaires.`;
       'Jouets': 'Jeux',
       'Animaux': 'Accessoires',
       'Art': 'Œuvres',
-      'Autre': 'Divers'
-       'Sacs': 'Sacs',
+      // APRÈS :
+'Autre': 'Divers',
+'Sacs': 'Sacs'
     };
     
     return sousCategoriesParDefaut[categorie] || 'Divers';
